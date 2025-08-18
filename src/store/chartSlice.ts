@@ -252,20 +252,34 @@ interface FormatConfig {
   concatenateLabels?: boolean;
 }
 
+interface TitleConfig extends FormatConfig {
+  text: string;
+  style: string;
+}
+
+interface LegendConfig {
+  enabled: boolean;
+  fontSize: number;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  color: string;
+  font?: string;
+  position: string;
+  title: {
+    enabled: boolean;
+    text: string;
+  };
+}
+
 interface ChartConfig {
   data: ChartDataConfig;
   format: {
     xAxis: FormatConfig;
     yAxis: FormatConfig;
     values: FormatConfig;
-    title: FormatConfig & { text: string; style: string };
-    legend: FormatConfig & {
-      position: string;
-      title: {
-        enabled: boolean;
-        text: string;
-      };
-    };
+    title: TitleConfig;
+    legend: LegendConfig;
     layout?: { minimumCategoryWidth: number };
     gridlines?: { enabled: boolean; color: string; strokeWidth: number };
     dataLabels?: FormatConfig;
