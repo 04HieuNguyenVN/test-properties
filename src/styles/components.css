@@ -1,0 +1,254 @@
+/* Component Styles */
+.data-table {
+  width: 100%;
+  font-size: 12px;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border: 1px solid #e8e8e8;
+  font-weight: 600;
+  color: #262626;
+  text-align: left;
+}
+
+.data-table td {
+  padding: 6px 12px;
+  border: 1px solid #e8e8e8;
+  color: #595959;
+}
+
+.data-table tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.data-table tr:hover {
+  background: #e6f7ff;
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.status-indicator.success {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.status-indicator.warning {
+  background: #fffbe6;
+  color: #faad14;
+  border: 1px solid #ffe58f;
+}
+
+.status-indicator.error {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.status-indicator.info {
+  background: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #1890ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.tooltip-content {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  max-width: 200px;
+  word-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 4px;
+}
+
+.tooltip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.tooltip-item:last-child {
+  margin-bottom: 0;
+}
+
+.tooltip-label {
+  margin-right: 8px;
+}
+
+.tooltip-value {
+  font-weight: 500;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #8c8c8c;
+  text-align: center;
+}
+
+.empty-state-icon {
+  font-size: 64px;
+  color: #d9d9d9;
+  margin-bottom: 16px;
+}
+
+.empty-state-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #595959;
+  margin-bottom: 8px;
+}
+
+.empty-state-description {
+  font-size: 14px;
+  color: #8c8c8c;
+  margin-bottom: 16px;
+  max-width: 300px;
+}
+
+.empty-state-action {
+  margin-top: 8px;
+}
+
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 6px;
+  margin: 20px;
+}
+
+.error-boundary-icon {
+  font-size: 48px;
+  color: #ff4d4f;
+  margin-bottom: 16px;
+}
+
+.error-boundary-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #ff4d4f;
+  margin-bottom: 8px;
+}
+
+.error-boundary-message {
+  font-size: 14px;
+  color: #a8071a;
+  text-align: center;
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+
+.error-boundary-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.resizable-handle {
+  background: #f0f0f0;
+  border: 1px solid #d9d9d9;
+  position: relative;
+}
+
+.resizable-handle:hover {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.resizable-handle.horizontal {
+  height: 4px;
+  cursor: row-resize;
+  width: 100%;
+}
+
+.resizable-handle.vertical {
+  width: 4px;
+  cursor: col-resize;
+  height: 100%;
+}
+
+.draggable-item {
+  cursor: move;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.draggable-item:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.2);
+}
+
+.draggable-item.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+}
+
+.drop-zone {
+  border: 2px dashed #d9d9d9;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s;
+  color: #8c8c8c;
+}
+
+.drop-zone.drag-over {
+  border-color: #1890ff;
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.drop-zone-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.drop-zone-text {
+  font-size: 14px;
+}

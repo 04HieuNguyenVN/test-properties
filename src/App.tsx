@@ -1,5 +1,43 @@
+// Import các thư viện React và Redux cần thiết
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
+// Import CSS styles
+import "./styles/dashboard.css";
+import "./styles/chart.css";
+import "./styles/field-selector.css";
+import "./styles/properties-panel.css";
+import "./styles/data-config.css";
+import "./styles/format-config.css";
+import "./styles/general-config.css";
+import "./styles/sections.css";
+import "./styles/components.css";
+import "./styles/overrides.css";
+import "./styles/custom-color-picker.css";
+
+// Import constants
+import {
+  CHART_COLORS,
+  DATA_SOURCE_OPTIONS,
+  TABLE_OPTIONS,
+  FIELD_OPTIONS,
+  FIELD_ACTION_OPTIONS,
+  FIELD_DISPLAY_NAMES,
+  LEGEND_POSITION_OPTIONS,
+  FONT_FAMILY_OPTIONS,
+  FONT_SIZE_OPTIONS,
+  CHART_AVAILABLE_FIELDS,
+  SIMPLE_CHART_TYPES,
+  SINGLE_FIELD_TYPES,
+  FIELD_RESTRICTIONS,
+  DEFAULT_COLORS,
+  BAR_CHART_TYPES,
+  REQUIRED_SECTIONS,
+  DEFAULT_AVAILABLE_FIELDS,
+  TITLE_DISPLAY_OPTIONS,
+} from "./constants/index";
+
+// Import các component chart từ Recharts library
 import {
   BarChart,
   Bar,
@@ -16,8 +54,30 @@ import {
   Cell,
   ComposedChart,
 } from "recharts";
+
+// Import chart components
+import {
+  ColumnChart,
+  StackedColumnChart,
+  ClusteredColumnChart,
+  PieChart as CustomPieChart,
+  LineChart as CustomLineChart,
+  BarChart as CustomBarChart,
+  LineAndColumnChart,
+  StackedBarChart,
+  ClusteredBarChart,
+} from "./components/charts";
+
+// Import tab components
+import { DataConfigTab } from "./components/tabs/DataTab";
+import { FormatConfigTab } from "./components/tabs/FormatVisualTab";
+import { GeneralConfigTab } from "./components/tabs/FormatGeneralTab";
+
+// Import các component chart từ Ant Design Charts
 import { Bar as AntBar, Column as AntColumn } from "@ant-design/charts";
 import { Bar as AntPlotBar } from "@ant-design/plots";
+
+// Import các component UI từ Ant Design
 import {
   Layout,
   Card,
@@ -37,6 +97,11 @@ import {
   Slider,
 } from "antd";
 const { TextArea } = Input;
+
+// Import custom components
+import { CustomColorPicker } from "./components/common/CustomColorPicker";
+
+// Import các icon từ Lucide React
 import {
   ChevronDown,
   ChevronRight,
@@ -58,6 +123,7 @@ import {
   LineChart as LineChartIcon,
 } from "lucide-react";
 import { RootState } from "./store/store";
+// Import Redux actions và types từ store
 import {
   setChartType,
   setActiveTab,
@@ -68,41 +134,47 @@ import {
   updateFormatConfig,
   ChartState,
 } from "./store/chartSlice";
-import "./App.css";
 
+// Destructure các component từ Ant Design
 const { Content, Sider } = Layout;
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { Option } = Select;
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
-
+// Component chính của ứng dụng Power BI Dashboard
 const PowerBIDashboard: React.FC = () => {
+  // Khởi tạo dispatch để gửi actions tới Redux store
   const dispatch = useDispatch();
+
+  // Lấy state từ Redux store bằng useSelector
   const {
-    data,
-    categoryData,
-    monthlyData,
-    populationData,
-    testStackedData,
-    chartType,
-    activeTab,
-    activeSubTab,
-    expandedSections,
-    chartConfigs,
+    data, // Dữ liệu chính cho charts
+    categoryData, // Dữ liệu theo danh mục
+    monthlyData, // Dữ liệu theo tháng
+    populationData, // Dữ liệu dân số
+    testStackedData, // Dữ liệu test cho stacked chart
+    chartType, // Loại chart hiện tại
+    activeTab, // Tab đang active (Data/Format/General)
+    activeSubTab, // Sub-tab đang active
+    expandedSections, // Các section đang được mở rộng
+    chartConfigs, // Cấu hình cho tất cả loại chart
   } = useSelector((state: RootState) => state.chart) as ChartState;
 
+  // Lấy cấu hình hiện tại của chart type đang được chọn
   const currentConfig = chartConfigs[chartType];
 
+  // Handler để toggle mở/đóng section
   const handleToggleSection = (section: string) => {
     dispatch(toggleSection(section));
   };
 
+  // Handler để xóa data item khỏi category
   const handleRemoveDataItem = (category: string, fieldName: string) => {
     dispatch(removeDataItem({ category, fieldName }));
   };
 
+  // Handler để thay đổi loại field (sum/count/average)
   const handleFieldTypeChange = (
     fieldName: string,
     newType: "sum" | "count" | "average",
@@ -111,6 +183,7 @@ const PowerBIDashboard: React.FC = () => {
     dispatch(updateFieldType({ fieldName, newType, category }));
   };
 
+  // Handler để cập nhật cấu hình format
   const handleUpdateFormatConfig = (
     section: string,
     key: string,
@@ -119,7 +192,7 @@ const PowerBIDashboard: React.FC = () => {
     dispatch(updateFormatConfig({ section, key, value }));
   };
 
-  // Field options dropdown component
+  // Component dropdown để hiển thị và chỉnh sửa field options
   const FieldDropdown: React.FC<{
     field: { name: string; type: string };
     onRemove: () => void;
@@ -207,339 +280,24 @@ const PowerBIDashboard: React.FC = () => {
     const config = currentConfig.format;
 
     switch (chartType) {
-      case "column": // Column Chart
-        const columnData = data.map((item) => ({
-          letter: item.name,
-          frequency: item.population / 10000000, // Convert to percentage-like value
-        }));
-
-        const columnConfig = {
-          data: columnData,
-          xField: "letter",
-          yField: "frequency",
-          label: {
-            text: (d: any) => `${(d.frequency * 100).toFixed(1)}%`,
-            textBaseline: "bottom",
-          },
-          axis: {
-            y: {
-              labelFormatter: ".0%",
-            },
-          },
-          style: {
-            // 圆角样式
-            radiusTopLeft: 10,
-            radiusTopRight: 10,
-            fill: "#0078D4",
-          },
-        };
-        return <AntColumn {...columnConfig} />;
-      case "stackedColumn": // Stacked Column Chart
-        return (
-          <ResponsiveContainer width="100%" height={500}>
-            <BarChart
-              data={populationData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              {config.gridlines?.enabled && (
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={config.gridlines.color}
-                  strokeWidth={config.gridlines.strokeWidth}
-                />
-              )}
-              <XAxis
-                dataKey="city"
-                tick={{
-                  fontSize: config.xAxis.fontSize,
-                  fill: config.xAxis.color,
-                  fontWeight: config.xAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <YAxis
-                tick={{
-                  fontSize: config.yAxis.fontSize,
-                  fill: config.yAxis.color,
-                  fontWeight: config.yAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <Tooltip />
-              {config.legend?.enabled && <Legend />}
-              <Bar dataKey="<10" stackId="a" fill="#0088FE" name="<10" />
-              <Bar dataKey="10-19" stackId="a" fill="#00C49F" name="10-19" />
-              <Bar dataKey="20-29" stackId="a" fill="#FFBB28" name="20-29" />
-              <Bar dataKey="30-39" stackId="a" fill="#FF8042" name="30-39" />
-              <Bar dataKey="40-49" stackId="a" fill="#8884d8" name="40-49" />
-              <Bar dataKey="50-59" stackId="a" fill="#82ca9d" name="50-59" />
-              <Bar dataKey="60-69" stackId="a" fill="#ffc658" name="60-69" />
-              <Bar dataKey="70-79" stackId="a" fill="#ff7300" name="70-79" />
-              <Bar dataKey="≥80" stackId="a" fill="#8dd1e1" name="≥80" />
-            </BarChart>
-          </ResponsiveContainer>
-        );
-      case "clusteredColumn": // Clustered Column Chart
-        return (
-          <ResponsiveContainer width="100%" height={500}>
-            <BarChart
-              data={monthlyData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              {config.gridlines?.enabled && (
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={config.gridlines.color}
-                  strokeWidth={config.gridlines.strokeWidth}
-                />
-              )}
-              <XAxis
-                dataKey="month"
-                tick={{
-                  fontSize: config.xAxis.fontSize,
-                  fill: config.xAxis.color,
-                  fontWeight: config.xAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <YAxis
-                tick={{
-                  fontSize: config.yAxis.fontSize,
-                  fill: config.yAxis.color,
-                  fontWeight: config.yAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <Tooltip />
-              {config.legend?.enabled && <Legend />}
-              <Bar dataKey="visitors" fill="#0088FE" name="Visitors" />
-              <Bar dataKey="revenue" fill="#00C49F" name="Revenue" />
-            </BarChart>
-          </ResponsiveContainer>
-        );
-      case "lineAndColumn": // Line and Column Chart
-        return (
-          <ResponsiveContainer width="100%" height={500}>
-            <ComposedChart
-              data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              {config.gridlines?.enabled && (
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={config.gridlines.color}
-                  strokeWidth={config.gridlines.strokeWidth}
-                />
-              )}
-              <XAxis
-                dataKey="name"
-                tick={{
-                  fontSize: config.xAxis.fontSize,
-                  fill: config.xAxis.color,
-                  fontWeight: config.xAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <YAxis
-                yAxisId="left"
-                tick={{
-                  fontSize: config.yAxis.fontSize,
-                  fill: config.yAxis.color,
-                  fontWeight: config.yAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <YAxis
-                yAxisId="right"
-                orientation="right"
-                tick={{
-                  fontSize: config.yAxis.fontSize,
-                  fill: config.yAxis.color,
-                  fontWeight: config.yAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <Tooltip />
-              {config.legend?.enabled && <Legend />}
-              <Bar
-                yAxisId="left"
-                dataKey="area"
-                fill="#FF8042"
-                name="Diện tích"
-              />
-              <Line
-                yAxisId="right"
-                type="monotone"
-                dataKey="population"
-                stroke="#0078D4"
-                strokeWidth={3}
-                name="Dân số"
-                dot={{ fill: "#0078D4", strokeWidth: 2, r: 4 }}
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        );
-      case "pie": // Pie Chart
-        return (
-          <ResponsiveContainer width="100%" height={500}>
-            <PieChart>
-              <Pie
-                data={categoryData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percentage }) => `${name} ${percentage}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {categoryData.map((entry: any, index: number) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-              {config.legend?.enabled && <Legend />}
-            </PieChart>
-          </ResponsiveContainer>
-        );
-      case "line": // Line Chart
-        return (
-          <ResponsiveContainer width="100%" height={500}>
-            <LineChart
-              data={monthlyData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              {config.gridlines?.enabled && (
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={config.gridlines.color}
-                  strokeWidth={config.gridlines.strokeWidth}
-                />
-              )}
-              <XAxis
-                dataKey="month"
-                tick={{
-                  fontSize: config.xAxis.fontSize,
-                  fill: config.xAxis.color,
-                  fontWeight: config.xAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <YAxis
-                tick={{
-                  fontSize: config.yAxis.fontSize,
-                  fill: config.yAxis.color,
-                  fontWeight: config.yAxis.bold ? "bold" : "normal",
-                }}
-              />
-              <Tooltip />
-              {config.legend?.enabled && <Legend />}
-              <Line
-                type="monotone"
-                dataKey="visitors"
-                stroke="#0078D4"
-                strokeWidth={2}
-                name="Visitors"
-              />
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#00BCF2"
-                strokeWidth={2}
-                name="Revenue"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        );
-      case "bar": // Bar Chart (Horizontal)
-        const barConfig = {
-          data: data.map((item) => ({
-            category: item.name,
-            value: item.population,
-            series: "Dân số",
-          })),
-          xField: "value",
-          yField: "category",
-          colorField: "series",
-          label: {
-            text: "value",
-            formatter: (d: any) => `${(d.value / 1000000).toFixed(1)}M`,
-            style: {
-              textAlign: "center",
-              fill: "#fff",
-            },
-          },
-          color: ["#0078D4"],
-        };
-        return <AntPlotBar {...barConfig} />;
-      case "stackedBar": // Stacked Bar Chart (Vertical Columns)
-        const stackedBarData = testStackedData.flatMap((item) => [
-          { state: item.category, population: item.series1, age: "Series 1" },
-          { state: item.category, population: item.series2, age: "Series 2" },
-          { state: item.category, population: item.series3, age: "Series 3" },
-        ]);
-
-        const stackedBarConfig = {
-          data: stackedBarData,
-          xField: "state",
-          yField: "population",
-          colorField: "age",
-          stack: true,
-          sort: {
-            reverse: true,
-            by: "y",
-          },
-          axis: {
-            y: { labelFormatter: "~s" },
-            x: {
-              labelSpacing: 4,
-              style: {
-                labelTransform: "rotate(90)",
-              },
-            },
-          },
-          color: {
-            "Series 1": "#1f77b4",
-            "Series 2": "#ff7f0e",
-            "Series 3": "#2ca02c",
-          },
-          legend: {
-            position: "top",
-          },
-          tooltip: {
-            formatter: (datum: any) => {
-              return {
-                name: datum.age,
-                value: `${datum.population}`,
-              };
-            },
-          },
-        };
-        return <AntPlotBar {...stackedBarConfig} />;
-      case "clusteredBar": // Clustered Bar Chart (Horizontal)
-        const clusteredBarData = monthlyData.flatMap((item) => [
-          { label: item.month, type: "visitors", value: item.visitors },
-          { label: item.month, type: "revenue", value: item.revenue },
-        ]);
-
-        const clusteredBarConfig = {
-          data: clusteredBarData,
-          xField: "value",
-          yField: "label",
-          colorField: "type",
-          scale: {
-            y: {
-              padding: 0.5,
-            },
-          },
-          group: true,
-          style: {
-            height: 10,
-          },
-          color: {
-            visitors: "#0088FE",
-            revenue: "#00C49F",
-          },
-          legend: {
-            position: "top",
-          },
-        };
-        return <AntPlotBar {...clusteredBarConfig} />;
+      case "column":
+        return <ColumnChart data={data} config={config} />;
+      case "stackedColumn":
+        return <StackedColumnChart data={populationData} config={config} />;
+      case "clusteredColumn":
+        return <ClusteredColumnChart data={monthlyData} config={config} />;
+      case "lineAndColumn":
+        return <LineAndColumnChart data={data} config={config} />;
+      case "pie":
+        return <CustomPieChart data={categoryData} config={config} />;
+      case "line":
+        return <CustomLineChart data={monthlyData} config={config} />;
+      case "bar":
+        return <CustomBarChart data={data} config={config} />;
+      case "stackedBar":
+        return <StackedBarChart data={testStackedData} config={config} />;
+      case "clusteredBar":
+        return <ClusteredBarChart data={monthlyData} config={config} />;
       default:
         return null;
     }
@@ -696,96 +454,93 @@ const PowerBIDashboard: React.FC = () => {
           </Space>
         </div>
 
-        <div>
-          <Typography.Text
-            style={{ fontSize: "12px", display: "block", marginBottom: "4px" }}
-          >
-            Color
-          </Typography.Text>
-          <Space align="center">
-            <ColorPicker
-              size="small"
-              value={config.color || "#000000"}
-              onChange={(color) =>
-                handleUpdateFormatConfig(section, "color", color.toHexString())
-              }
-            />
-            <Typography.Text code style={{ fontSize: "12px" }}>
-              {config.color || "#000000"}
-            </Typography.Text>
-          </Space>
-        </div>
+        <CustomColorPicker
+          label="Color"
+          value={config.color}
+          onChange={(color) =>
+            handleUpdateFormatConfig(section, "color", color)
+          }
+        />
       </Space>
     </div>
   );
 
+  // Component tab cấu hình dữ liệu (Data tab)
   const DataConfigTab = () => {
     const dataConfig = currentConfig.data;
 
-    // State for data source and table selection
+    // State để quản lý nguồn dữ liệu và bảng được chọn
     const [dataSource, setDataSource] = useState("API");
     const [selectedTable, setSelectedTable] = useState("cities");
 
-    // State for each category's fields
+    // State để quản lý các field của từng category (Y-axis, X-axis, Legend, v.v.)
     const [categoryFields, setCategoryFields] = useState<{
       [key: string]: any[];
     }>({
-      yAxis: [{ id: 1, field: "population", action: "sum" }],
-      xAxis: [{ id: 2, field: "name", action: "no-action" }],
-      legend: [{ id: 3, field: "name", action: "no-action" }],
-      values: [{ id: 4, field: "gdp", action: "sum" }],
-      secondaryYAxis: [],
+      yAxis: [{ id: 1, field: "population", action: "sum" }], // Trục Y
+      xAxis: [{ id: 2, field: "name", action: "no-action" }], // Trục X
+      legend: [{ id: 3, field: "name", action: "no-action" }], // Chú thích
+      values: [{ id: 4, field: "gdp", action: "sum" }], // Giá trị (cho pie chart)
+      secondaryYAxis: [], // Trục Y phụ
+      detail: [], // Chi tiết (cho pie chart)
+      columnY: [], // Column Y (cho line+column chart)
+      lineY: [], // Line Y (cho line+column chart)
+      columnLegend: [], // Column Legend (cho line+column chart)
     });
 
-    // Define fields available for each chart type (remove tooltips)
+    // Hàm xác định các field có sẵn cho từng loại chart
     const getAvailableFields = () => {
-      switch (chartType) {
-        case "column": // Simple Column Chart
-          return ["yAxis", "xAxis", "legend", "drillThrough"];
-        case "stackedColumn": // Stacked Column Chart
-        case "clusteredColumn": // Clustered Column Chart
-          return ["yAxis", "xAxis", "legend", "drillThrough"];
-        case "bar": // Simple Bar Chart
-          return ["xAxis", "yAxis", "legend", "drillThrough"];
-        case "stackedBar": // Stacked Bar Chart
-        case "clusteredBar": // Clustered Bar Chart
-          return ["xAxis", "yAxis", "legend", "drillThrough"];
-        case "pie": // Simple Pie Chart
-          return ["legend", "values", "drillThrough"];
-        case "line": // Line Chart
-          return ["xAxis", "yAxis", "secondaryYAxis", "legend", "drillThrough"];
-        case "lineAndColumn": // Line and Column Chart
-          return ["xAxis", "columnY", "lineY", "columnLegend", "drillThrough"];
-        default:
-          return ["yAxis", "xAxis", "legend", "drillThrough"];
-      }
+      return CHART_AVAILABLE_FIELDS[chartType] || DEFAULT_AVAILABLE_FIELDS;
     };
 
-    // Check if chart type allows adding multiple fields
+    // Kiểm tra xem loại chart có cho phép thêm nhiều field không
     const allowsAddingFields = () => {
-      switch (chartType) {
-        case "column": // Simple Column Chart
-        case "bar": // Simple Bar Chart
-        case "pie": // Simple Pie Chart
-          return false;
-        default:
-          return true;
+      // Pie chart được phép thêm fields vào các category của nó
+      if (chartType === "pie") {
+        return true;
       }
+      return !SIMPLE_CHART_TYPES.includes(chartType);
     };
 
-    // Check if a specific field category allows adding fields
+    // Kiểm tra xem một category field cụ thể có cho phép thêm field không
     const allowsAddingFieldsToCategory = (fieldKey: string) => {
-      // Simple charts don't allow adding fields to basic categories
-      if (!allowsAddingFields() && fieldKey !== "drillThrough") {
+      // Các chart đơn giản không cho phép thêm field vào các category cơ bản
+      if (!allowsAddingFields()) {
         return false;
       }
 
-      // Column Y, Line Y, and Column Legend only allow 1 field each
+      // Pie chart - tất cả fields chỉ cho phép 1 field
+      if (chartType === "pie") {
+        const fieldsForCategory = categoryFields[fieldKey] || [];
+        return fieldsForCategory.length === 0;
+      }
+
+      // Các field chỉ cho phép 1 field
+      if (SINGLE_FIELD_TYPES.includes(fieldKey)) {
+        const fieldsForCategory = categoryFields[fieldKey] || [];
+        return fieldsForCategory.length === 0;
+      }
+
+      // Y-axis cho stacked/clustered column charts chỉ cho phép 1 field
       if (
-        fieldKey === "columnY" ||
-        fieldKey === "lineY" ||
-        fieldKey === "columnLegend"
+        fieldKey === "yAxis" &&
+        FIELD_RESTRICTIONS.yAxis.includes(chartType)
       ) {
+        const fieldsForCategory = categoryFields[fieldKey] || [];
+        return fieldsForCategory.length === 0;
+      }
+
+      // X-axis cho stacked/clustered bar charts chỉ cho phép 1 field
+      if (
+        fieldKey === "xAxis" &&
+        FIELD_RESTRICTIONS.xAxis.includes(chartType)
+      ) {
+        const fieldsForCategory = categoryFields[fieldKey] || [];
+        return fieldsForCategory.length === 0;
+      }
+
+      // Line chart - tất cả fields chỉ cho phép 1 field
+      if (FIELD_RESTRICTIONS.allFields.includes(chartType)) {
         const fieldsForCategory = categoryFields[fieldKey] || [];
         return fieldsForCategory.length === 0;
       }
@@ -793,26 +548,17 @@ const PowerBIDashboard: React.FC = () => {
       return true;
     };
 
+    // Hàm lấy tên hiển thị cho từng loại field
     const getFieldDisplayName = (fieldKey: string) => {
-      const displayNames: { [key: string]: string } = {
-        yAxis: "Y-axis",
-        xAxis: "X-axis",
-        legend: "Legend",
-        values: "Values",
-        secondaryYAxis: "Secondary Y-axis",
-        columnY: "Column Y",
-        lineY: "Line Y",
-        columnLegend: "Column Legend",
-        drillThrough: "Drill through",
-      };
-      return displayNames[fieldKey] || fieldKey;
+      return FIELD_DISPLAY_NAMES[fieldKey] || fieldKey;
     };
 
+    // Hàm thêm field mới vào category
     const addFieldToCategory = (category: string) => {
       const newField = {
-        id: Date.now(),
-        field: "population",
-        action: "sum",
+        id: Date.now(), // ID duy nhất dựa trên timestamp
+        field: "population", // Field mặc định
+        action: "sum", // Action mặc định là tổng
       };
       setCategoryFields((prev) => ({
         ...prev,
@@ -844,27 +590,24 @@ const PowerBIDashboard: React.FC = () => {
     };
 
     // Simple Field Selector - only Field + Action row
+    // Component để chọn field đơn giản với dropdown
     const SimpleFieldSelector = ({
-      field,
-      category,
-      onUpdate,
-      onRemove,
+      field, // Object field hiện tại
+      category, // Category của field (yAxis, xAxis, v.v.)
+      onUpdate, // Hàm callback khi update field
+      onRemove, // Hàm callback khi xóa field
     }: any) => (
       <div className="simple-field-selector">
         <div className="selector-row">
           <div className="selector-group">
+            {/* Dropdown để chọn field */}
             <Select
               size="small"
               value={field.field}
               onChange={(value) => onUpdate(category, field.id, "field", value)}
               style={{ width: "100%" }}
               placeholder="Select field"
-              options={[
-                { label: "Population", value: "population" },
-                { label: "Area", value: "area" },
-                { label: "GDP", value: "gdp" },
-                { label: "Name", value: "name" },
-              ]}
+              options={FIELD_OPTIONS}
             />
           </div>
           <div className="selector-group">
@@ -876,14 +619,7 @@ const PowerBIDashboard: React.FC = () => {
                   onUpdate(category, field.id, "action", value)
                 }
                 style={{ flex: 1 }}
-                options={[
-                  { label: "No action", value: "no-action" },
-                  { label: "Sum", value: "sum" },
-                  { label: "Count", value: "count" },
-                  { label: "Average", value: "average" },
-                  { label: "Min", value: "min" },
-                  { label: "Max", value: "max" },
-                ]}
+                options={FIELD_ACTION_OPTIONS}
               />
               <Button
                 size="small"
@@ -898,11 +634,13 @@ const PowerBIDashboard: React.FC = () => {
       </div>
     );
 
+    // Render chính của Data Config Tab
     return (
       <div className="data-config-tab">
-        {/* Data Source and Table Selection */}
+        {/* Phần chọn Data Source và Table */}
         <div className="data-source-section">
           <div className="source-table-row">
+            {/* Selector cho Data Source */}
             <div className="selector-group">
               <Typography.Text className="selector-label">
                 Data source:
@@ -912,14 +650,10 @@ const PowerBIDashboard: React.FC = () => {
                 value={dataSource}
                 onChange={setDataSource}
                 style={{ width: "100%" }}
-                options={[
-                  { label: "API", value: "API" },
-                  { label: "Database", value: "DB" },
-                  { label: "Formula", value: "Formula" },
-                  { label: "File", value: "File" },
-                ]}
+                options={DATA_SOURCE_OPTIONS}
               />
             </div>
+            {/* Selector cho Table */}
             <div className="selector-group">
               <Typography.Text className="selector-label">
                 Table:
@@ -929,12 +663,7 @@ const PowerBIDashboard: React.FC = () => {
                 value={selectedTable}
                 onChange={setSelectedTable}
                 style={{ width: "100%" }}
-                options={[
-                  { label: "Cities", value: "cities" },
-                  { label: "Countries", value: "countries" },
-                  { label: "Sales", value: "sales" },
-                  { label: "Products", value: "products" },
-                ]}
+                options={TABLE_OPTIONS}
               />
             </div>
           </div>
@@ -944,44 +673,7 @@ const PowerBIDashboard: React.FC = () => {
 
         {/* Field Categories - Different for each chart type */}
         <div className="field-categories">
-          {getAvailableFields().map((fieldKey) => {
-            if (fieldKey === "drillThrough") {
-              return (
-                <div key={fieldKey} className="field-category">
-                  <div className="category-header">
-                    <Typography.Text className="category-title">
-                      {getFieldDisplayName(fieldKey)}
-                    </Typography.Text>
-                  </div>
-                  <div className="drill-through-content">
-                    <div className="drill-options">
-                      <div className="option-item">
-                        <Switch
-                          size="small"
-                          checked={dataConfig.drillThrough.crossReport}
-                        />
-                        <Typography.Text className="option-text">
-                          Cross-report
-                        </Typography.Text>
-                      </div>
-                      <div className="option-item">
-                        <Switch
-                          size="small"
-                          checked={dataConfig.drillThrough.keepAllFilters}
-                        />
-                        <Typography.Text className="option-text">
-                          Keep all filters
-                        </Typography.Text>
-                      </div>
-                    </div>
-                    <Button type="link" className="add-fields-button">
-                      Add drill-through fields here
-                    </Button>
-                  </div>
-                </div>
-              );
-            }
-
+          {getAvailableFields().map((fieldKey: string) => {
             const fieldsForCategory = categoryFields[fieldKey] || [];
 
             return (
@@ -1030,7 +722,7 @@ const PowerBIDashboard: React.FC = () => {
 
     // Define format sections available for each chart type
     const getAvailableFormatSections = () => {
-      const commonSections = ["legend", "title"];
+      const commonSections = ["legend"];
 
       switch (chartType) {
         case "column": // Column Chart
@@ -1086,13 +778,12 @@ const PowerBIDashboard: React.FC = () => {
       // Define which sections should have toggles
       const sectionsWithToggle = [
         "legend",
-        "title",
         "dataLabels",
         "gridlines",
         "slices",
         "rotation",
       ];
-      const sectionsWithoutToggle = ["xAxis", "yAxis"]; // Required sections
+      const sectionsWithoutToggle = REQUIRED_SECTIONS; // Required sections
 
       return {
         hasToggle: sectionsWithToggle.includes(sectionKey),
@@ -1208,12 +899,11 @@ const PowerBIDashboard: React.FC = () => {
                         }
                         style={{ width: "120px" }} // Chiều rộng cố định 120px
                       >
-                        <Select.Option value="Segoe UI">Segoe UI</Select.Option>
-                        <Select.Option value="Arial">Arial</Select.Option>
-                        <Select.Option value="Times New Roman">
-                          Times New Roman
-                        </Select.Option>
-                        <Select.Option value="Calibri">Calibri</Select.Option>
+                        {FONT_FAMILY_OPTIONS.map((font: any) => (
+                          <Select.Option key={font.value} value={font.value}>
+                            {font.label}
+                          </Select.Option>
+                        ))}
                       </Select>
 
                       {/* 
@@ -1308,49 +998,22 @@ const PowerBIDashboard: React.FC = () => {
                     <Typography.Text className="form-label">
                       Color
                     </Typography.Text>
-                    <div className="color-picker-row">
-                      {/* 
-                        ANTD COLOR PICKER
-                        
-                        Component chọn màu từ Ant Design
-                        - Hiển thị palette màu sắc
-                        - Hỗ trợ nhập hex code
-                        - showText render custom preview
-                      */}
+                    <Space align="center">
                       <ColorPicker
                         size="small"
-                        value={config.color || "#666666"} // Màu mặc định: xám đậm
+                        value={config.color || "#1677FF"}
                         onChange={(color) =>
                           handleUpdateFormatConfig(
                             sectionKey,
                             "color",
-                            color.toHexString() // Chuyển đổi màu thành hex string
+                            color.toHexString()
                           )
                         }
-                        showText={() => (
-                          /* 
-                            COLOR PREVIEW
-                            
-                            Hiển thị màu hiện tại dưới dạng hình vuông nhỏ
-                            Sử dụng inline style để set background color
-                          */
-                          <div
-                            className="effects-color-display"
-                            style={{
-                              backgroundColor: config.color || "#666666",
-                            }}
-                          />
-                        )}
                       />
-
-                      {/* 
-                        SEARCH BUTTON
-                        
-                        Button phụ có thể mở rộng để tìm kiếm màu
-                        Hiện tại chỉ là placeholder, có thể implement sau
-                      */}
-                      <Button size="small" icon={<Search size={12} />} />
-                    </div>
+                      <Typography.Text code style={{ fontSize: "12px" }}>
+                        {config.color || "#666666"}
+                      </Typography.Text>
+                    </Space>
                   </div>
                 </div>
               </ConfigSection>
@@ -1451,23 +1114,6 @@ const PowerBIDashboard: React.FC = () => {
             </div>
           );
 
-        case "title":
-          return (
-            <div className="section-content">
-              <div className="form-group">
-                <Typography.Text className="form-label">Text</Typography.Text>
-                <Input
-                  size="small"
-                  value={config.text || "Chart Title"}
-                  onChange={(e) =>
-                    handleUpdateFormatConfig(sectionKey, "text", e.target.value)
-                  }
-                />
-              </div>
-              <FontControls config={config} section={sectionKey} />
-            </div>
-          );
-
         case "gridlines":
           return (
             <div className="section-content">
@@ -1476,7 +1122,7 @@ const PowerBIDashboard: React.FC = () => {
                 <Space align="center">
                   <ColorPicker
                     size="small"
-                    value={config.color || "#E1E1E1"}
+                    value={config.color || "#1677FF"}
                     onChange={(color) =>
                       handleUpdateFormatConfig(
                         sectionKey,
@@ -1781,9 +1427,7 @@ const PowerBIDashboard: React.FC = () => {
                 </ConfigSection>
               </div>
             );
-          } else if (
-            ["bar", "stackedBar", "clusteredBar"].includes(chartType)
-          ) {
+          } else if (BAR_CHART_TYPES.includes(chartType)) {
             // For bar charts: X-axis shows Range (numeric values)
             return (
               <div className="properties-container">
@@ -2260,9 +1904,7 @@ const PowerBIDashboard: React.FC = () => {
                 </ConfigSection>
               </div>
             );
-          } else if (
-            ["bar", "stackedBar", "clusteredBar"].includes(chartType)
-          ) {
+          } else if (BAR_CHART_TYPES.includes(chartType)) {
             // For bar charts: Y-axis shows Values (categories)
             return (
               <div className="properties-container">
@@ -3757,9 +3399,25 @@ const PowerBIDashboard: React.FC = () => {
                   <Typography.Text className="form-label">
                     Transparency
                   </Typography.Text>
-                  <div className="transparency-row">
+                  <div className="transparency-control">
                     <InputNumber
                       size="small"
+                      min={0}
+                      max={100}
+                      value={generalSettings.effects.background.transparency}
+                      onChange={(value) =>
+                        updateGeneralSetting("effects", "background", {
+                          ...generalSettings.effects.background,
+                          transparency: value || 0,
+                        })
+                      }
+                      style={{ width: "60px" }}
+                      formatter={(value) => `${value}%`}
+                      parser={(value) => Number(value!.replace("%", ""))}
+                    />
+                    <Slider
+                      min={0}
+                      max={100}
                       value={generalSettings.effects.background.transparency}
                       onChange={(value) =>
                         updateGeneralSetting("effects", "background", {
@@ -3767,12 +3425,8 @@ const PowerBIDashboard: React.FC = () => {
                           transparency: value,
                         })
                       }
-                      addonAfter="%"
-                      style={{ width: "60px" }}
-                      min={0}
-                      max={100}
+                      style={{ flex: 1, marginLeft: "8px" }}
                     />
-                    <div className="effects-indicator" />
                   </div>
                 </div>
               </div>

@@ -1,0 +1,183 @@
+/* Power BI Dashboard Styles */
+.powerbi-dashboard {
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.chart-container {
+  padding: 24px;
+  height: calc(100vh - 140px);
+  overflow: auto;
+}
+
+.chart-render-area {
+  padding: 24px;
+}
+
+.config-section-indent {
+  padding-left: 16px;
+}
+
+.config-section-no-indent {
+  padding-left: 0;
+}
+
+.empty-state {
+  padding: 16px;
+  color: #666;
+}
+
+.properties-header {
+  padding: 16px;
+  border-bottom: 1px solid #d9d9d9;
+  background: #fafafa;
+}
+
+.properties-content {
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.config-section {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.config-section-header {
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  transition: background 0.3s;
+}
+
+.config-section-header:hover {
+  background: #fafafa;
+}
+
+.config-section-content {
+  padding: 16px;
+  background: #fafafa;
+}
+
+/* Power BI Properties Panel Styles */
+.properties-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #d9d9d9;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visual-icon {
+  font-size: 16px;
+}
+
+.main-tabs .ant-tabs-tab {
+  padding: 8px 24px !important;
+  font-weight: 500 !important;
+}
+
+.sub-tabs {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sub-tabs .ant-tabs-tab {
+  padding: 8px 16px !important;
+  font-size: 12px !important;
+}
+
+.data-config-tab {
+  background: white;
+}
+
+.search-container {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.config-sections {
+  padding: 0;
+}
+
+.section-content {
+  padding: 12px 16px;
+  background: #fafafa;
+}
+
+.legend-content {
+  padding: 8px 16px;
+}
+
+.field-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.form-input {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.drill-through-content {
+  padding: 12px 16px;
+}
+
+.drill-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reset-section {
+  border-top: 1px solid #f0f0f0;
+  padding: 8px 16px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .properties-panel {
+    width: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .properties-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+}

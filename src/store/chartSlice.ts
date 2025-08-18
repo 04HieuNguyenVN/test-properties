@@ -231,6 +231,7 @@ interface ChartDataConfig {
   tooltips: DataField[];
   values?: DataField[];
   secondaryYAxis?: DataField[];
+  detail?: DataField[];
   drillThrough: {
     crossReport: boolean;
     keepAllFilters: boolean;
@@ -335,6 +336,7 @@ const initialState: ChartState = {
   activeSubTab: "Visual",
   expandedSections: {
     // Visual tab sections
+    properties: true,
     appearance: false,
     axes: false,
     legend: false,
@@ -442,6 +444,7 @@ const initialState: ChartState = {
         legend: [{ name: "Khu vực", type: "sum" }],
         values: [{ name: "Sum of GDPGRDP 20...", type: "sum" }],
         tooltips: [{ name: "Sum of Dân số (người)", type: "count" }],
+        detail: [],
         yAxis: [],
         xAxis: [],
         smallMultiples: [],

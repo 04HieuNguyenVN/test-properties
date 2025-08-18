@@ -1,0 +1,284 @@
+/* Format Config Tab Styles */
+.format-config-container {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.format-section {
+  background: white;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.format-section-header {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 12px;
+  font-weight: 600;
+  color: #262626;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.format-section-header:hover {
+  background: #e6f7ff;
+}
+
+.format-section-content {
+  padding: 16px;
+}
+
+.format-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+  min-height: 32px;
+}
+
+.format-row:last-child {
+  margin-bottom: 0;
+}
+
+.format-label {
+  font-size: 12px;
+  color: #595959;
+  font-weight: 500;
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.format-control {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.color-picker-label {
+  font-size: 12px;
+  color: #595959;
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.color-picker-control {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.font-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.font-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.font-control-label {
+  font-size: 11px;
+  color: #595959;
+  font-weight: 500;
+}
+
+.border-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.border-style-options {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.border-style-option {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  transition: all 0.2s;
+}
+
+.border-style-option:hover {
+  border-color: #40a9ff;
+  background: #f6ffed;
+}
+
+.border-style-option.selected {
+  border-color: #1890ff;
+  background: #e6f7ff;
+}
+
+.alignment-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.alignment-option {
+  padding: 6px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  background: white;
+  transition: all 0.2s;
+  font-size: 10px;
+}
+
+.alignment-option:hover {
+  border-color: #40a9ff;
+  background: #f6ffed;
+}
+
+.alignment-option.selected {
+  border-color: #1890ff;
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.spacing-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.spacing-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spacing-label {
+  font-size: 10px;
+  color: #8c8c8c;
+  text-align: center;
+}
+
+.spacing-input {
+  width: 100%;
+}
+
+.number-format-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.number-format-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.number-format-label {
+  font-size: 11px;
+  color: #595959;
+  min-width: 80px;
+}
+
+.format-preset-buttons {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.format-preset-button {
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  background: white;
+  transition: all 0.2s;
+}
+
+.format-preset-button:hover {
+  border-color: #40a9ff;
+  background: #f6ffed;
+}
+
+.format-preset-button.selected {
+  border-color: #1890ff;
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.conditional-formatting {
+  margin-top: 16px;
+}
+
+.conditional-rule {
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: white;
+}
+
+.conditional-rule-header {
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.conditional-rule-content {
+  padding: 12px;
+}
+
+.conditional-criteria {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.conditional-format-preview {
+  padding: 8px 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background: #f8f9fa;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.add-rule-button {
+  width: 100%;
+  margin-top: 8px;
+}

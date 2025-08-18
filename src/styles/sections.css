@@ -1,0 +1,181 @@
+/* Configuration Sections and Structure Styles */
+
+/* Unified styling for both General and Visual tabs */
+
+/* Level 1 - Main sections (Properties, Title, Effects, etc.) */
+.config-section {
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.config-section .section-header {
+  background: #f0f0f0;
+  border-radius: 6px 6px 0 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 13px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Level 2 - Sub-sections inside Properties containers */
+.properties-container {
+  padding-left: 8px;
+  border-left: 3px solid #1890ff;
+  margin-left: 8px;
+  background: #f9f9f9;
+}
+
+.properties-container .config-section {
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.properties-container .config-section .section-header {
+  background: #f5f5f5;
+  border-radius: 4px 4px 0 0;
+  padding: 10px 12px;
+  border-bottom: 1px solid #d9d9d9;
+  font-size: 12px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Level 3 - Sub-sub-sections (like axis Values, Title, etc.) */
+.properties-container .properties-container {
+  border-left: 3px solid #52c41a;
+  background: #f6ffed;
+  padding-left: 6px;
+  margin-left: 6px;
+}
+
+.properties-container .properties-container .config-section {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+
+.properties-container .properties-container .config-section .section-header {
+  background: #edf9d5;
+  border-radius: 3px 3px 0 0;
+  padding: 8px 10px;
+  border-bottom: 1px solid #b7eb8f;
+  font-size: 11px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Data Config Tab - Simple Structure */
+.field-categories {
+  padding: 0;
+}
+
+.field-category {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.field-category:last-child {
+  border-bottom: none;
+}
+
+.category-header {
+  margin-bottom: 8px;
+}
+
+.category-title {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #666 !important;
+  text-transform: uppercase;
+}
+
+.option-text {
+  font-size: 11px !important;
+  margin-left: 8px;
+}
+
+.add-fields-button {
+  padding: 4px 0 !important;
+  font-size: 12px !important;
+  color: #0078d4 !important;
+}
+
+/* ConfigSection Header with Toggle */
+.ant-collapse-header {
+  padding: 12px 16px !important;
+}
+
+.ant-collapse-header .ant-collapse-expand-icon {
+  padding-right: 8px !important;
+}
+
+.ant-collapse-header-text {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.section-toggle {
+  margin-left: auto !important;
+}
+
+/* Format Config Sections */
+.config-sections .ant-collapse {
+  border: none !important;
+  background: transparent !important;
+}
+
+.config-sections .ant-collapse-item {
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.config-sections .ant-collapse-item:last-child {
+  border-bottom: none !important;
+}
+
+.config-sections .ant-collapse-content {
+  border-top: none !important;
+}
+
+.config-sections .ant-collapse-content-box {
+  padding: 0 !important;
+}
+
+/* Unified text sizing for all tabs */
+.general-tab,
+.visual-tab {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.general-tab .form-label,
+.visual-tab .form-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+}
+
+.general-tab .ant-input,
+.visual-tab .ant-input,
+.general-tab .ant-select,
+.visual-tab .ant-select,
+.general-tab .ant-input-number,
+.visual-tab .ant-input-number {
+  font-size: 12px;
+}
+
+.general-tab .ant-typography,
+.visual-tab .ant-typography {
+  font-size: 12px;
+}
+
+.general-tab .ant-btn,
+.visual-tab .ant-btn {
+  font-size: 12px;
+}
