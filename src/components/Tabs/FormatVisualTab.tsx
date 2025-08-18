@@ -568,16 +568,6 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
 
   return (
     <div className="format-config-tab visual-tab">
-      {/* Search box */}
-      <div className="search-container">
-        <Input
-          prefix={<Search size={14} />}
-          placeholder="Search"
-          size="small"
-          style={{ margin: "12px 16px" }}
-        />
-      </div>
-
       {/* Properties Section - Main Container */}
       <ConfigSection
         title="Properties"

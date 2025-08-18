@@ -37,24 +37,6 @@ import {
   TITLE_DISPLAY_OPTIONS,
 } from "./constants/index";
 
-// Import các component chart từ Recharts library
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  ComposedChart,
-} from "recharts";
-
 // Import chart components
 import {
   ColumnChart,
