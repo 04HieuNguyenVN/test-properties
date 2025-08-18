@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { Bold, Italic, Underline, Search, RotateCcw } from "lucide-react";
 import { toggleSection } from "../../store/chartSlice";
-import ConfigSection from "./ConfigSection";
+import ConfigSection from "../ConfigSection";
 
 /**
  * LEGEND SECTION COMPONENT
