@@ -17,20 +17,16 @@ import "./styles/custom-color-picker.css";
 
 // Import constants
 import {
-  CHART_COLORS,
   DATA_SOURCE_OPTIONS,
   TABLE_OPTIONS,
   FIELD_OPTIONS,
   FIELD_ACTION_OPTIONS,
   FIELD_DISPLAY_NAMES,
-  LEGEND_POSITION_OPTIONS,
-  FONT_FAMILY_OPTIONS,
-  FONT_SIZE_OPTIONS,
   CHART_AVAILABLE_FIELDS,
   SIMPLE_CHART_TYPES,
   SINGLE_FIELD_TYPES,
   FIELD_RESTRICTIONS,
-  DEFAULT_COLORS,
+  FONT_FAMILY_OPTIONS,
   BAR_CHART_TYPES,
   REQUIRED_SECTIONS,
   DEFAULT_AVAILABLE_FIELDS,
@@ -49,15 +45,6 @@ import {
   StackedBarChart,
   ClusteredBarChart,
 } from "./components/charts";
-
-// Import tab components
-import { DataConfigTab } from "./components/tabs/DataTab";
-import { FormatConfigTab } from "./components/tabs/FormatVisualTab";
-import { GeneralConfigTab } from "./components/tabs/FormatGeneralTab";
-
-// Import các component chart từ Ant Design Charts
-import { Bar as AntBar, Column as AntColumn } from "@ant-design/charts";
-import { Bar as AntPlotBar } from "@ant-design/plots";
 
 // Import các component UI từ Ant Design
 import {
