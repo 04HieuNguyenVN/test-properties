@@ -629,3 +629,324 @@
 .config-sections .ant-collapse-content-box {
   padding: 0 !important;
 }
+
+/* General Config Tab Styles */
+.general-config-tab {
+  padding: 0;
+}
+
+.properties-container {
+  padding-left: 16px;
+}
+
+.checkbox-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.checkbox-row .form-label {
+  flex: 1;
+}
+
+/* Padding Grid Layout */
+.padding-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+}
+
+.padding-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.padding-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.padding-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 40px;
+}
+
+.padding-visual {
+  width: 40px;
+  height: 30px;
+  border: 2px solid #d9d9d9;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+}
+
+.padding-box {
+  width: 20px;
+  height: 15px;
+  border: 1px solid #999;
+  background: white;
+}
+
+/* Title Section Styles */
+.title-input-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.title-font-group {
+  display: flex;
+  gap: 4px;
+}
+
+.title-format-buttons {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.title-color-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.title-color-display {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d9d9d9;
+}
+
+.title-alignment-group {
+  display: flex;
+  gap: 2px;
+}
+
+.title-alignment-button {
+  width: 32px;
+  text-align: center;
+}
+
+/* Effects Section Styles */
+.color-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.transparency-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rounded-corners-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.effects-color-display {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d9d9d9;
+}
+
+.effects-indicator {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+}
+
+.transparency-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.transparency-control .ant-slider {
+  flex: 1;
+  margin: 0;
+}
+
+.font-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.text-format-buttons {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.axis-subsection {
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.axis-subsection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.subsection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.subsection-title {
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.range-input-group {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.properties-container {
+  padding-left: 8px;
+  border-left: 2px solid #f0f0f0;
+  margin-left: 8px;
+}
+
+.properties-container .config-section {
+  margin-bottom: 8px;
+}
+
+.properties-container .config-section:last-child {
+  margin-bottom: 0;
+}
+
+.properties-container .section-header {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.properties-container .section-content {
+  padding: 8px 0;
+}
+
+/* Unified styling for both General and Visual tabs */
+
+/* Level 1 - Main sections (Properties, Title, Effects, etc.) */
+.config-section {
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.config-section .section-header {
+  background: #f0f0f0;
+  border-radius: 6px 6px 0 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Level 2 - Sub-sections inside Properties containers */
+.properties-container {
+  padding-left: 8px;
+  border-left: 3px solid #1890ff;
+  margin-left: 8px;
+  background: #f9f9f9;
+}
+
+.properties-container .config-section {
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.properties-container .config-section .section-header {
+  background: #f5f5f5;
+  border-radius: 4px 4px 0 0;
+  padding: 10px 12px;
+  border-bottom: 1px solid #d9d9d9;
+  font-size: 13px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Level 3 - Sub-sub-sections (like axis Values, Title, etc.) */
+.properties-container .properties-container {
+  border-left: 3px solid #52c41a;
+  background: #f6ffed;
+  padding-left: 6px;
+  margin-left: 6px;
+}
+
+.properties-container .properties-container .config-section {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+
+.properties-container .properties-container .config-section .section-header {
+  background: #edf9d5;
+  border-radius: 3px 3px 0 0;
+  padding: 8px 10px;
+  border-bottom: 1px solid #b7eb8f;
+  font-size: 12px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Unified text sizing for all tabs */
+.general-tab,
+.visual-tab {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.general-tab .form-label,
+.visual-tab .form-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+}
+
+.general-tab .ant-input,
+.visual-tab .ant-input,
+.general-tab .ant-select,
+.visual-tab .ant-select,
+.general-tab .ant-input-number,
+.visual-tab .ant-input-number {
+  font-size: 12px;
+}
+
+.general-tab .ant-typography,
+.visual-tab .ant-typography {
+  font-size: 12px;
+}
+
+.general-tab .ant-btn,
+.visual-tab .ant-btn {
+  font-size: 12px;
+}
