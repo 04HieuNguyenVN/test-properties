@@ -22,6 +22,7 @@ const JsonDataPanel: React.FC = () => {
   const getChartDataArray = () => {
     switch (chartType) {
       case "stackedColumn":
+        return chartData.monthlyData;
       case "stackedBar":
         return chartData.stackedData;
       case "clusteredColumn":

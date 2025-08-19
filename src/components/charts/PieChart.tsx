@@ -10,19 +10,20 @@ import {
 import { CHART_COLORS } from "../../constants/index";
 import chartData from "../../data/chartData.json";
 
-// Props cho biểu đồ tròn
+// ===== Props cho biểu đồ tròn =====
+// Thêm prop data để nhận dữ liệu từ ngoài vào
 interface PieChartProps {
   config: any;
+  data: any[];
 }
 
-// Biểu đồ tròn (Pie Chart)
-export const PieChart: React.FC<PieChartProps> = ({ config }) => {
-  // Lấy dữ liệu từ file chartData.json
-  const data = chartData.categories;
-  // Render biểu đồ tròn với các phần tử màu sắc
+// ===== Biểu đồ tròn (Pie Chart) =====
+export const PieChart: React.FC<PieChartProps> = ({ config, data }) => {
+  // Nhận dữ liệu từ prop data
   return (
     <ResponsiveContainer width="100%" height={500}>
       <RechartsPieChart>
+        {/* Vẽ các phần tử của biểu đồ tròn */}
         <Pie
           data={data}
           cx="50%"
@@ -41,6 +42,7 @@ export const PieChart: React.FC<PieChartProps> = ({ config }) => {
           ))}
         </Pie>
         <Tooltip />
+        {/* Hiển thị chú giải nếu có cấu hình */}
         {config.legend?.enabled && <Legend />}
       </RechartsPieChart>
     </ResponsiveContainer>

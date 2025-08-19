@@ -2,18 +2,19 @@ import React from "react";
 import { Bar as AntPlotBar } from "@ant-design/plots";
 import chartData from "../../data/chartData.json";
 
-// Props cho biểu đồ cột nhóm ngang
+// ===== Props cho biểu đồ cột nhóm ngang =====
+// Thêm prop data để nhận dữ liệu từ ngoài vào
 interface ClusteredBarChartProps {
   config: any;
+  data: any[];
 }
 
-// Biểu đồ cột nhóm ngang (Clustered Bar Chart)
+// ===== Biểu đồ cột nhóm ngang (Clustered Bar Chart) =====
 export const ClusteredBarChart: React.FC<ClusteredBarChartProps> = ({
   config,
+  data,
 }) => {
-  // Lấy dữ liệu từ file chartData.json
-  const data = chartData.monthlyData;
-  // Chuyển đổi dữ liệu thành dạng phù hợp cho biểu đồ nhóm
+  // Nhận dữ liệu từ prop data
   const clusteredBarData = data.flatMap((item) => [
     { label: item.month, type: "visitors", value: item.visitors },
     { label: item.month, type: "revenue", value: item.revenue },
@@ -43,6 +44,6 @@ export const ClusteredBarChart: React.FC<ClusteredBarChartProps> = ({
     },
   };
 
-  // Render biểu đồ
+  // Render biểu đồ cột nhóm ngang
   return <AntPlotBar {...clusteredBarConfig} />;
 };

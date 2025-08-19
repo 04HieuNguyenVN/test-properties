@@ -2,16 +2,19 @@ import React from "react";
 import { Bar as AntPlotBar } from "@ant-design/plots";
 import chartData from "../../data/chartData.json";
 
-// Props cho biểu đồ cột chồng ngang
+// ===== Props cho biểu đồ cột chồng ngang =====
+// Thêm prop data để nhận dữ liệu từ ngoài vào
 interface StackedBarChartProps {
   config: any;
+  data: any[];
 }
 
-// Biểu đồ cột chồng ngang (Stacked Bar Chart)
-export const StackedBarChart: React.FC<StackedBarChartProps> = ({ config }) => {
-  // Lấy dữ liệu từ file chartData.json
-  const data = chartData.stackedData;
-  // Chuyển đổi dữ liệu thành dạng phù hợp cho biểu đồ chồng
+// ===== Biểu đồ cột chồng ngang (Stacked Bar Chart) =====
+export const StackedBarChart: React.FC<StackedBarChartProps> = ({
+  config,
+  data,
+}) => {
+  // Nhận dữ liệu từ prop data
   const stackedBarData = data.flatMap((item) => [
     { state: item.category, population: item.series1, age: "Series 1" },
     { state: item.category, population: item.series2, age: "Series 2" },
@@ -56,6 +59,6 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({ config }) => {
     },
   };
 
-  // Render biểu đồ
+  // Render biểu đồ cột chồng ngang
   return <AntPlotBar {...stackedBarConfig} />;
 };

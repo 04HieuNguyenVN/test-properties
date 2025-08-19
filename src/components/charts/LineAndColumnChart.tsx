@@ -12,14 +12,17 @@ import {
 } from "recharts";
 import chartData from "../../data/chartData.json";
 
+// Thêm prop data để nhận dữ liệu từ ngoài vào
 interface LineAndColumnChartProps {
   config: any;
+  data: any[];
 }
 
 export const LineAndColumnChart: React.FC<LineAndColumnChartProps> = ({
   config,
+  data,
 }) => {
-  const data = chartData.monthlyData;
+  // Nhận dữ liệu từ prop data
   return (
     <ResponsiveContainer width="100%" height={500}>
       <ComposedChart

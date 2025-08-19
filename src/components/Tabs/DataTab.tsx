@@ -14,12 +14,18 @@ import {
   loadFieldOptions,
 } from "../../constants/index";
 
+// Thêm prop data để nhận dữ liệu từ ngoài vào (1 chiều)
 export interface DataTabProps {
   chartType: string;
   rawData: any[];
+  data: any[];
 }
 
-export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
+export const DataTab: React.FC<DataTabProps> = ({
+  chartType,
+  rawData,
+  data,
+}) => {
   // Lấy các field khả dụng cho chart hiện tại
   const getAvailableFields = (): string[] => {
     return CHART_AVAILABLE_FIELDS[chartType] || DEFAULT_AVAILABLE_FIELDS;
@@ -257,16 +263,19 @@ export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
 
   // Determine table name based on chartType
   let tableName = "";
-  if (chartType === "stackedColumn" || chartType === "stackedBar")
+  // Sử dụng monthlyData cho stackedColumn, còn stackedBar vẫn dùng stackedData
+  if (chartType === "stackedColumn") {
+    tableName = "monthlyData";
+  } else if (chartType === "stackedBar") {
     tableName = "stackedData";
-  else if (
+  } else if (
     chartType === "clusteredColumn" ||
     chartType === "clusteredBar" ||
     chartType === "lineAndColumn" ||
     chartType === "line"
-  )
+  ) {
     tableName = "monthlyData";
-  else if (chartType === "pie") tableName = "categories";
+  } else if (chartType === "pie") tableName = "categories";
   else tableName = "data";
 
   return (

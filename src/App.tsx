@@ -1,9 +1,9 @@
-// Import các thư viện React và Redux cần thiết
+// Nhập các thư viện React, Redux và các hook cần thiết
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 
-// Import CSS styles
+// Nhập các file CSS style cho giao diện
 import "./styles/dashboard.css";
 import "./styles/chart.css";
 import "./styles/field-selector.css";
@@ -17,7 +17,7 @@ import "./styles/overrides.css";
 import "./styles/custom-color-picker.css";
 import "./styles/data-display.css";
 
-// Import constants
+// Nhập các hằng số cấu hình, danh sách field, loại chart, ...
 import {
   DATA_SOURCE_OPTIONS,
   TABLE_OPTIONS,
@@ -35,7 +35,7 @@ import {
   TITLE_DISPLAY_OPTIONS,
 } from "./constants/index";
 
-// Import chart components
+// Nhập các component biểu đồ
 import {
   StackedColumnChart,
   ClusteredColumnChart,
@@ -45,12 +45,13 @@ import {
   StackedBarChart,
   ClusteredBarChart,
 } from "./components/charts";
+import chartData from "./data/chartData.json";
 
-// Import DataDisplayPanels component
+// Nhập component hiển thị panel dữ liệu
 import DataDisplayPanels from "./components/DataDisplayPanels";
 import { DataTab } from "./components/tabs/DataTab";
 
-// Import các component UI từ Ant Design
+// Nhập các component UI từ thư viện Ant Design
 import {
   Layout,
   Card,
@@ -71,11 +72,11 @@ import {
 } from "antd";
 const { TextArea } = Input;
 
-// Import custom components
+// Nhập các component tuỳ chỉnh (custom)
 import { CustomColorPicker } from "./components/common/CustomColorPicker";
 // import { FunctionButton } from "./components/common/FunctionButton";
 
-// Import các icon từ Lucide React
+// Nhập các icon từ thư viện Lucide React
 import {
   ChevronDown,
   ChevronRight,
@@ -98,7 +99,7 @@ import {
   FunctionSquare,
 } from "lucide-react";
 import { RootState } from "./store/store";
-// Import Redux actions và types từ store
+// Nhập các action và kiểu dữ liệu Redux từ store
 import {
   setChartType,
   setActiveTab,
@@ -110,47 +111,47 @@ import {
   ChartState,
 } from "./store/chartSlice";
 
-// Destructure các component từ Ant Design
+// Tách các component cần dùng từ Ant Design
 const { Content, Sider } = Layout;
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 const { Option } = Select;
 
-// Component chính của ứng dụng Power BI Dashboard
+// Component chính của ứng dụng Dashboard
 const PowerBIDashboard: React.FC = () => {
   const { i18n } = useTranslation();
-  // Khởi tạo dispatch để gửi actions tới Redux store
+  // Tạo dispatch để gửi action tới Redux
   const dispatch = useDispatch();
 
-  // Lấy state từ Redux store bằng useSelector
+  // Lấy state từ Redux store
   const {
-    data, // Dữ liệu chính cho charts
-    categoryData, // Dữ liệu theo danh mục
+    data, // Dữ liệu chính cho biểu đồ
+    categoryData, // Dữ liệu phân loại
     monthlyData, // Dữ liệu theo tháng
     populationData, // Dữ liệu dân số
     testStackedData, // Dữ liệu test cho stacked chart
-    chartType, // Loại chart hiện tại
-    activeTab, // Tab đang active (Data/Format/General)
-    activeSubTab, // Sub-tab đang active
-    expandedSections, // Các section đang được mở rộng
-    chartConfigs, // Cấu hình cho tất cả loại chart
+    chartType, // Loại biểu đồ hiện tại
+    activeTab, // Tab đang chọn (Data/Format/General)
+    activeSubTab, // Sub-tab đang chọn
+    expandedSections, // Các mục đang mở rộng
+    chartConfigs, // Cấu hình cho các loại biểu đồ
   } = useSelector((state: RootState) => state.chart) as ChartState;
 
-  // Lấy cấu hình hiện tại của chart type đang được chọn
+  // Lấy cấu hình của loại biểu đồ đang chọn
   const currentConfig = chartConfigs[chartType];
 
-  // Handler để toggle mở/đóng section
+  // Hàm xử lý mở/đóng section
   const handleToggleSection = (section: string) => {
     dispatch(toggleSection(section));
   };
 
-  // Handler để xóa data item khỏi category
+  // Hàm xử lý xóa field khỏi category
   const handleRemoveDataItem = (category: string, fieldName: string) => {
     dispatch(removeDataItem({ category, fieldName }));
   };
 
-  // Handler để thay đổi loại field (sum/count/average)
+  // Hàm xử lý thay đổi loại field (sum/count/average)
   const handleFieldTypeChange = (
     fieldName: string,
     newType: "sum" | "count" | "average",
@@ -254,22 +255,49 @@ const PowerBIDashboard: React.FC = () => {
 
   const renderChart = () => {
     const config = currentConfig.format;
+    // Lấy đúng data cho từng loại chart
+    let chartRawData: any[] = [];
+    if (chartType === "stackedColumn") {
+      chartRawData = chartData.monthlyData;
+    } else if (chartType === "stackedBar") {
+      chartRawData = chartData.stackedData;
+    } else if (
+      chartType === "clusteredColumn" ||
+      chartType === "clusteredBar" ||
+      chartType === "lineAndColumn" ||
+      chartType === "line"
+    ) {
+      chartRawData = chartData.monthlyData;
+    } else if (chartType === "pie") {
+      chartRawData = chartData.categories;
+    } else {
+      chartRawData = [];
+    }
 
     switch (chartType) {
       case "stackedColumn":
-        return <StackedColumnChart config={config} />;
+        // Truyền data từ chartData.monthlyData vào StackedColumnChart
+        return (
+          <StackedColumnChart config={config} data={chartData.monthlyData} />
+        );
       case "clusteredColumn":
-        return <ClusteredColumnChart config={config} />;
+        return (
+          <ClusteredColumnChart config={config} data={chartData.monthlyData} />
+        );
       case "lineAndColumn":
-        return <LineAndColumnChart config={config} />;
+        return (
+          <LineAndColumnChart config={config} data={chartData.monthlyData} />
+        );
       case "pie":
-        return <CustomPieChart config={config} />;
+        return <CustomPieChart config={config} data={chartData.categories} />;
       case "line":
-        return <CustomLineChart config={config} />;
+        return <CustomLineChart config={config} data={chartData.monthlyData} />;
       case "stackedBar":
-        return <StackedBarChart config={config} />;
+        return <StackedBarChart config={config} data={chartData.stackedData} />;
       case "clusteredBar":
-        return <ClusteredBarChart config={config} />;
+        return (
+          <ClusteredBarChart config={config} data={chartData.monthlyData} />
+        );
       default:
         return null;
     }
@@ -4146,19 +4174,36 @@ const PowerBIDashboard: React.FC = () => {
                     chartType={chartType}
                     rawData={
                       chartType === "stackedColumn"
-                        ? require("./data/chartData.json").stackedData
+                        ? chartData.monthlyData
                         : chartType === "clusteredColumn"
-                        ? require("./data/chartData.json").monthlyData
+                        ? chartData.monthlyData
                         : chartType === "lineAndColumn"
-                        ? require("./data/chartData.json").monthlyData
+                        ? chartData.monthlyData
                         : chartType === "pie"
-                        ? require("./data/chartData.json").categories
+                        ? chartData.categories
                         : chartType === "line"
-                        ? require("./data/chartData.json").monthlyData
+                        ? chartData.monthlyData
                         : chartType === "stackedBar"
-                        ? require("./data/chartData.json").stackedData
+                        ? chartData.stackedData
                         : chartType === "clusteredBar"
-                        ? require("./data/chartData.json").monthlyData
+                        ? chartData.monthlyData
+                        : []
+                    }
+                    data={
+                      chartType === "stackedColumn"
+                        ? chartData.monthlyData
+                        : chartType === "stackedBar"
+                        ? chartData.stackedData
+                        : chartType === "clusteredColumn"
+                        ? chartData.monthlyData
+                        : chartType === "clusteredBar"
+                        ? chartData.monthlyData
+                        : chartType === "lineAndColumn"
+                        ? chartData.monthlyData
+                        : chartType === "line"
+                        ? chartData.monthlyData
+                        : chartType === "pie"
+                        ? chartData.categories
                         : []
                     }
                   />

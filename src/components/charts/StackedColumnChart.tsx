@@ -4,24 +4,31 @@ import { useDispatch } from "react-redux";
 import { setRawChartData } from "../../store/chartSlice";
 import chartData from "../../data/chartData.json";
 
-// Props cho biểu đồ cột chồng dọc
+// ===== Props cho biểu đồ cột chồng dọc =====
+// Thêm prop data để nhận dữ liệu từ ngoài vào
 interface StackedColumnChartProps {
   config?: any;
+  data: any[];
 }
 
-// Biểu đồ cột chồng dọc (Stacked Column Chart)
-const StackedColumnChart: React.FC<StackedColumnChartProps> = ({ config }) => {
+// ===== Biểu đồ cột chồng dọc (Stacked Column Chart) =====
+
+const StackedColumnChart: React.FC<StackedColumnChartProps> = ({
+  config,
+  data,
+}) => {
   const dispatch = useDispatch();
-  // Lấy dữ liệu từ file chartData.json
-  const rawData = chartData.stackedData;
-  // Chuyển đổi dữ liệu thành dạng phù hợp cho biểu đồ chồng
+
+  // Nhận dữ liệu từ prop data
+  const rawData = data;
+  // Chuyển đổi dữ liệu sang dạng phù hợp cho stacked column chart
   const transformedData = rawData.flatMap((item) => [
-    { category: item.category, series: "Series 1", value: item.series1 },
-    { category: item.category, series: "Series 2", value: item.series2 },
-    { category: item.category, series: "Series 3", value: item.series3 },
+    { category: item.month, series: "Visitors", value: item.visitors },
+    { category: item.month, series: "Revenue", value: item.revenue },
+    { category: item.month, series: "Sales", value: item.sales },
   ]);
 
-  // Đẩy dữ liệu gốc lên Redux khi mount
+  // Đẩy dữ liệu gốc lên Redux khi component mount (nếu cần)
   useEffect(() => {
     dispatch(setRawChartData(rawData));
   }, [dispatch, rawData]);
@@ -46,10 +53,10 @@ const StackedColumnChart: React.FC<StackedColumnChartProps> = ({ config }) => {
     },
   };
 
-  // Gộp cấu hình custom nếu có
+  // Gộp cấu hình custom nếu có truyền vào
   const mergedConfig = config ? { ...defaultConfig, ...config } : defaultConfig;
 
-  // Render biểu đồ
+  // Render biểu đồ cột chồng dọc
   return <Column {...mergedConfig} />;
 };
 

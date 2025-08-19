@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Sample data for Vietnamese cities
+// Dữ liệu mẫu cho các thành phố Việt Nam
 const sampleData = [
   {
     name: "Hà Nội",
@@ -92,14 +92,14 @@ const sampleData = [
   },
 ];
 
-// Additional data for pie charts (category distribution)
+// Dữ liệu phân phối danh mục cho biểu đồ tròn
 const categoryData = [
   { name: "Thủ đô", value: 1, percentage: 12.5 },
   { name: "TP trực thuộc TW", value: 4, percentage: 50.0 },
   { name: "TP tỉnh", value: 3, percentage: 37.5 },
 ];
 
-// Population pyramid data for stacked charts
+// Dữ liệu tháp dân số cho biểu đồ stacked
 const populationData = [
   {
     city: "Hà Nội",
