@@ -284,7 +284,12 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
           >
             <div className="section-content">
               <div className="form-group">
-                <Typography.Text className="form-label">Height</Typography.Text>
+                <Typography.Text
+                  className="form-label"
+                  title="Chiều cao của biểu đồ"
+                >
+                  Height
+                </Typography.Text>
                 <InputNumber
                   size="small"
                   value={generalSettings.size.height}
@@ -292,21 +297,28 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     updateGeneralSetting("size", "height", value)
                   }
                   style={{ width: "100%" }}
+                  title="Nhập chiều cao (px)"
                 />
               </div>
               <div className="form-group">
-                <Typography.Text className="form-label">Width</Typography.Text>
+                <Typography.Text
+                  className="form-label"
+                  title="Chiều rộng của biểu đồ"
+                >
+                  Width
+                </Typography.Text>
                 <InputNumber
                   size="small"
                   value={generalSettings.size.width}
                   onChange={(value) =>
                     updateGeneralSetting("size", "width", value)
                   }
-                  style={{ width: "100%" }}
+                  className="general-input-fullwidth"
+                  title="Nhập chiều rộng (px)"
                 />
               </div>
               <div className="form-group">
-                <div className="checkbox-row">
+                <div className="checkbox-row general-flex-gap">
                   <Typography.Text className="form-label">
                     Lock aspect ratio
                   </Typography.Text>
@@ -316,6 +328,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     onChange={(checked) =>
                       updateGeneralSetting("size", "lockAspectRatio", checked)
                     }
+                    title="Khóa tỉ lệ khung hình"
                   />
                 </div>
               </div>
@@ -330,7 +343,10 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
           >
             <div className="section-content">
               <div className="form-group">
-                <Typography.Text className="form-label">
+                <Typography.Text
+                  className="form-label"
+                  title="Vị trí ngang của biểu đồ"
+                >
                   Horizontal
                 </Typography.Text>
                 <InputNumber
@@ -339,11 +355,15 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                   onChange={(value) =>
                     updateGeneralSetting("position", "horizontal", value)
                   }
-                  style={{ width: "100%" }}
+                  className="general-input-fullwidth"
+                  title="Nhập vị trí ngang (px)"
                 />
               </div>
               <div className="form-group">
-                <Typography.Text className="form-label">
+                <Typography.Text
+                  className="form-label"
+                  title="Vị trí dọc của biểu đồ"
+                >
                   Vertical
                 </Typography.Text>
                 <InputNumber
@@ -352,7 +372,8 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                   onChange={(value) =>
                     updateGeneralSetting("position", "vertical", value)
                   }
-                  style={{ width: "100%" }}
+                  className="general-input-fullwidth"
+                  title="Nhập vị trí dọc (px)"
                 />
               </div>
             </div>
@@ -443,6 +464,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     onChange={(checked) =>
                       updateGeneralSetting("advanced", "responsive", checked)
                     }
+                    title="Bật/tắt chế độ responsive"
                   />
                 </div>
               </div>
@@ -461,6 +483,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                         checked
                       )
                     }
+                    title="Giữ thứ tự lớp hiển thị"
                   />
                 </div>
               </div>
@@ -521,7 +544,11 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                       heading: value,
                     })
                   }
-                  style={{ width: "100%" }}
+                  className="general-input-fullwidth"
+                  dropdownMatchSelectWidth={false}
+                  placement="bottomLeft"
+                  getPopupContainer={(trigger) => trigger.parentNode}
+                  title="Chọn cấp độ tiêu đề cho biểu đồ. Heading 1 là lớn nhất, Heading 4 là nhỏ nhất."
                 >
                   <Select.Option value="Heading 1">Heading 1</Select.Option>
                   <Select.Option value="Heading 2">Heading 2</Select.Option>
@@ -541,7 +568,11 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                         font: value,
                       })
                     }
-                    style={{ flex: 1 }}
+                    className="general-input-flex"
+                    dropdownMatchSelectWidth={false}
+                    placement="bottomLeft"
+                    getPopupContainer={(trigger) => trigger.parentNode}
+                    title="Chọn font chữ cho tiêu đề."
                   >
                     <Select.Option value="DIN">DIN</Select.Option>
                     <Select.Option value="Segoe UI">Segoe UI</Select.Option>
@@ -556,7 +587,8 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                         fontSize: value,
                       })
                     }
-                    style={{ width: "60px" }}
+                    className="general-input-60px"
+                    title="Cỡ chữ tiêu đề (px)"
                   />
                 </div>
               </div>

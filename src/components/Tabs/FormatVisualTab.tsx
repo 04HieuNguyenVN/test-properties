@@ -10,6 +10,7 @@ import {
   Switch,
   ColorPicker,
   Slider,
+  Tooltip,
 } from "antd";
 import { Bold, Italic, Underline, RotateCcw } from "lucide-react";
 import { RootState } from "../../store/store";
@@ -21,9 +22,10 @@ import {
   BAR_CHART_TYPES,
 } from "../../constants/index";
 
+// Kiểu props cho tab cấu hình định dạng
 interface FormatConfigTabProps {}
 
-// ConfigSection component for collapsible sections
+// Component cho từng mục cấu hình có thể thu gọn/mở rộng
 interface ConfigSectionProps {
   title: string;
   children: React.ReactNode;
@@ -47,29 +49,35 @@ const ConfigSection: React.FC<ConfigSectionProps> = ({
     <div className="config-section">
       <div className="section-header" onClick={onToggle}>
         <div className="section-title-row">
-          <Typography.Text className="section-title">{title}</Typography.Text>
+          <Tooltip title={`Cài đặt cho mục "${title}"`}>
+            <Typography.Text className="section-title">{title}</Typography.Text>
+          </Tooltip>
           {hasToggle && (
-            <Switch
-              size="small"
-              checked={toggleValue}
-              onChange={(checked) => {
-                onToggleChange?.(checked);
-                // Prevent header click when toggling switch
-              }}
-              onClick={(e: any) => e.stopPropagation()}
-            />
+            <Tooltip title="Bật/tắt mục này">
+              <Switch
+                size="small"
+                checked={toggleValue}
+                onChange={(checked) => {
+                  onToggleChange?.(checked);
+                  // Prevent header click when toggling switch
+                }}
+                onClick={(e: any) => e.stopPropagation()}
+              />
+            </Tooltip>
           )}
         </div>
-        <span className={`expand-icon ${isExpanded ? "expanded" : ""}`}>
-          {isExpanded ? "−" : "+"}
-        </span>
+        <Tooltip title={isExpanded ? "Thu gọn" : "Mở rộng"}>
+          <span className={`expand-icon ${isExpanded ? "expanded" : ""}`}>
+            {isExpanded ? "−" : "+"}
+          </span>
+        </Tooltip>
       </div>
       {isExpanded && <div className="section-body">{children}</div>}
     </div>
   );
 };
 
-// FontControls component for reusable font styling
+// Component điều khiển font chữ dùng lại nhiều nơi
 interface FontControlsProps {
   config: any;
   section: string;
@@ -86,69 +94,92 @@ const FontControls: React.FC<FontControlsProps> = ({ config, section }) => {
     dispatch(updateFormatConfig({ section: sectionKey, key, value }));
   };
 
+  // Điều khiển font chữ, cỡ chữ, kiểu chữ, màu sắc cho từng mục
   return (
     <>
+      {/* Chọn font và cỡ chữ */}
       <div className="form-group">
         <Typography.Text className="form-label">Font</Typography.Text>
         <div className="font-controls">
-          <Select
-            size="small"
-            value={config.font || "Segoe UI"}
-            onChange={(value) =>
-              handleUpdateFormatConfig(section, "font", value)
-            }
-            style={{ width: "120px" }}
-          >
-            {FONT_FAMILY_OPTIONS.map((font) => (
-              <Select.Option key={font.value} value={font.value}>
-                {font.label}
-              </Select.Option>
-            ))}
-          </Select>
-          <InputNumber
-            size="small"
-            value={config.fontSize || 10}
-            onChange={(value) =>
-              handleUpdateFormatConfig(section, "fontSize", value)
-            }
-            style={{ width: "60px" }}
-            min={8}
-            max={72}
-          />
+          <Tooltip title="Chọn font chữ cho nhãn, tiêu đề hoặc trục.">
+            <Select
+              size="small"
+              value={config.font || "Segoe UI"}
+              onChange={(value) =>
+                handleUpdateFormatConfig(section, "font", value)
+              }
+              className="general-input-120px"
+              dropdownMatchSelectWidth={false}
+              placement="bottomLeft"
+              getPopupContainer={(trigger) => trigger.parentNode}
+              title="Chọn font chữ cho nhãn, tiêu đề hoặc trục."
+            >
+              {FONT_FAMILY_OPTIONS.map((font) => (
+                <Select.Option key={font.value} value={font.value}>
+                  {font.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Tooltip>
+          <Tooltip title="Chọn cỡ chữ (px) cho nhãn, tiêu đề hoặc trục.">
+            <InputNumber
+              size="small"
+              value={config.fontSize || 10}
+              onChange={(value) =>
+                handleUpdateFormatConfig(section, "fontSize", value)
+              }
+              className="general-input-60px"
+              title="Chọn cỡ chữ (px) cho nhãn, tiêu đề hoặc trục."
+              min={8}
+              max={72}
+            />
+          </Tooltip>
         </div>
       </div>
 
+      {/* Nút chọn kiểu chữ: đậm, nghiêng, gạch chân */}
       <div className="form-group">
         <div className="text-format-buttons">
-          <Button
-            size="small"
-            type={config.bold ? "primary" : "default"}
-            icon={<Bold size={12} />}
-            onClick={() =>
-              handleUpdateFormatConfig(section, "bold", !config.bold)
-            }
-          />
-          <Button
-            size="small"
-            type={config.italic ? "primary" : "default"}
-            icon={<Italic size={12} />}
-            onClick={() =>
-              handleUpdateFormatConfig(section, "italic", !config.italic)
-            }
-          />
-          <Button
-            size="small"
-            type={config.underline ? "primary" : "default"}
-            icon={<Underline size={12} />}
-            onClick={() =>
-              handleUpdateFormatConfig(section, "underline", !config.underline)
-            }
-          />
+          <Tooltip title="Bật/tắt in đậm cho nhãn, tiêu đề hoặc trục.">
+            <Button
+              size="small"
+              type={config.bold ? "primary" : "default"}
+              icon={<Bold size={12} />}
+              onClick={() =>
+                handleUpdateFormatConfig(section, "bold", !config.bold)
+              }
+            />
+          </Tooltip>
+          <Tooltip title="Bật/tắt in nghiêng cho nhãn, tiêu đề hoặc trục.">
+            <Button
+              size="small"
+              type={config.italic ? "primary" : "default"}
+              icon={<Italic size={12} />}
+              onClick={() =>
+                handleUpdateFormatConfig(section, "italic", !config.italic)
+              }
+            />
+          </Tooltip>
+          <Tooltip title="Bật/tắt gạch chân cho nhãn, tiêu đề hoặc trục.">
+            <Button
+              size="small"
+              type={config.underline ? "primary" : "default"}
+              icon={<Underline size={12} />}
+              onClick={() =>
+                handleUpdateFormatConfig(
+                  section,
+                  "underline",
+                  !config.underline
+                )
+              }
+            />
+          </Tooltip>
         </div>
       </div>
 
+      {/* Chọn màu sắc */}
       <CustomColorPicker
-        label="Color"
+        label="Màu sắc"
         value={config.color}
         onChange={(color) => handleUpdateFormatConfig(section, "color", color)}
       />
@@ -216,24 +247,32 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
             >
               <div className="section-content">
                 <div className="form-group">
-                  <Typography.Text className="form-label">
-                    Position
-                  </Typography.Text>
-                  <Select
-                    size="small"
-                    value={config.position || "Top"}
-                    onChange={(value) =>
-                      handleUpdateFormatConfig(sectionKey, "position", value)
-                    }
-                    style={{ width: "100%" }}
-                    options={[
-                      { label: "Top", value: "Top" },
-                      { label: "Bottom", value: "Bottom" },
-                      { label: "Left", value: "Left" },
-                      { label: "Right", value: "Right" },
-                      { label: "Center right", value: "Center right" },
-                    ]}
-                  />
+                  <Tooltip title="Vị trí hiển thị của chú thích (legend)">
+                    <Typography.Text className="form-label">
+                      Position
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Chọn vị trí hiển thị của legend">
+                    <Select
+                      size="small"
+                      value={config.position || "Top"}
+                      onChange={(value) =>
+                        handleUpdateFormatConfig(sectionKey, "position", value)
+                      }
+                      className="general-input-fullwidth"
+                      dropdownMatchSelectWidth={false}
+                      placement="bottomLeft"
+                      getPopupContainer={(trigger) => trigger.parentNode}
+                      title="Chọn vị trí hiển thị của legend."
+                      options={[
+                        { label: "Top", value: "Top" },
+                        { label: "Bottom", value: "Bottom" },
+                        { label: "Left", value: "Left" },
+                        { label: "Right", value: "Right" },
+                        { label: "Center right", value: "Center right" },
+                      ]}
+                    />
+                  </Tooltip>
                 </div>
               </div>
             </ConfigSection>
@@ -285,30 +324,32 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
 
             {/* Reset to Default */}
             <div className="reset-section">
-              <Button
-                type="link"
-                icon={<RotateCcw size={14} />}
-                style={{
-                  padding: "16px",
-                  fontSize: "12px",
-                  color: "#0078d4",
-                }}
-                onClick={() => {
-                  handleUpdateFormatConfig(sectionKey, "position", "Top");
-                  handleUpdateFormatConfig(sectionKey, "font", "Segoe UI");
-                  handleUpdateFormatConfig(sectionKey, "fontSize", 8);
-                  handleUpdateFormatConfig(sectionKey, "bold", false);
-                  handleUpdateFormatConfig(sectionKey, "italic", false);
-                  handleUpdateFormatConfig(sectionKey, "underline", false);
-                  handleUpdateFormatConfig(sectionKey, "color", "#666666");
-                  handleUpdateFormatConfig(sectionKey, "title", {
-                    enabled: true,
-                    text: "Legend",
-                  });
-                }}
-              >
-                Reset to default
-              </Button>
+              <Tooltip title="Đặt lại cấu hình mục này về mặc định">
+                <Button
+                  type="link"
+                  icon={<RotateCcw size={14} />}
+                  style={{
+                    padding: "16px",
+                    fontSize: "12px",
+                    color: "#0078d4",
+                  }}
+                  onClick={() => {
+                    handleUpdateFormatConfig(sectionKey, "position", "Top");
+                    handleUpdateFormatConfig(sectionKey, "font", "Segoe UI");
+                    handleUpdateFormatConfig(sectionKey, "fontSize", 8);
+                    handleUpdateFormatConfig(sectionKey, "bold", false);
+                    handleUpdateFormatConfig(sectionKey, "italic", false);
+                    handleUpdateFormatConfig(sectionKey, "underline", false);
+                    handleUpdateFormatConfig(sectionKey, "color", "#666666");
+                    handleUpdateFormatConfig(sectionKey, "title", {
+                      enabled: true,
+                      text: "Legend",
+                    });
+                  }}
+                >
+                  Reset to default
+                </Button>
+              </Tooltip>
             </div>
           </div>
         );
@@ -673,13 +714,15 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
 
       {/* Reset to default */}
       <div className="reset-section">
-        <Button
-          type="link"
-          icon={<RotateCcw size={14} />}
-          style={{ padding: "16px", fontSize: "12px", color: "#0078d4" }}
-        >
-          Reset to default
-        </Button>
+        <Tooltip title="Đặt lại toàn bộ cấu hình về mặc định">
+          <Button
+            type="link"
+            icon={<RotateCcw size={14} />}
+            className="general-reset-btn"
+          >
+            Reset to default
+          </Button>
+        </Tooltip>
       </div>
     </div>
   );

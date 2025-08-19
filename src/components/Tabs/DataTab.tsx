@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Select, Divider, Button } from "antd";
+import { Typography, Select, Divider, Button, Tooltip } from "antd";
 import { Plus } from "lucide-react";
 import {
   DATA_SOURCE_OPTIONS,
@@ -229,6 +229,7 @@ export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
       <div className="selector-row">
         <div className="selector-group">
           <Select
+            title="Chọn trường dữ liệu"
             size="small"
             value={field.field || undefined}
             onChange={(value) => onUpdate(category, field.id, "field", value)}
@@ -240,6 +241,7 @@ export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
         </div>
         <div className="selector-group">
           <Select
+            title="Chọn hành động cho trường"
             size="small"
             value={field.action || undefined}
             onChange={(value) => onUpdate(category, field.id, "action", value)}
@@ -272,26 +274,38 @@ export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
       <div className="data-source-section">
         <div className="source-table-row">
           <div className="selector-group">
-            <Typography.Text className="selector-label">
-              Data source:
-            </Typography.Text>
-            <Select
-              size="small"
-              value={dataSource}
-              onChange={setDataSource}
-              style={{ width: "100%" }}
-              options={DATA_SOURCE_OPTIONS}
-            />
+            <Tooltip title="Chọn nguồn dữ liệu cho biểu đồ">
+              <Typography.Text className="selector-label">
+                Data source:
+              </Typography.Text>
+            </Tooltip>
+            <Tooltip title="Chọn nguồn dữ liệu (API, file, v.v.)">
+              <Select
+                title="Chọn trường dữ liệu cho nhóm này"
+                size="small"
+                value={dataSource}
+                onChange={setDataSource}
+                style={{ width: "100%" }}
+                options={DATA_SOURCE_OPTIONS}
+              />
+            </Tooltip>
           </div>
           <div className="selector-group">
-            <Typography.Text className="selector-label">Table:</Typography.Text>
-            <Select
-              size="small"
-              value={tableName}
-              style={{ width: "100%" }}
-              disabled
-              options={[{ label: tableName, value: tableName }]}
-            />
+            <Tooltip title="Tên bảng dữ liệu đang sử dụng cho biểu đồ">
+              <Typography.Text className="selector-label">
+                Table:
+              </Typography.Text>
+            </Tooltip>
+            <Tooltip title="Bảng dữ liệu tương ứng với loại biểu đồ đang chọn">
+              <Select
+                title="Chọn hành động cho trường trong nhóm"
+                size="small"
+                value={tableName}
+                style={{ width: "100%" }}
+                disabled
+                options={[{ label: tableName, value: tableName }]}
+              />
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -302,22 +316,34 @@ export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
           return (
             <div key={fieldKey} className="field-category">
               <div className="category-header">
-                <Typography.Text className="category-title">
-                  {getFieldDisplayName(fieldKey)}
-                  {fieldKey === "legend" &&
-                  fieldsForCategory.length > 0 &&
-                  fieldsForCategory[0].field ? (
-                    <span
-                      style={{
-                        color: "#1677ff",
-                        marginLeft: 8,
-                        fontWeight: 500,
-                      }}
-                    >
-                      (Color: {fieldsForCategory[0].field})
-                    </span>
-                  ) : null}
-                </Typography.Text>
+                <Tooltip
+                  title={
+                    fieldKey === "xAxis"
+                      ? "Chọn trường dữ liệu cho trục X"
+                      : fieldKey === "yAxis" || fieldKey === "columnY"
+                      ? "Chọn trường dữ liệu cho trục Y"
+                      : fieldKey === "legend" || fieldKey === "columnLegend"
+                      ? "Chọn trường dữ liệu để phân biệt màu sắc (legend)"
+                      : undefined
+                  }
+                >
+                  <Typography.Text className="category-title">
+                    {getFieldDisplayName(fieldKey)}
+                    {fieldKey === "legend" &&
+                    fieldsForCategory.length > 0 &&
+                    fieldsForCategory[0].field ? (
+                      <span
+                        style={{
+                          color: "#1677ff",
+                          marginLeft: 8,
+                          fontWeight: 500,
+                        }}
+                      >
+                        (Color: {fieldsForCategory[0].field})
+                      </span>
+                    ) : null}
+                  </Typography.Text>
+                </Tooltip>
               </div>
               <div className="field-list">
                 {fieldsForCategory.map((field) => (
@@ -331,6 +357,7 @@ export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
                 {allowsAddingFieldsToCategory(fieldKey) && (
                   <div className="add-field-button">
                     <Button
+                      title="Thêm trường mới vào nhóm"
                       type="dashed"
                       icon={<Plus size={14} />}
                       onClick={() => addFieldToCategory(fieldKey)}

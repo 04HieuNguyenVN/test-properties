@@ -1,5 +1,6 @@
 // Import các thư viện React và Redux cần thiết
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 
 // Import CSS styles
@@ -118,6 +119,7 @@ const { Option } = Select;
 
 // Component chính của ứng dụng Power BI Dashboard
 const PowerBIDashboard: React.FC = () => {
+  const { i18n } = useTranslation();
   // Khởi tạo dispatch để gửi actions tới Redux store
   const dispatch = useDispatch();
 
@@ -349,6 +351,7 @@ const PowerBIDashboard: React.FC = () => {
               Font
             </Typography.Text>
             <Select
+              title="Chọn font chữ cho nhãn"
               size="small"
               value={config.font || "Segoe UI"}
               onChange={(value) =>
@@ -374,6 +377,7 @@ const PowerBIDashboard: React.FC = () => {
               Size
             </Typography.Text>
             <InputNumber
+              title="Chọn cỡ chữ cho nhãn"
               size="small"
               value={config.fontSize || 9}
               min={6}
@@ -394,6 +398,7 @@ const PowerBIDashboard: React.FC = () => {
           </Typography.Text>
           <Space size="small">
             <Button
+              title="In đậm"
               size="small"
               type={config.bold ? "primary" : "default"}
               icon={<Bold size={12} />}
@@ -402,6 +407,7 @@ const PowerBIDashboard: React.FC = () => {
               }
             />
             <Button
+              title="In nghiêng"
               size="small"
               type={config.italic ? "primary" : "default"}
               icon={<Italic size={12} />}
@@ -410,6 +416,7 @@ const PowerBIDashboard: React.FC = () => {
               }
             />
             <Button
+              title="Gạch chân"
               size="small"
               type={config.underline ? "primary" : "default"}
               icon={<Underline size={12} />}
@@ -2123,7 +2130,10 @@ const PowerBIDashboard: React.FC = () => {
             >
               <div className="section-content">
                 <div className="form-group">
-                  <Typography.Text className="form-label">
+                  <Typography.Text
+                    className="form-label"
+                    title="Chiều cao của biểu đồ"
+                  >
                     Height
                   </Typography.Text>
                   <InputNumber
@@ -2133,10 +2143,14 @@ const PowerBIDashboard: React.FC = () => {
                       updateGeneralSetting("size", "height", value)
                     }
                     style={{ width: "100%" }}
+                    title="Nhập chiều cao (px)"
                   />
                 </div>
                 <div className="form-group">
-                  <Typography.Text className="form-label">
+                  <Typography.Text
+                    className="form-label"
+                    title="Chiều rộng của biểu đồ"
+                  >
                     Width
                   </Typography.Text>
                   <InputNumber
@@ -2146,6 +2160,7 @@ const PowerBIDashboard: React.FC = () => {
                       updateGeneralSetting("size", "width", value)
                     }
                     style={{ width: "100%" }}
+                    title="Nhập chiều rộng (px)"
                   />
                 </div>
                 <div className="form-group">
@@ -2159,6 +2174,7 @@ const PowerBIDashboard: React.FC = () => {
                       onChange={(checked) =>
                         updateGeneralSetting("size", "lockAspectRatio", checked)
                       }
+                      title="Khóa tỉ lệ khung hình"
                     />
                   </div>
                 </div>
@@ -2173,7 +2189,10 @@ const PowerBIDashboard: React.FC = () => {
             >
               <div className="section-content">
                 <div className="form-group">
-                  <Typography.Text className="form-label">
+                  <Typography.Text
+                    className="form-label"
+                    title="Vị trí ngang của biểu đồ"
+                  >
                     Horizontal
                   </Typography.Text>
                   <InputNumber
@@ -2183,10 +2202,14 @@ const PowerBIDashboard: React.FC = () => {
                       updateGeneralSetting("position", "horizontal", value)
                     }
                     style={{ width: "100%" }}
+                    title="Nhập vị trí ngang (px)"
                   />
                 </div>
                 <div className="form-group">
-                  <Typography.Text className="form-label">
+                  <Typography.Text
+                    className="form-label"
+                    title="Vị trí dọc của biểu đồ"
+                  >
                     Vertical
                   </Typography.Text>
                   <InputNumber
@@ -2196,6 +2219,7 @@ const PowerBIDashboard: React.FC = () => {
                       updateGeneralSetting("position", "vertical", value)
                     }
                     style={{ width: "100%" }}
+                    title="Nhập vị trí dọc (px)"
                   />
                 </div>
               </div>
@@ -2248,6 +2272,7 @@ const PowerBIDashboard: React.FC = () => {
                         }
                         addonAfter="px"
                         style={{ width: "70px" }}
+                        title="Padding phải (px)"
                       />
                     </div>
                   </div>
@@ -2261,6 +2286,7 @@ const PowerBIDashboard: React.FC = () => {
                         }
                         addonAfter="px"
                         style={{ width: "70px" }}
+                        title="Padding dưới (px)"
                       />
                     </div>
                   </div>
@@ -2286,6 +2312,7 @@ const PowerBIDashboard: React.FC = () => {
                       onChange={(checked) =>
                         updateGeneralSetting("advanced", "responsive", checked)
                       }
+                      title="Bật/tắt chế độ responsive"
                     />
                   </div>
                 </div>
@@ -2304,6 +2331,7 @@ const PowerBIDashboard: React.FC = () => {
                           checked
                         )
                       }
+                      title="Giữ thứ tự lớp hiển thị"
                     />
                   </div>
                 </div>
@@ -4004,6 +4032,17 @@ const PowerBIDashboard: React.FC = () => {
 
   return (
     <Layout className="powerbi-dashboard">
+      {/* Language Switch Button - top right */}
+      <div className="lang-switch-container">
+        <button
+          className="lang-switch-btn"
+          onClick={() =>
+            i18n.changeLanguage(i18n.language === "vi" ? "en" : "vi")
+          }
+        >
+          {i18n.language === "vi" ? "EN" : "VI"}
+        </button>
+      </div>
       <Content>
         <Layout>
           <Content>

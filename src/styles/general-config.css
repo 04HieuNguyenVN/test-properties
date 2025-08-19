@@ -1,3 +1,130 @@
+.general-input-120px {
+  width: 120px;
+}
+.general-reset-btn {
+  padding: 16px;
+  font-size: 12px;
+  color: #0078d4;
+}
+/* GeneralConfigTab utility classes */
+.general-input-fullwidth {
+  width: 100%;
+}
+.general-input-flex {
+  flex: 1;
+}
+.general-input-60px {
+  width: 60px;
+}
+/* GeneralConfigTab utility classes */
+.general-flex-gap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.general-input-fullwidth {
+  width: 100%;
+}
+/* Custom SpinButton styles */
+.custom-spin-button {
+  display: inline-flex;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  transition: border-color 0.2s;
+  width: 54px;
+  height: 22px;
+  align-items: center;
+}
+.custom-spin-button:hover {
+  border-color: #22c55e;
+}
+.custom-spin-input {
+  width: 22px;
+  padding: 0 2px;
+  font-size: 12px;
+  border: none;
+  outline: none;
+  background: transparent;
+  text-align: center;
+}
+.custom-spin-px {
+  font-size: 11px;
+  color: #888;
+  padding: 0 2px;
+}
+.custom-spin-controls {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #d1d5db;
+  width: 12px;
+  height: 100%;
+}
+.custom-spin-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.custom-spin-btn:hover {
+  background: #e0fce2;
+}
+.custom-spin-divider {
+  height: 1px;
+  background: #d1d5db;
+  width: 100%;
+}
+.custom-spin-icon {
+  color: #888;
+}
+
+/* PaddingControl styles */
+.custom-padding-control {
+  background: #f8f9fa;
+  border-left: 2px solid #d1d5db;
+  padding: 12px 0 12px 8px;
+  width: 180px;
+}
+.custom-padding-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.custom-padding-title {
+  font-size: 12px;
+  color: #222;
+  font-weight: 600;
+}
+.custom-padding-grid {
+  display: grid;
+  grid-template-columns: 54px 52px 54px;
+  grid-template-rows: 22px 52px 22px;
+  gap: 0;
+  align-items: center;
+  justify-items: center;
+}
+.custom-padding-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom-padding-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.custom-padding-svgbox {
+  border: 1px solid #d1d5db;
+  background: #f8f9fa;
+}
+.padding-input {
+  width: 60px;
+  text-align: center;
+}
 /* General Config Tab Styles */
 .general-config-container {
   padding: 16px;

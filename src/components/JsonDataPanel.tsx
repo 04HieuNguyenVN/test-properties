@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Typography, Button, Space } from "antd";
+import { Card, Typography, Button, Space, Tooltip } from "antd";
 import { Code, Eye, EyeOff, RotateCcw } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
@@ -50,24 +50,33 @@ const JsonDataPanel: React.FC = () => {
     <Card className="data-panel json-data-panel">
       <div className="panel-header">
         <Space>
-          <Code size={16} />
-          <Title level={5} className="panel-title">
-            JSON DATA {selectedData && selectedData.length > 0 && "(Selected)"}
-          </Title>
-          <Button
-            type="text"
-            size="small"
-            icon={showRawData ? <EyeOff size={14} /> : <Eye size={14} />}
-            onClick={() => setShowRawData(!showRawData)}
-          />
-          {selectedData && selectedData.length > 0 && (
+          <Tooltip title="Xem dữ liệu gốc dạng JSON">
+            <Code size={16} />
+          </Tooltip>
+          <Tooltip title="Bảng dữ liệu gốc của biểu đồ, có thể copy hoặc xem chi tiết">
+            <Title level={5} className="panel-title">
+              JSON DATA{" "}
+              {selectedData && selectedData.length > 0 && "(Selected)"}
+            </Title>
+          </Tooltip>
+          <Tooltip title="Ẩn/hiện dữ liệu JSON">
             <Button
               type="text"
               size="small"
-              icon={<RotateCcw size={14} />}
-              onClick={handleReset}
-              title="Reset to default data"
+              icon={showRawData ? <EyeOff size={14} /> : <Eye size={14} />}
+              onClick={() => setShowRawData(!showRawData)}
             />
+          </Tooltip>
+          {selectedData && selectedData.length > 0 && (
+            <Tooltip title="Đặt lại về dữ liệu gốc">
+              <Button
+                type="text"
+                size="small"
+                icon={<RotateCcw size={14} />}
+                onClick={handleReset}
+                title="Reset to default data"
+              />
+            </Tooltip>
           )}
         </Space>
       </div>

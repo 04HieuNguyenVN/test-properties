@@ -11,12 +11,16 @@ import {
 } from "recharts";
 import chartData from "../../data/chartData.json";
 
+// Props cho biểu đồ đường
 interface LineChartProps {
   config: any;
 }
 
+// Biểu đồ đường (Line Chart)
 export const LineChart: React.FC<LineChartProps> = ({ config }) => {
+  // Lấy dữ liệu từ file chartData.json
   const data = chartData.monthlyData;
+  // Render biểu đồ đường với các đường dữ liệu
   return (
     <ResponsiveContainer width="100%" height={500}>
       <RechartsLineChart

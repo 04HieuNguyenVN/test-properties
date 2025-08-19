@@ -10,6 +10,7 @@ import {
   ColorPicker,
   Slider,
   Space,
+  Tooltip,
 } from "antd";
 import {
   FunctionSquare,
@@ -21,6 +22,7 @@ import {
 import { RootState } from "../../store/store";
 import { toggleSection } from "../../store/chartSlice";
 import { CustomColorPicker } from "../common/CustomColorPicker";
+import PaddingControl from "../common/PaddingControl";
 // import { FunctionButton } from "../common/FunctionButton";
 
 const { TextArea } = Input;
@@ -251,13 +253,19 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
   });
 
   const updateGeneralSetting = (category: string, key: string, value: any) => {
-    setGeneralSettings((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category as keyof typeof prev],
-        [key]: value,
-      },
-    }));
+    setGeneralSettings((prev) => {
+      if (key === "") {
+        // For full object update (like padding)
+        return { ...prev, [category]: value };
+      }
+      return {
+        ...prev,
+        [category]: {
+          ...prev[category as keyof typeof prev],
+          [key]: value,
+        },
+      };
+    });
   };
 
   const handleToggleGeneralSection = (section: string) => {
@@ -284,39 +292,62 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
           >
             <div className="section-content">
               <div className="form-group">
-                <Typography.Text className="form-label">Height</Typography.Text>
-                <InputNumber
-                  size="small"
-                  value={generalSettings.size.height}
-                  onChange={(value) =>
-                    updateGeneralSetting("size", "height", value)
-                  }
-                  style={{ width: "100%" }}
-                />
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <Tooltip title="Chiều cao tổng thể của biểu đồ (px).">
+                    <Typography.Text className="form-label">
+                      Height
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Nhập chiều cao mong muốn cho biểu đồ, đơn vị pixel (px).">
+                    <InputNumber
+                      size="small"
+                      value={generalSettings.size.height}
+                      onChange={(value) =>
+                        updateGeneralSetting("size", "height", value)
+                      }
+                      style={{ width: "100%" }}
+                    />
+                  </Tooltip>
+                </div>
               </div>
               <div className="form-group">
-                <Typography.Text className="form-label">Width</Typography.Text>
-                <InputNumber
-                  size="small"
-                  value={generalSettings.size.width}
-                  onChange={(value) =>
-                    updateGeneralSetting("size", "width", value)
-                  }
-                  style={{ width: "100%" }}
-                />
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <Tooltip title="Chiều rộng tổng thể của biểu đồ (px).">
+                    <Typography.Text className="form-label">
+                      Width
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Nhập chiều rộng mong muốn cho biểu đồ, đơn vị pixel (px).">
+                    <InputNumber
+                      size="small"
+                      value={generalSettings.size.width}
+                      onChange={(value) =>
+                        updateGeneralSetting("size", "width", value)
+                      }
+                      style={{ width: "100%" }}
+                    />
+                  </Tooltip>
+                </div>
               </div>
               <div className="form-group">
-                <div className="checkbox-row">
-                  <Typography.Text className="form-label">
-                    Lock aspect ratio
-                  </Typography.Text>
-                  <Switch
-                    size="small"
-                    checked={generalSettings.size.lockAspectRatio}
-                    onChange={(checked) =>
-                      updateGeneralSetting("size", "lockAspectRatio", checked)
-                    }
-                  />
+                <div
+                  className="checkbox-row"
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  <Tooltip title="Giữ nguyên tỉ lệ chiều rộng/chiều cao khi thay đổi kích thước.">
+                    <Typography.Text className="form-label">
+                      Lock aspect ratio
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Bật để khóa tỉ lệ khung hình, tắt để thay đổi tự do.">
+                    <Switch
+                      size="small"
+                      checked={generalSettings.size.lockAspectRatio}
+                      onChange={(checked) =>
+                        updateGeneralSetting("size", "lockAspectRatio", checked)
+                      }
+                    />
+                  </Tooltip>
                 </div>
               </div>
             </div>
@@ -330,30 +361,42 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
           >
             <div className="section-content">
               <div className="form-group">
-                <Typography.Text className="form-label">
-                  Horizontal
-                </Typography.Text>
-                <InputNumber
-                  size="small"
-                  value={generalSettings.position.horizontal}
-                  onChange={(value) =>
-                    updateGeneralSetting("position", "horizontal", value)
-                  }
-                  style={{ width: "100%" }}
-                />
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <Tooltip title="Vị trí ngang của biểu đồ so với vùng chứa (px).">
+                    <Typography.Text className="form-label">
+                      Horizontal
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Nhập vị trí ngang (từ trái sang phải), đơn vị pixel (px).">
+                    <InputNumber
+                      size="small"
+                      value={generalSettings.position.horizontal}
+                      onChange={(value) =>
+                        updateGeneralSetting("position", "horizontal", value)
+                      }
+                      style={{ width: "100%" }}
+                    />
+                  </Tooltip>
+                </div>
               </div>
               <div className="form-group">
-                <Typography.Text className="form-label">
-                  Vertical
-                </Typography.Text>
-                <InputNumber
-                  size="small"
-                  value={generalSettings.position.vertical}
-                  onChange={(value) =>
-                    updateGeneralSetting("position", "vertical", value)
-                  }
-                  style={{ width: "100%" }}
-                />
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <Tooltip title="Vị trí dọc của biểu đồ so với vùng chứa (px).">
+                    <Typography.Text className="form-label">
+                      Vertical
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Nhập vị trí dọc (từ trên xuống), đơn vị pixel (px).">
+                    <InputNumber
+                      size="small"
+                      value={generalSettings.position.vertical}
+                      onChange={(value) =>
+                        updateGeneralSetting("position", "vertical", value)
+                      }
+                      style={{ width: "100%" }}
+                    />
+                  </Tooltip>
+                </div>
               </div>
             </div>
           </ConfigSection>
@@ -365,63 +408,10 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
             onToggle={() => handleToggleGeneralSection("padding")}
           >
             <div className="section-content">
-              <div className="padding-grid">
-                <div className="padding-row">
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.top}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "top", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                </div>
-                <div className="padding-row">
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.left}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "left", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                  <div className="padding-center">
-                    <div className="padding-visual">
-                      <div className="padding-box"></div>
-                    </div>
-                  </div>
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.right}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "right", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                </div>
-                <div className="padding-row">
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.bottom}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "bottom", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                </div>
-              </div>
+              <PaddingControl
+                value={generalSettings.padding}
+                onChange={(val) => updateGeneralSetting("padding", "", val)}
+              />
             </div>
           </ConfigSection>
 
@@ -433,35 +423,49 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
           >
             <div className="section-content">
               <div className="form-group">
-                <div className="checkbox-row">
-                  <Typography.Text className="form-label">
-                    Responsive
-                  </Typography.Text>
-                  <Switch
-                    size="small"
-                    checked={generalSettings.advanced.responsive}
-                    onChange={(checked) =>
-                      updateGeneralSetting("advanced", "responsive", checked)
-                    }
-                  />
+                <div
+                  className="checkbox-row"
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  <Tooltip title="Tự động điều chỉnh kích thước và bố cục khi thay đổi kích thước vùng chứa.">
+                    <Typography.Text className="form-label">
+                      Responsive
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Bật để biểu đồ tự động co giãn theo vùng chứa.">
+                    <Switch
+                      size="small"
+                      checked={generalSettings.advanced.responsive}
+                      onChange={(checked) =>
+                        updateGeneralSetting("advanced", "responsive", checked)
+                      }
+                    />
+                  </Tooltip>
                 </div>
               </div>
               <div className="form-group">
-                <div className="checkbox-row">
-                  <Typography.Text className="form-label">
-                    Maintain layer order
-                  </Typography.Text>
-                  <Switch
-                    size="small"
-                    checked={generalSettings.advanced.maintainLayerOrder}
-                    onChange={(checked) =>
-                      updateGeneralSetting(
-                        "advanced",
-                        "maintainLayerOrder",
-                        checked
-                      )
-                    }
-                  />
+                <div
+                  className="checkbox-row"
+                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                >
+                  <Tooltip title="Giữ nguyên thứ tự các lớp khi thay đổi hoặc di chuyển biểu đồ.">
+                    <Typography.Text className="form-label">
+                      Maintain layer order
+                    </Typography.Text>
+                  </Tooltip>
+                  <Tooltip title="Bật để không thay đổi thứ tự các lớp hiển thị.">
+                    <Switch
+                      size="small"
+                      checked={generalSettings.advanced.maintainLayerOrder}
+                      onChange={(checked) =>
+                        updateGeneralSetting(
+                          "advanced",
+                          "maintainLayerOrder",
+                          checked
+                        )
+                      }
+                    />
+                  </Tooltip>
                 </div>
               </div>
             </div>
