@@ -8,13 +8,14 @@ import {
   Legend,
 } from "recharts";
 import { CHART_COLORS } from "../../constants/index";
+import chartData from "../../data/chartData.json";
 
 interface PieChartProps {
-  data: any[];
   config: any;
 }
 
-export const PieChart: React.FC<PieChartProps> = ({ data, config }) => {
+export const PieChart: React.FC<PieChartProps> = ({ config }) => {
+  const data = chartData.categories;
   return (
     <ResponsiveContainer width="100%" height={500}>
       <RechartsPieChart>

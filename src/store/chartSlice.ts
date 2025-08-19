@@ -297,14 +297,13 @@ interface ChartState {
   monthlyData: typeof monthlyData;
   populationData: typeof populationData;
   testStackedData: typeof testStackedData;
+  selectedData: any[]; // Dữ liệu được chọn từ chart
   chartType:
-    | "column"
     | "line"
     | "pie"
     | "stackedColumn"
     | "clusteredColumn"
     | "lineAndColumn"
-    | "bar"
     | "stackedBar"
     | "clusteredBar";
   activeTab: "data" | "format";
@@ -323,6 +322,7 @@ interface ChartState {
     stackedBar: ChartConfig;
     clusteredBar: ChartConfig;
   };
+  rawChartData: any[];
 }
 
 const initialState: ChartState = {
@@ -331,7 +331,8 @@ const initialState: ChartState = {
   monthlyData: monthlyData,
   populationData: populationData,
   testStackedData: testStackedData,
-  chartType: "column",
+  selectedData: [], // Khởi tạo rỗng
+  chartType: "stackedColumn",
   activeTab: "data",
   activeSubTab: "Visual",
   expandedSections: {
@@ -365,6 +366,7 @@ const initialState: ChartState = {
     plot: false,
     dataLabels: false,
   },
+  rawChartData: [],
   chartConfigs: {
     column: {
       data: {
@@ -1050,21 +1052,25 @@ const chartSlice = createSlice({
   name: "chart",
   initialState,
   reducers: {
+    setRawChartData: (state, action: PayloadAction<any[]>) => {
+      state.rawChartData = action.payload;
+    },
     setChartType: (
       state,
       action: PayloadAction<
-        | "column"
         | "line"
         | "pie"
         | "stackedColumn"
         | "clusteredColumn"
         | "lineAndColumn"
-        | "bar"
         | "stackedBar"
         | "clusteredBar"
       >
     ) => {
       state.chartType = action.payload;
+    },
+    setSelectedData: (state, action: PayloadAction<any[]>) => {
+      state.selectedData = action.payload;
     },
     setActiveTab: (state, action: PayloadAction<"data" | "format">) => {
       state.activeTab = action.payload;
@@ -1133,6 +1139,8 @@ const chartSlice = createSlice({
 
 export const {
   setChartType,
+  setSelectedData,
+  setRawChartData,
   setActiveTab,
   setActiveSubTab,
   toggleSection,

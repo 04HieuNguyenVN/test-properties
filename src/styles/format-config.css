@@ -65,9 +65,16 @@
 .color-picker-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  gap: 12px;
+  gap: 8px;
+  width: 100%;
+}
+
+.color-picker-row .ant-btn {
+  height: 32px;
+  min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .color-picker-label {

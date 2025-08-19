@@ -11,7 +11,14 @@ import {
   Slider,
   Space,
 } from "antd";
-import { Search, Bold, Italic, Underline, RotateCcw } from "lucide-react";
+import {
+  FunctionSquare,
+  Bold,
+  Italic,
+  Underline,
+  RotateCcw,
+} from "lucide-react";
+// import { FunctionButton } from "../common/FunctionButton";
 import { RootState } from "../../store/store";
 import { CustomColorPicker } from "../common/CustomColorPicker";
 import { toggleSection } from "../../store/chartSlice";
@@ -498,7 +505,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     style={{ flex: 1 }}
                   />
-                  <Button size="small" icon={<Search size={12} />} />
+                  {/* <FunctionButton /> */}
                 </div>
               </div>
               <div className="form-group">

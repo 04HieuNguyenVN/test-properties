@@ -9,16 +9,16 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import chartData from "../../data/chartData.json";
 
 interface ClusteredColumnChartProps {
-  data: any[];
   config: any;
 }
 
 export const ClusteredColumnChart: React.FC<ClusteredColumnChartProps> = ({
-  data,
   config,
 }) => {
+  const data = chartData.monthlyData;
   return (
     <ResponsiveContainer width="100%" height={500}>
       <BarChart

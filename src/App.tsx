@@ -14,6 +14,7 @@ import "./styles/sections.css";
 import "./styles/components.css";
 import "./styles/overrides.css";
 import "./styles/custom-color-picker.css";
+import "./styles/data-display.css";
 
 // Import constants
 import {
@@ -35,16 +36,18 @@ import {
 
 // Import chart components
 import {
-  ColumnChart,
   StackedColumnChart,
   ClusteredColumnChart,
   PieChart as CustomPieChart,
   LineChart as CustomLineChart,
-  BarChart as CustomBarChart,
   LineAndColumnChart,
   StackedBarChart,
   ClusteredBarChart,
 } from "./components/charts";
+
+// Import DataDisplayPanels component
+import DataDisplayPanels from "./components/DataDisplayPanels";
+import { DataTab } from "./components/tabs/DataTab";
 
 // Import các component UI từ Ant Design
 import {
@@ -69,6 +72,7 @@ const { TextArea } = Input;
 
 // Import custom components
 import { CustomColorPicker } from "./components/common/CustomColorPicker";
+// import { FunctionButton } from "./components/common/FunctionButton";
 
 // Import các icon từ Lucide React
 import {
@@ -90,6 +94,7 @@ import {
   BarChart4,
   BarChart2,
   LineChart as LineChartIcon,
+  FunctionSquare,
 } from "lucide-react";
 import { RootState } from "./store/store";
 // Import Redux actions và types từ store
@@ -249,24 +254,20 @@ const PowerBIDashboard: React.FC = () => {
     const config = currentConfig.format;
 
     switch (chartType) {
-      case "column":
-        return <ColumnChart data={data} config={config} />;
       case "stackedColumn":
-        return <StackedColumnChart data={populationData} config={config} />;
+        return <StackedColumnChart config={config} />;
       case "clusteredColumn":
-        return <ClusteredColumnChart data={monthlyData} config={config} />;
+        return <ClusteredColumnChart config={config} />;
       case "lineAndColumn":
-        return <LineAndColumnChart data={data} config={config} />;
+        return <LineAndColumnChart config={config} />;
       case "pie":
-        return <CustomPieChart data={categoryData} config={config} />;
+        return <CustomPieChart config={config} />;
       case "line":
-        return <CustomLineChart data={monthlyData} config={config} />;
-      case "bar":
-        return <CustomBarChart data={data} config={config} />;
+        return <CustomLineChart config={config} />;
       case "stackedBar":
-        return <StackedBarChart data={testStackedData} config={config} />;
+        return <StackedBarChart config={config} />;
       case "clusteredBar":
-        return <ClusteredBarChart data={monthlyData} config={config} />;
+        return <ClusteredBarChart config={config} />;
       default:
         return null;
     }
@@ -435,256 +436,6 @@ const PowerBIDashboard: React.FC = () => {
   );
 
   // Component tab cấu hình dữ liệu (Data tab)
-  const DataConfigTab = () => {
-    const dataConfig = currentConfig.data;
-
-    // State để quản lý nguồn dữ liệu và bảng được chọn
-    const [dataSource, setDataSource] = useState("API");
-    const [selectedTable, setSelectedTable] = useState("cities");
-
-    // State để quản lý các field của từng category (Y-axis, X-axis, Legend, v.v.)
-    const [categoryFields, setCategoryFields] = useState<{
-      [key: string]: any[];
-    }>({
-      yAxis: [{ id: 1, field: "population", action: "sum" }], // Trục Y
-      xAxis: [{ id: 2, field: "name", action: "no-action" }], // Trục X
-      legend: [{ id: 3, field: "name", action: "no-action" }], // Chú thích
-      values: [{ id: 4, field: "gdp", action: "sum" }], // Giá trị (cho pie chart)
-      secondaryYAxis: [], // Trục Y phụ
-      detail: [], // Chi tiết (cho pie chart)
-      columnY: [], // Column Y (cho line+column chart)
-      lineY: [], // Line Y (cho line+column chart)
-      columnLegend: [], // Column Legend (cho line+column chart)
-    });
-
-    // Hàm xác định các field có sẵn cho từng loại chart
-    const getAvailableFields = () => {
-      return CHART_AVAILABLE_FIELDS[chartType] || DEFAULT_AVAILABLE_FIELDS;
-    };
-
-    // Kiểm tra xem loại chart có cho phép thêm nhiều field không
-    const allowsAddingFields = () => {
-      // Pie chart được phép thêm fields vào các category của nó
-      if (chartType === "pie") {
-        return true;
-      }
-      return !SIMPLE_CHART_TYPES.includes(chartType);
-    };
-
-    // Kiểm tra xem một category field cụ thể có cho phép thêm field không
-    const allowsAddingFieldsToCategory = (fieldKey: string) => {
-      // Các chart đơn giản không cho phép thêm field vào các category cơ bản
-      if (!allowsAddingFields()) {
-        return false;
-      }
-
-      // Pie chart - tất cả fields chỉ cho phép 1 field
-      if (chartType === "pie") {
-        const fieldsForCategory = categoryFields[fieldKey] || [];
-        return fieldsForCategory.length === 0;
-      }
-
-      // Các field chỉ cho phép 1 field
-      if (SINGLE_FIELD_TYPES.includes(fieldKey)) {
-        const fieldsForCategory = categoryFields[fieldKey] || [];
-        return fieldsForCategory.length === 0;
-      }
-
-      // Y-axis cho stacked/clustered column charts chỉ cho phép 1 field
-      if (
-        fieldKey === "yAxis" &&
-        FIELD_RESTRICTIONS.yAxis.includes(chartType)
-      ) {
-        const fieldsForCategory = categoryFields[fieldKey] || [];
-        return fieldsForCategory.length === 0;
-      }
-
-      // X-axis cho stacked/clustered bar charts chỉ cho phép 1 field
-      if (
-        fieldKey === "xAxis" &&
-        FIELD_RESTRICTIONS.xAxis.includes(chartType)
-      ) {
-        const fieldsForCategory = categoryFields[fieldKey] || [];
-        return fieldsForCategory.length === 0;
-      }
-
-      // Line chart - tất cả fields chỉ cho phép 1 field
-      if (FIELD_RESTRICTIONS.allFields.includes(chartType)) {
-        const fieldsForCategory = categoryFields[fieldKey] || [];
-        return fieldsForCategory.length === 0;
-      }
-
-      return true;
-    };
-
-    // Hàm lấy tên hiển thị cho từng loại field
-    const getFieldDisplayName = (fieldKey: string) => {
-      return FIELD_DISPLAY_NAMES[fieldKey] || fieldKey;
-    };
-
-    // Hàm thêm field mới vào category
-    const addFieldToCategory = (category: string) => {
-      const newField = {
-        id: Date.now(), // ID duy nhất dựa trên timestamp
-        field: "population", // Field mặc định
-        action: "sum", // Action mặc định là tổng
-      };
-      setCategoryFields((prev) => ({
-        ...prev,
-        [category]: [...(prev[category] || []), newField],
-      }));
-    };
-
-    const removeFieldFromCategory = (category: string, fieldId: number) => {
-      setCategoryFields((prev) => ({
-        ...prev,
-        [category]:
-          prev[category]?.filter((field) => field.id !== fieldId) || [],
-      }));
-    };
-
-    const updateFieldInCategory = (
-      category: string,
-      fieldId: number,
-      key: string,
-      value: string
-    ) => {
-      setCategoryFields((prev) => ({
-        ...prev,
-        [category]:
-          prev[category]?.map((field) =>
-            field.id === fieldId ? { ...field, [key]: value } : field
-          ) || [],
-      }));
-    };
-
-    // Simple Field Selector - only Field + Action row
-    // Component để chọn field đơn giản với dropdown
-    const SimpleFieldSelector = ({
-      field, // Object field hiện tại
-      category, // Category của field (yAxis, xAxis, v.v.)
-      onUpdate, // Hàm callback khi update field
-      onRemove, // Hàm callback khi xóa field
-    }: any) => (
-      <div className="simple-field-selector">
-        <div className="selector-row">
-          <div className="selector-group">
-            {/* Dropdown để chọn field */}
-            <Select
-              size="small"
-              value={field.field}
-              onChange={(value) => onUpdate(category, field.id, "field", value)}
-              style={{ width: "100%" }}
-              placeholder="Select field"
-              options={FIELD_OPTIONS}
-            />
-          </div>
-          <div className="selector-group">
-            <Space.Compact style={{ width: "100%" }}>
-              <Select
-                size="small"
-                value={field.action}
-                onChange={(value) =>
-                  onUpdate(category, field.id, "action", value)
-                }
-                style={{ flex: 1 }}
-                options={FIELD_ACTION_OPTIONS}
-              />
-              <Button
-                size="small"
-                icon={<X size={14} />}
-                onClick={() => onRemove(category, field.id)}
-                danger
-                type="text"
-              />
-            </Space.Compact>
-          </div>
-        </div>
-      </div>
-    );
-
-    // Render chính của Data Config Tab
-    return (
-      <div className="data-config-tab">
-        {/* Phần chọn Data Source và Table */}
-        <div className="data-source-section">
-          <div className="source-table-row">
-            {/* Selector cho Data Source */}
-            <div className="selector-group">
-              <Typography.Text className="selector-label">
-                Data source:
-              </Typography.Text>
-              <Select
-                size="small"
-                value={dataSource}
-                onChange={setDataSource}
-                style={{ width: "100%" }}
-                options={DATA_SOURCE_OPTIONS}
-              />
-            </div>
-            {/* Selector cho Table */}
-            <div className="selector-group">
-              <Typography.Text className="selector-label">
-                Table:
-              </Typography.Text>
-              <Select
-                size="small"
-                value={selectedTable}
-                onChange={setSelectedTable}
-                style={{ width: "100%" }}
-                options={TABLE_OPTIONS}
-              />
-            </div>
-          </div>
-        </div>
-
-        <Divider style={{ margin: "12px 0" }} />
-
-        {/* Field Categories - Different for each chart type */}
-        <div className="field-categories">
-          {getAvailableFields().map((fieldKey: string) => {
-            const fieldsForCategory = categoryFields[fieldKey] || [];
-
-            return (
-              <div key={fieldKey} className="field-category">
-                <div className="category-header">
-                  <Typography.Text className="category-title">
-                    {getFieldDisplayName(fieldKey)}
-                  </Typography.Text>
-                </div>
-                <div className="field-list">
-                  {fieldsForCategory.map((field) => (
-                    <SimpleFieldSelector
-                      key={field.id}
-                      field={field}
-                      category={fieldKey}
-                      onUpdate={updateFieldInCategory}
-                      onRemove={removeFieldFromCategory}
-                    />
-                  ))}
-
-                  {/* Add button inside each category - check specific category rules */}
-                  {allowsAddingFieldsToCategory(fieldKey) && (
-                    <div className="add-field-button">
-                      <Button
-                        type="dashed"
-                        icon={<Plus size={14} />}
-                        onClick={() => addFieldToCategory(fieldKey)}
-                        block
-                        size="small"
-                      >
-                        Add field
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
 
   const FormatConfigTab = () => {
     const formatConfig = currentConfig.format;
@@ -694,7 +445,6 @@ const PowerBIDashboard: React.FC = () => {
       const commonSections = ["legend"];
 
       switch (chartType) {
-        case "column": // Column Chart
         case "stackedColumn": // Stacked Column Chart
         case "clusteredColumn": // Clustered Column Chart
           return [
@@ -704,7 +454,6 @@ const PowerBIDashboard: React.FC = () => {
             "dataLabels",
             "gridlines",
           ];
-        case "bar": // Bar Chart
         case "stackedBar": // Stacked Bar Chart
         case "clusteredBar": // Clustered Bar Chart
           return [
@@ -963,27 +712,13 @@ const PowerBIDashboard: React.FC = () => {
                     - Preview màu hiện tại
                     - Button search (có thể mở rộng để search màu)
                   */}
-                  <div className="form-group">
-                    <Typography.Text className="form-label">
-                      Color
-                    </Typography.Text>
-                    <Space align="center">
-                      <ColorPicker
-                        size="small"
-                        value={config.color || "#1677FF"}
-                        onChange={(color) =>
-                          handleUpdateFormatConfig(
-                            sectionKey,
-                            "color",
-                            color.toHexString()
-                          )
-                        }
-                      />
-                      <Typography.Text code style={{ fontSize: "12px" }}>
-                        {config.color || "#666666"}
-                      </Typography.Text>
-                    </Space>
-                  </div>
+                  <CustomColorPicker
+                    label="Color"
+                    value={config.color}
+                    onChange={(color) =>
+                      handleUpdateFormatConfig(sectionKey, "color", color)
+                    }
+                  />
                 </div>
               </ConfigSection>
 
@@ -1086,25 +821,13 @@ const PowerBIDashboard: React.FC = () => {
         case "gridlines":
           return (
             <div className="section-content">
-              <div className="form-group">
-                <Typography.Text className="form-label">Color</Typography.Text>
-                <Space align="center">
-                  <ColorPicker
-                    size="small"
-                    value={config.color || "#1677FF"}
-                    onChange={(color) =>
-                      handleUpdateFormatConfig(
-                        sectionKey,
-                        "color",
-                        color.toHexString()
-                      )
-                    }
-                  />
-                  <Typography.Text code style={{ fontSize: "12px" }}>
-                    {config.color || "#E1E1E1"}
-                  </Typography.Text>
-                </Space>
-              </div>
+              <CustomColorPicker
+                label="Color"
+                value={config.color}
+                onChange={(color) =>
+                  handleUpdateFormatConfig(sectionKey, "color", color)
+                }
+              />
               <div className="form-group">
                 <Typography.Text className="form-label">
                   Stroke Width
@@ -1164,7 +887,6 @@ const PowerBIDashboard: React.FC = () => {
           // Enhanced X-axis - different content for bar vs column charts
           if (
             [
-              "column",
               "stackedColumn",
               "clusteredColumn",
               "line",
@@ -1215,27 +937,13 @@ const PowerBIDashboard: React.FC = () => {
                         <Button size="small" icon={<Underline size={12} />} />
                       </div>
                     </div>
-                    <div className="form-group">
-                      <Typography.Text className="form-label">
-                        Color
-                      </Typography.Text>
-                      <div className="color-picker-row">
-                        <ColorPicker
-                          size="small"
-                          value={config.valuesColor || "#000000"}
-                          showText={() => (
-                            <div
-                              className="effects-color-display"
-                              style={{
-                                backgroundColor:
-                                  config.valuesColor || "#000000",
-                              }}
-                            />
-                          )}
-                        />
-                        <Button size="small" icon={<Search size={12} />} />
-                      </div>
-                    </div>
+                    <CustomColorPicker
+                      label="Color"
+                      value={config.valuesColor}
+                      onChange={(color) =>
+                        handleUpdateFormatConfig("xAxis", "valuesColor", color)
+                      }
+                    />
                     <div className="form-group">
                       <Typography.Text className="form-label">
                         Maximum height
@@ -1340,26 +1048,13 @@ const PowerBIDashboard: React.FC = () => {
                         <Button size="small" icon={<Underline size={12} />} />
                       </div>
                     </div>
-                    <div className="form-group">
-                      <Typography.Text className="form-label">
-                        Color
-                      </Typography.Text>
-                      <div className="color-picker-row">
-                        <ColorPicker
-                          size="small"
-                          value={config.titleColor || "#000000"}
-                          showText={() => (
-                            <div
-                              className="effects-color-display"
-                              style={{
-                                backgroundColor: config.titleColor || "#000000",
-                              }}
-                            />
-                          )}
-                        />
-                        <Button size="small" icon={<Search size={12} />} />
-                      </div>
-                    </div>
+                    <CustomColorPicker
+                      label="Color"
+                      value={config.titleColor}
+                      onChange={(color) =>
+                        handleUpdateFormatConfig("xAxis", "titleColor", color)
+                      }
+                    />
                   </div>
                 </ConfigSection>
 
@@ -1417,7 +1112,7 @@ const PowerBIDashboard: React.FC = () => {
                           value={config.rangeMin || "Auto"}
                           style={{ width: "100px" }}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                     <div className="form-group">
@@ -1430,7 +1125,7 @@ const PowerBIDashboard: React.FC = () => {
                           value={config.rangeMax || "Auto"}
                           style={{ width: "100px" }}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                     <div className="form-group">
@@ -1493,20 +1188,20 @@ const PowerBIDashboard: React.FC = () => {
                         Color
                       </Typography.Text>
                       <div className="color-picker-row">
-                        <ColorPicker
+                        <CustomColorPicker
+                          label=""
+                          value={config.valuesColor || "#1677FF"}
+                          onChange={(color) =>
+                            handleUpdateFormatConfig(
+                              "xAxis",
+                              "valuesColor",
+                              color
+                            )
+                          }
                           size="small"
-                          value={config.valuesColor || "#000000"}
-                          showText={() => (
-                            <div
-                              className="effects-color-display"
-                              style={{
-                                backgroundColor:
-                                  config.valuesColor || "#000000",
-                              }}
-                            />
-                          )}
+                          showLabel={false}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                     <div className="form-group">
@@ -1603,7 +1298,6 @@ const PowerBIDashboard: React.FC = () => {
           // Enhanced Y-axis - different content for bar vs column charts
           if (
             [
-              "column",
               "stackedColumn",
               "clusteredColumn",
               "line",
@@ -1630,7 +1324,7 @@ const PowerBIDashboard: React.FC = () => {
                           value={config.rangeMin || "Auto"}
                           style={{ width: "100px" }}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                     <div className="form-group">
@@ -1643,7 +1337,7 @@ const PowerBIDashboard: React.FC = () => {
                           value={config.rangeMax || "Auto"}
                           style={{ width: "100px" }}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                     <div className="form-group">
@@ -1717,20 +1411,20 @@ const PowerBIDashboard: React.FC = () => {
                         Color
                       </Typography.Text>
                       <div className="color-picker-row">
-                        <ColorPicker
+                        <CustomColorPicker
+                          label=""
+                          value={config.valuesColor || "#1677FF"}
+                          onChange={(color) =>
+                            handleUpdateFormatConfig(
+                              "yAxis",
+                              "valuesColor",
+                              color
+                            )
+                          }
                           size="small"
-                          value={config.valuesColor || "#000000"}
-                          showText={() => (
-                            <div
-                              className="effects-color-display"
-                              style={{
-                                backgroundColor:
-                                  config.valuesColor || "#000000",
-                              }}
-                            />
-                          )}
+                          showLabel={false}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                     <div className="form-group">
@@ -1854,19 +1548,20 @@ const PowerBIDashboard: React.FC = () => {
                         Color
                       </Typography.Text>
                       <div className="color-picker-row">
-                        <ColorPicker
+                        <CustomColorPicker
+                          label=""
+                          value={config.titleColor || "#1677FF"}
+                          onChange={(color) =>
+                            handleUpdateFormatConfig(
+                              "yAxis",
+                              "titleColor",
+                              color
+                            )
+                          }
                           size="small"
-                          value={config.titleColor || "#000000"}
-                          showText={() => (
-                            <div
-                              className="effects-color-display"
-                              style={{
-                                backgroundColor: config.titleColor || "#000000",
-                              }}
-                            />
-                          )}
+                          showLabel={false}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                   </div>
@@ -1923,20 +1618,20 @@ const PowerBIDashboard: React.FC = () => {
                         Color
                       </Typography.Text>
                       <div className="color-picker-row">
-                        <ColorPicker
+                        <CustomColorPicker
+                          label=""
+                          value={config.valuesColor || "#1677FF"}
+                          onChange={(color) =>
+                            handleUpdateFormatConfig(
+                              "yAxis",
+                              "valuesColor",
+                              color
+                            )
+                          }
                           size="small"
-                          value={config.valuesColor || "#000000"}
-                          showText={() => (
-                            <div
-                              className="effects-color-display"
-                              style={{
-                                backgroundColor:
-                                  config.valuesColor || "#000000",
-                              }}
-                            />
-                          )}
+                          showLabel={false}
                         />
-                        <Button size="small" icon={<Search size={12} />} />
+                        {/* <FunctionButton /> */}
                       </div>
                     </div>
                     <div className="form-group">
@@ -2082,16 +1777,6 @@ const PowerBIDashboard: React.FC = () => {
 
     return (
       <div className="format-config-tab visual-tab">
-        {/* Search box */}
-        <div className="search-container">
-          <Input
-            prefix={<Search size={14} />}
-            placeholder="Search"
-            size="small"
-            style={{ margin: "12px 16px" }}
-          />
-        </div>
-
         {/* Format Configuration Sections - Flat structure */}
         <div className="config-sections">
           {/* Legend Section */}
@@ -2663,7 +2348,7 @@ const PowerBIDashboard: React.FC = () => {
                       }
                       style={{ flex: 1 }}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -2770,26 +2455,19 @@ const PowerBIDashboard: React.FC = () => {
                     Text color
                   </Typography.Text>
                   <div className="title-color-group">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.title.title.textColor}
                       onChange={(color) =>
                         updateGeneralSetting("title", "title", {
                           ...generalSettings.title.title,
-                          textColor: color.toHexString(),
+                          textColor: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="title-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.title.title.textColor,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -2797,26 +2475,19 @@ const PowerBIDashboard: React.FC = () => {
                     Background color
                   </Typography.Text>
                   <div className="title-color-group">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.title.title.backgroundColor}
                       onChange={(color) =>
                         updateGeneralSetting("title", "title", {
                           ...generalSettings.title.title,
-                          backgroundColor: color.toHexString(),
+                          backgroundColor: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="title-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.title.title.backgroundColor,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -2935,7 +2606,7 @@ const PowerBIDashboard: React.FC = () => {
                       }
                       style={{ flex: 1 }}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -3056,26 +2727,17 @@ const PowerBIDashboard: React.FC = () => {
                       gap: "4px",
                     }}
                   >
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.title.subtitle.textColor}
                       onChange={(color) =>
                         updateGeneralSetting("title", "subtitle", {
                           ...generalSettings.title.subtitle,
-                          textColor: color.toHexString(),
+                          textColor: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          style={{
-                            width: "16px",
-                            height: "16px",
-                            backgroundColor:
-                              generalSettings.title.subtitle.textColor,
-                            border: "1px solid #d9d9d9",
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
                   </div>
                 </div>
@@ -3186,28 +2848,19 @@ const PowerBIDashboard: React.FC = () => {
                       gap: "4px",
                     }}
                   >
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.title.divider.color}
                       onChange={(color) =>
                         updateGeneralSetting("title", "divider", {
                           ...generalSettings.title.divider,
-                          color: color.toHexString(),
+                          color: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          style={{
-                            width: "16px",
-                            height: "16px",
-                            backgroundColor:
-                              generalSettings.title.divider.color,
-                            border: "1px solid #d9d9d9",
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -3342,26 +2995,19 @@ const PowerBIDashboard: React.FC = () => {
                     Color
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.effects.background.color}
                       onChange={(color) =>
                         updateGeneralSetting("effects", "background", {
                           ...generalSettings.effects.background,
-                          color: color.toHexString(),
+                          color: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.effects.background.color,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -3421,26 +3067,19 @@ const PowerBIDashboard: React.FC = () => {
                     Color
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.effects.visualBorder.color}
                       onChange={(color) =>
                         updateGeneralSetting("effects", "visualBorder", {
                           ...generalSettings.effects.visualBorder,
-                          color: color.toHexString(),
+                          color: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.effects.visualBorder.color,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -3507,26 +3146,19 @@ const PowerBIDashboard: React.FC = () => {
                     Color
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.effects.shadow.color}
                       onChange={(color) =>
                         updateGeneralSetting("effects", "shadow", {
                           ...generalSettings.effects.shadow,
-                          color: color.toHexString(),
+                          color: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.effects.shadow.color,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
                 <div className="form-group">
@@ -3656,26 +3288,19 @@ const PowerBIDashboard: React.FC = () => {
                     Background
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.headerIcons.colors.background}
                       onChange={(color) =>
                         updateGeneralSetting("headerIcons", "colors", {
                           ...generalSettings.headerIcons.colors,
-                          background: color.toHexString(),
+                          background: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.headerIcons.colors.background,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
 
@@ -3684,52 +3309,38 @@ const PowerBIDashboard: React.FC = () => {
                     Border
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.headerIcons.colors.border}
                       onChange={(color) =>
                         updateGeneralSetting("headerIcons", "colors", {
                           ...generalSettings.headerIcons.colors,
-                          border: color.toHexString(),
+                          border: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.headerIcons.colors.border,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
 
                 <div className="form-group">
                   <Typography.Text className="form-label">Icon</Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.headerIcons.colors.icon}
                       onChange={(color) =>
                         updateGeneralSetting("headerIcons", "colors", {
                           ...generalSettings.headerIcons.colors,
-                          icon: color.toHexString(),
+                          icon: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.headerIcons.colors.icon,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
 
@@ -4248,26 +3859,19 @@ const PowerBIDashboard: React.FC = () => {
                     Label color
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.tooltips.text.labelColor}
                       onChange={(color) =>
                         updateGeneralSetting("tooltips", "text", {
                           ...generalSettings.tooltips.text,
-                          labelColor: color.toHexString(),
+                          labelColor: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.tooltips.text.labelColor,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
 
@@ -4276,26 +3880,19 @@ const PowerBIDashboard: React.FC = () => {
                     Value color
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.tooltips.text.valueColor}
                       onChange={(color) =>
                         updateGeneralSetting("tooltips", "text", {
                           ...generalSettings.tooltips.text,
-                          valueColor: color.toHexString(),
+                          valueColor: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.tooltips.text.valueColor,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
 
@@ -4304,29 +3901,21 @@ const PowerBIDashboard: React.FC = () => {
                     Drill text and icon color
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={
                         generalSettings.tooltips.text.drillTextAndIconColor
                       }
                       onChange={(color) =>
                         updateGeneralSetting("tooltips", "text", {
                           ...generalSettings.tooltips.text,
-                          drillTextAndIconColor: color.toHexString(),
+                          drillTextAndIconColor: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.tooltips.text
-                                .drillTextAndIconColor,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
               </div>
@@ -4344,26 +3933,19 @@ const PowerBIDashboard: React.FC = () => {
                     Color
                   </Typography.Text>
                   <div className="color-picker-row">
-                    <ColorPicker
-                      size="small"
+                    <CustomColorPicker
+                      label=""
                       value={generalSettings.tooltips.background.color}
                       onChange={(color) =>
                         updateGeneralSetting("tooltips", "background", {
                           ...generalSettings.tooltips.background,
-                          color: color.toHexString(),
+                          color: color,
                         })
                       }
-                      showText={() => (
-                        <div
-                          className="effects-color-display"
-                          style={{
-                            backgroundColor:
-                              generalSettings.tooltips.background.color,
-                          }}
-                        />
-                      )}
+                      size="small"
+                      showLabel={false}
                     />
-                    <Button size="small" icon={<Search size={12} />} />
+                    {/* <FunctionButton /> */}
                   </div>
                 </div>
 
@@ -4430,15 +4012,6 @@ const PowerBIDashboard: React.FC = () => {
               <div className="chart-toolbar">
                 <Space>
                   <Button
-                    onClick={() => dispatch(setChartType("column"))}
-                    className={`chart-type-button ${
-                      chartType === "column" ? "active" : ""
-                    }`}
-                    title="Column"
-                  >
-                    <BarChart3 size={20} />
-                  </Button>
-                  <Button
                     onClick={() => dispatch(setChartType("stackedColumn"))}
                     className={`chart-type-button ${
                       chartType === "stackedColumn" ? "active" : ""
@@ -4484,18 +4057,6 @@ const PowerBIDashboard: React.FC = () => {
                     <TrendingUp size={20} />
                   </Button>
                   <Button
-                    onClick={() => dispatch(setChartType("bar"))}
-                    className={`chart-type-button ${
-                      chartType === "bar" ? "active" : ""
-                    }`}
-                    title="Bar Chart"
-                  >
-                    <BarChart3
-                      size={20}
-                      style={{ transform: "rotate(90deg)" }}
-                    />
-                  </Button>
-                  <Button
                     onClick={() => dispatch(setChartType("stackedBar"))}
                     className={`chart-type-button ${
                       chartType === "stackedBar" ? "active" : ""
@@ -4522,8 +4083,8 @@ const PowerBIDashboard: React.FC = () => {
                 </Space>
               </div>
 
-              {/* Chart Render Area */}
-              <div className="chart-render-area">{renderChart()}</div>
+              {/* Chart Render Area with Data Panels */}
+              <DataDisplayPanels chartComponent={renderChart()} />
             </Card>
           </Content>
 
@@ -4541,7 +4102,27 @@ const PowerBIDashboard: React.FC = () => {
               <TabPane tab="Data" key="data">
                 {/* Data tab - no sub-tabs, direct content */}
                 <div className="properties-content">
-                  <DataConfigTab />
+                  {/* Pass correct data for each chart type */}
+                  <DataTab
+                    chartType={chartType}
+                    rawData={
+                      chartType === "stackedColumn"
+                        ? require("./data/chartData.json").stackedData
+                        : chartType === "clusteredColumn"
+                        ? require("./data/chartData.json").monthlyData
+                        : chartType === "lineAndColumn"
+                        ? require("./data/chartData.json").monthlyData
+                        : chartType === "pie"
+                        ? require("./data/chartData.json").categories
+                        : chartType === "line"
+                        ? require("./data/chartData.json").monthlyData
+                        : chartType === "stackedBar"
+                        ? require("./data/chartData.json").stackedData
+                        : chartType === "clusteredBar"
+                        ? require("./data/chartData.json").monthlyData
+                        : []
+                    }
+                  />
                 </div>
               </TabPane>
 

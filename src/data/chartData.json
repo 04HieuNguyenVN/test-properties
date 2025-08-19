@@ -1,0 +1,516 @@
+{
+  "cities": [
+    {
+      "id": 1,
+      "name": "Hà Nội",
+      "population": 8000000,
+      "area": 3324,
+      "gdp": 85.2,
+      "revenue": 120.5,
+      "growth": 6.8,
+      "temperature": 23.5,
+      "humidity": 78,
+      "category": "Thủ đô",
+      "region": "Bắc Bộ",
+      "established": 1010,
+      "density": 2407
+    },
+    {
+      "id": 2,
+      "name": "TP.HCM",
+      "population": 9000000,
+      "area": 2095,
+      "gdp": 123.4,
+      "revenue": 145.8,
+      "growth": 7.2,
+      "temperature": 28.2,
+      "humidity": 82,
+      "category": "Thành phố trực thuộc TW",
+      "region": "Nam Bộ",
+      "established": 1698,
+      "density": 4298
+    },
+    {
+      "id": 3,
+      "name": "Đà Nẵng",
+      "population": 1200000,
+      "area": 1285,
+      "gdp": 42.1,
+      "revenue": 55.3,
+      "growth": 8.1,
+      "temperature": 26.8,
+      "humidity": 75,
+      "category": "Thành phố trực thuộc TW",
+      "region": "Trung Bộ",
+      "established": 1307,
+      "density": 934
+    },
+    {
+      "id": 4,
+      "name": "Hải Phòng",
+      "population": 2000000,
+      "area": 1523,
+      "gdp": 38.7,
+      "revenue": 48.9,
+      "growth": 5.9,
+      "temperature": 24.1,
+      "humidity": 80,
+      "category": "Thành phố trực thuộc TW",
+      "region": "Bắc Bộ",
+      "established": 1888,
+      "density": 1313
+    },
+    {
+      "id": 5,
+      "name": "Cần Thơ",
+      "population": 1200000,
+      "area": 1409,
+      "gdp": 28.9,
+      "revenue": 35.2,
+      "growth": 6.5,
+      "temperature": 27.5,
+      "humidity": 85,
+      "category": "Thành phố trực thuộc TW",
+      "region": "Nam Bộ",
+      "established": 1732,
+      "density": 852
+    },
+    {
+      "id": 6,
+      "name": "Nha Trang",
+      "population": 500000,
+      "area": 251,
+      "gdp": 15.3,
+      "revenue": 22.1,
+      "growth": 7.8,
+      "temperature": 26.3,
+      "humidity": 77,
+      "category": "Thành phố tỉnh",
+      "region": "Trung Bộ",
+      "established": 1653,
+      "density": 1992
+    },
+    {
+      "id": 7,
+      "name": "Huế",
+      "population": 350000,
+      "area": 71,
+      "gdp": 12.8,
+      "revenue": 18.4,
+      "growth": 6.2,
+      "temperature": 25.1,
+      "humidity": 83,
+      "category": "Thành phố tỉnh",
+      "region": "Trung Bộ",
+      "established": 1802,
+      "density": 4930
+    },
+    {
+      "id": 8,
+      "name": "Vũng Tàu",
+      "population": 450000,
+      "area": 140,
+      "gdp": 18.6,
+      "revenue": 28.3,
+      "growth": 8.5,
+      "temperature": 27.8,
+      "humidity": 79,
+      "category": "Thành phố tỉnh",
+      "region": "Nam Bộ",
+      "established": 1876,
+      "density": 3214
+    }
+  ],
+  "categories": [
+    {
+      "name": "Thủ đô",
+      "value": 1,
+      "percentage": 12.5,
+      "color": "#0088FE"
+    },
+    {
+      "name": "TP trực thuộc TW",
+      "value": 4,
+      "percentage": 50.0,
+      "color": "#00C49F"
+    },
+    {
+      "name": "TP tỉnh",
+      "value": 3,
+      "percentage": 37.5,
+      "color": "#FFBB28"
+    }
+  ],
+  "monthlyData": [
+    {
+      "month": "Jan",
+      "visitors": 4000,
+      "revenue": 2400,
+      "sales": 1200,
+      "profit": 800,
+      "expenses": 1600
+    },
+    {
+      "month": "Feb",
+      "visitors": 3000,
+      "revenue": 1398,
+      "sales": 980,
+      "profit": 418,
+      "expenses": 980
+    },
+    {
+      "month": "Mar",
+      "visitors": 2000,
+      "revenue": 9800,
+      "sales": 5200,
+      "profit": 4600,
+      "expenses": 5200
+    },
+    {
+      "month": "Apr",
+      "visitors": 2780,
+      "revenue": 3908,
+      "sales": 2100,
+      "profit": 1808,
+      "expenses": 2100
+    },
+    {
+      "month": "May",
+      "visitors": 1890,
+      "revenue": 4800,
+      "sales": 2800,
+      "profit": 2000,
+      "expenses": 2800
+    },
+    {
+      "month": "Jun",
+      "visitors": 2390,
+      "revenue": 3800,
+      "sales": 2200,
+      "profit": 1600,
+      "expenses": 2200
+    },
+    {
+      "month": "Jul",
+      "visitors": 3490,
+      "revenue": 4300,
+      "sales": 2600,
+      "profit": 1700,
+      "expenses": 2600
+    },
+    {
+      "month": "Aug",
+      "visitors": 4200,
+      "revenue": 5100,
+      "sales": 3100,
+      "profit": 2000,
+      "expenses": 3100
+    },
+    {
+      "month": "Sep",
+      "visitors": 3800,
+      "revenue": 4700,
+      "sales": 2900,
+      "profit": 1800,
+      "expenses": 2900
+    },
+    {
+      "month": "Oct",
+      "visitors": 4100,
+      "revenue": 5200,
+      "sales": 3200,
+      "profit": 2000,
+      "expenses": 3200
+    },
+    {
+      "month": "Nov",
+      "visitors": 3900,
+      "revenue": 4900,
+      "sales": 3000,
+      "profit": 1900,
+      "expenses": 3000
+    },
+    {
+      "month": "Dec",
+      "visitors": 4500,
+      "revenue": 5500,
+      "sales": 3400,
+      "profit": 2100,
+      "expenses": 3400
+    }
+  ],
+  "populationByAge": [
+    {
+      "city": "Hà Nội",
+      "under10": 800000,
+      "age10to19": 750000,
+      "age20to29": 900000,
+      "age30to39": 1200000,
+      "age40to49": 1100000,
+      "age50to59": 800000,
+      "age60to69": 600000,
+      "age70to79": 400000,
+      "over80": 200000
+    },
+    {
+      "city": "TP.HCM",
+      "under10": 950000,
+      "age10to19": 850000,
+      "age20to29": 1050000,
+      "age30to39": 1400000,
+      "age40to49": 1300000,
+      "age50to59": 950000,
+      "age60to69": 700000,
+      "age70to79": 500000,
+      "over80": 250000
+    },
+    {
+      "city": "Đà Nẵng",
+      "under10": 120000,
+      "age10to19": 110000,
+      "age20to29": 140000,
+      "age30to39": 180000,
+      "age40to49": 160000,
+      "age50to59": 120000,
+      "age60to69": 90000,
+      "age70to79": 60000,
+      "over80": 30000
+    },
+    {
+      "city": "Hải Phòng",
+      "under10": 200000,
+      "age10to19": 180000,
+      "age20to29": 220000,
+      "age30to39": 280000,
+      "age40to49": 260000,
+      "age50to59": 200000,
+      "age60to69": 150000,
+      "age70to79": 100000,
+      "over80": 50000
+    },
+    {
+      "city": "Cần Thơ",
+      "under10": 130000,
+      "age10to19": 120000,
+      "age20to29": 140000,
+      "age30to39": 180000,
+      "age40to49": 170000,
+      "age50to59": 130000,
+      "age60to69": 100000,
+      "age70to79": 70000,
+      "over80": 35000
+    }
+  ],
+  "businessData": [
+    {
+      "category": "Technology",
+      "q1": 120000,
+      "q2": 145000,
+      "q3": 158000,
+      "q4": 172000,
+      "target": 150000,
+      "growth": 8.5
+    },
+    {
+      "category": "Manufacturing",
+      "q1": 95000,
+      "q2": 108000,
+      "q3": 115000,
+      "q4": 128000,
+      "target": 110000,
+      "growth": 6.2
+    },
+    {
+      "category": "Services",
+      "q1": 85000,
+      "q2": 92000,
+      "q3": 98000,
+      "q4": 105000,
+      "target": 95000,
+      "growth": 5.8
+    },
+    {
+      "category": "Finance",
+      "q1": 78000,
+      "q2": 84000,
+      "q3": 89000,
+      "q4": 96000,
+      "target": 87000,
+      "growth": 7.1
+    },
+    {
+      "category": "Healthcare",
+      "q1": 65000,
+      "q2": 72000,
+      "q3": 76000,
+      "q4": 82000,
+      "target": 74000,
+      "growth": 6.8
+    }
+  ],
+  "sales": [
+    {
+      "product": "Laptop",
+      "january": 45000,
+      "february": 48000,
+      "march": 52000,
+      "april": 49000,
+      "may": 55000,
+      "june": 58000,
+      "profit": 15000,
+      "units": 150
+    },
+    {
+      "product": "Smartphone",
+      "january": 35000,
+      "february": 38000,
+      "march": 42000,
+      "april": 39000,
+      "may": 45000,
+      "june": 48000,
+      "profit": 12000,
+      "units": 200
+    },
+    {
+      "product": "Tablet",
+      "january": 25000,
+      "february": 28000,
+      "march": 32000,
+      "april": 29000,
+      "may": 35000,
+      "june": 38000,
+      "profit": 8000,
+      "units": 120
+    },
+    {
+      "product": "Desktop",
+      "january": 20000,
+      "february": 22000,
+      "march": 25000,
+      "april": 23000,
+      "may": 27000,
+      "june": 30000,
+      "profit": 6000,
+      "units": 80
+    },
+    {
+      "product": "Monitor",
+      "january": 15000,
+      "february": 17000,
+      "march": 19000,
+      "april": 18000,
+      "may": 21000,
+      "june": 23000,
+      "profit": 4000,
+      "units": 180
+    }
+  ],
+  "regions": [
+    {
+      "region": "Bắc Bộ",
+      "population": 10000000,
+      "area": 4847,
+      "gdp": 123.9,
+      "cities": 2,
+      "averageTemp": 23.8,
+      "humidity": 79
+    },
+    {
+      "region": "Trung Bộ",
+      "population": 2050000,
+      "area": 1607,
+      "gdp": 70.2,
+      "cities": 3,
+      "averageTemp": 26.1,
+      "humidity": 78
+    },
+    {
+      "region": "Nam Bộ",
+      "population": 10650000,
+      "area": 2235,
+      "gdp": 170.3,
+      "cities": 3,
+      "averageTemp": 27.9,
+      "humidity": 82
+    }
+  ],
+  "performance": [
+    {
+      "metric": "Revenue",
+      "actual": 95.2,
+      "target": 100.0,
+      "previous": 88.5,
+      "variance": -4.8,
+      "trend": "declining"
+    },
+    {
+      "metric": "Profit",
+      "actual": 102.8,
+      "target": 98.0,
+      "previous": 94.2,
+      "variance": 4.8,
+      "trend": "improving"
+    },
+    {
+      "metric": "Market Share",
+      "actual": 23.5,
+      "target": 25.0,
+      "previous": 22.1,
+      "variance": -1.5,
+      "trend": "stable"
+    },
+    {
+      "metric": "Customer Satisfaction",
+      "actual": 87.3,
+      "target": 85.0,
+      "previous": 84.7,
+      "variance": 2.3,
+      "trend": "improving"
+    },
+    {
+      "metric": "Employee Productivity",
+      "actual": 78.9,
+      "target": 80.0,
+      "previous": 76.4,
+      "variance": -1.1,
+      "trend": "stable"
+    }
+  ],
+  "stackedData": [
+    {
+      "category": "Product A",
+      "series1": 100,
+      "series2": 200,
+      "series3": 150,
+      "total": 450
+    },
+    {
+      "category": "Product B",
+      "series1": 150,
+      "series2": 180,
+      "series3": 120,
+      "total": 450
+    },
+    {
+      "category": "Product C",
+      "series1": 200,
+      "series2": 160,
+      "series3": 180,
+      "total": 540
+    },
+    {
+      "category": "Product D",
+      "series1": 120,
+      "series2": 220,
+      "series3": 140,
+      "total": 480
+    },
+    {
+      "category": "Product E",
+      "series1": 180,
+      "series2": 190,
+      "series3": 160,
+      "total": 530
+    }
+  ]
+}

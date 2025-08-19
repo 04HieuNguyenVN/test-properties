@@ -9,13 +9,14 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import chartData from "../../data/chartData.json";
 
 interface LineChartProps {
-  data: any[];
   config: any;
 }
 
-export const LineChart: React.FC<LineChartProps> = ({ data, config }) => {
+export const LineChart: React.FC<LineChartProps> = ({ config }) => {
+  const data = chartData.monthlyData;
   return (
     <ResponsiveContainer width="100%" height={500}>
       <RechartsLineChart

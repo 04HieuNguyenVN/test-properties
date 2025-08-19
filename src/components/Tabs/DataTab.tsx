@@ -1,11 +1,8 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Typography, Select, Divider, Button, Space } from "antd";
-import { Plus, X } from "lucide-react";
-import { RootState } from "../../store/store";
+import React, { useState, useEffect } from "react";
+import { Typography, Select, Divider, Button } from "antd";
+import { Plus } from "lucide-react";
 import {
   DATA_SOURCE_OPTIONS,
-  TABLE_OPTIONS,
   FIELD_OPTIONS,
   FIELD_ACTION_OPTIONS,
   FIELD_DISPLAY_NAMES,
@@ -14,100 +11,201 @@ import {
   SINGLE_FIELD_TYPES,
   FIELD_RESTRICTIONS,
   DEFAULT_AVAILABLE_FIELDS,
+  loadFieldOptions,
 } from "../../constants/index";
 
-export const DataConfigTab: React.FC = () => {
-  const chartType = useSelector((state: RootState) => state.chart.chartType);
-  const currentConfig = useSelector(
-    (state: RootState) => state.chart.chartConfigs[state.chart.chartType]
-  );
-  const dataConfig = currentConfig.data;
+export interface DataTabProps {
+  chartType: string;
+  rawData: any[];
+}
 
-  // State để quản lý nguồn dữ liệu và bảng được chọn
-  const [dataSource, setDataSource] = useState("API");
-  const [selectedTable, setSelectedTable] = useState("cities");
-
-  // State để quản lý các field của từng category (Y-axis, X-axis, Legend, v.v.)
-  const [categoryFields, setCategoryFields] = useState<{
-    [key: string]: any[];
-  }>({
-    yAxis: [{ id: 1, field: "population", action: "sum" }], // Trục Y
-    xAxis: [{ id: 2, field: "name", action: "no-action" }], // Trục X
-    legend: [{ id: 3, field: "name", action: "no-action" }], // Chú thích
-    values: [{ id: 4, field: "gdp", action: "sum" }], // Giá trị (cho pie chart)
-    secondaryYAxis: [], // Trục Y phụ
-    detail: [], // Chi tiết (cho pie chart)
-    columnY: [], // Column Y (cho line+column chart)
-    lineY: [], // Line Y (cho line+column chart)
-    columnLegend: [], // Column Legend (cho line+column chart)
-  });
-
-  // Hàm xác định các field có sẵn cho từng loại chart
-  const getAvailableFields = () => {
+export const DataTab: React.FC<DataTabProps> = ({ chartType, rawData }) => {
+  // Lấy các field khả dụng cho chart hiện tại
+  const getAvailableFields = (): string[] => {
     return CHART_AVAILABLE_FIELDS[chartType] || DEFAULT_AVAILABLE_FIELDS;
   };
 
-  // Kiểm tra xem loại chart có cho phép thêm nhiều field không
+  // State để quản lý nguồn dữ liệu
+  const [dataSource, setDataSource] = useState("API");
+
+  // Hiển thị data gốc nhận từ Redux (demo)
+  // console.log('Raw data for this chart:', rawChartData);
+
+  const [categoryFields, setCategoryFields] = useState<{
+    [key: string]: any[];
+  }>({
+    yAxis: [],
+    xAxis: [],
+    legend: [],
+    values: [],
+    secondaryYAxis: [],
+    detail: [],
+    columnY: [],
+    lineY: [],
+    columnLegend: [],
+  });
+
+  // Tự động fill field và cập nhật FIELD_OPTIONS khi rawData hoặc chartType thay đổi
+  useEffect(() => {
+    if (!rawData || rawData.length === 0) return;
+    loadFieldOptions({ temp: rawData }, "temp");
+    const keys = Object.keys(rawData[0]);
+    const xField =
+      keys.find(
+        (k) =>
+          k.toLowerCase().includes("name") ||
+          k.toLowerCase().includes("category") ||
+          k.toLowerCase().includes("month")
+      ) || keys[0];
+    const yField =
+      keys.find(
+        (k) =>
+          k.toLowerCase().includes("value") ||
+          k.toLowerCase().includes("population") ||
+          k.toLowerCase().includes("series")
+      ) ||
+      keys[1] ||
+      keys[0];
+    const legendField =
+      keys.find(
+        (k) =>
+          k.toLowerCase().includes("series") ||
+          k.toLowerCase().includes("type") ||
+          k.toLowerCase().includes("legend")
+      ) ||
+      keys[2] ||
+      keys[0];
+
+    // Auto-fill for pie chart: values & detail
+    if (chartType === "pie") {
+      // values: tìm field có value, percentage, hoặc value lớn nhất
+      const valueField =
+        keys.find(
+          (k) =>
+            k.toLowerCase().includes("value") ||
+            k.toLowerCase().includes("percentage") ||
+            k.toLowerCase().includes("count")
+        ) ||
+        keys[1] ||
+        keys[0];
+      // detail: tìm field có name, label, hoặc category
+      const detailField =
+        keys.find(
+          (k) =>
+            k.toLowerCase().includes("name") ||
+            k.toLowerCase().includes("label") ||
+            k.toLowerCase().includes("category")
+        ) || keys[0];
+      setCategoryFields((prev) => ({
+        ...prev,
+        legend: legendField
+          ? [{ id: 3, field: legendField, action: "no-action" }]
+          : [],
+        values: valueField ? [{ id: 4, field: valueField, action: "sum" }] : [],
+        detail: detailField
+          ? [{ id: 5, field: detailField, action: "no-action" }]
+          : [],
+      }));
+    } else if (chartType === "lineAndColumn") {
+      // For lineAndColumn, auto-fill both columnY and lineY from data keys
+      // Try to find two different Y fields (e.g., sales and profit)
+      const yKeys = keys.filter(
+        (k) =>
+          k.toLowerCase().includes("sales") ||
+          k.toLowerCase().includes("profit") ||
+          k.toLowerCase().includes("value") ||
+          k.toLowerCase().includes("amount")
+      );
+      const columnYField = yKeys[0] || keys[1] || keys[0];
+      const lineYField = yKeys[1] || yKeys[0] || keys[2] || keys[1] || keys[0];
+      setCategoryFields((prev) => ({
+        ...prev,
+        xAxis: xField ? [{ id: 1, field: xField, action: "no-action" }] : [],
+        columnY: columnYField
+          ? [{ id: 2, field: columnYField, action: "sum" }]
+          : [],
+        lineY: lineYField ? [{ id: 3, field: lineYField, action: "sum" }] : [],
+        legend: legendField
+          ? [{ id: 4, field: legendField, action: "no-action" }]
+          : [],
+      }));
+    } else {
+      setCategoryFields((prev) => ({
+        ...prev,
+        xAxis: xField ? [{ id: 1, field: xField, action: "no-action" }] : [],
+        yAxis: yField ? [{ id: 2, field: yField, action: "sum" }] : [],
+        legend: legendField
+          ? [{ id: 3, field: legendField, action: "no-action" }]
+          : [],
+      }));
+    }
+  }, [rawData, chartType]);
+
   const allowsAddingFields = () => {
     return !SIMPLE_CHART_TYPES.includes(chartType);
   };
 
-  // Kiểm tra xem một category field cụ thể có cho phép thêm field không
   const allowsAddingFieldsToCategory = (fieldKey: string) => {
-    // Các chart đơn giản không cho phép thêm field vào các category cơ bản
     if (!allowsAddingFields()) {
       return false;
     }
-
-    // Các field chỉ cho phép 1 field
     if (SINGLE_FIELD_TYPES.includes(fieldKey)) {
       const fieldsForCategory = categoryFields[fieldKey] || [];
       return fieldsForCategory.length === 0;
     }
-
-    // Y-axis cho stacked/clustered column charts chỉ cho phép 1 field
     if (fieldKey === "yAxis" && FIELD_RESTRICTIONS.yAxis.includes(chartType)) {
       const fieldsForCategory = categoryFields[fieldKey] || [];
       return fieldsForCategory.length === 0;
     }
-
-    // X-axis cho stacked/clustered bar charts chỉ cho phép 1 field
     if (fieldKey === "xAxis" && FIELD_RESTRICTIONS.xAxis.includes(chartType)) {
       const fieldsForCategory = categoryFields[fieldKey] || [];
       return fieldsForCategory.length === 0;
     }
-
-    // Line chart - tất cả fields chỉ cho phép 1 field
+    if (
+      fieldKey === "legend" &&
+      FIELD_RESTRICTIONS.legend.includes(chartType)
+    ) {
+      const fieldsForCategory = categoryFields[fieldKey] || [];
+      return fieldsForCategory.length === 0;
+    }
+    if (
+      fieldKey === "columnY" &&
+      FIELD_RESTRICTIONS.columnY.includes(chartType)
+    ) {
+      const fieldsForCategory = categoryFields[fieldKey] || [];
+      return fieldsForCategory.length === 0;
+    }
+    if (fieldKey === "lineY" && FIELD_RESTRICTIONS.lineY.includes(chartType)) {
+      const fieldsForCategory = categoryFields[fieldKey] || [];
+      return fieldsForCategory.length === 0;
+    }
+    if (
+      fieldKey === "columnLegend" &&
+      FIELD_RESTRICTIONS.columnLegend.includes(chartType)
+    ) {
+      const fieldsForCategory = categoryFields[fieldKey] || [];
+      return fieldsForCategory.length === 0;
+    }
     if (FIELD_RESTRICTIONS.allFields.includes(chartType)) {
       const fieldsForCategory = categoryFields[fieldKey] || [];
       return fieldsForCategory.length === 0;
     }
-
     return true;
   };
 
-  // Hàm lấy tên hiển thị cho từng loại field
   const getFieldDisplayName = (fieldKey: string) => {
     return FIELD_DISPLAY_NAMES[fieldKey] || fieldKey;
   };
 
-  // Hàm thêm field mới vào category
   const addFieldToCategory = (category: string) => {
     const newField = {
-      id: Date.now(), // ID duy nhất dựa trên timestamp
-      field: "population", // Field mặc định
-      action: "sum", // Action mặc định là tổng
+      id: Date.now(),
+      field: "",
+      action: "",
     };
     setCategoryFields((prev) => ({
       ...prev,
       [category]: [...(prev[category] || []), newField],
-    }));
-  };
-
-  const removeFieldFromCategory = (category: string, fieldId: number) => {
-    setCategoryFields((prev) => ({
-      ...prev,
-      [category]: prev[category]?.filter((field) => field.id !== fieldId) || [],
     }));
   };
 
@@ -126,58 +224,53 @@ export const DataConfigTab: React.FC = () => {
     }));
   };
 
-  // Simple Field Selector - only Field + Action row
-  // Component để chọn field đơn giản với dropdown
-  const SimpleFieldSelector = ({
-    field, // Object field hiện tại
-    category, // Category của field (yAxis, xAxis, v.v.)
-    onUpdate, // Hàm callback khi update field
-    onRemove, // Hàm callback khi xóa field
-  }: any) => (
+  const SimpleFieldSelector = ({ field, category, onUpdate }: any) => (
     <div className="simple-field-selector">
       <div className="selector-row">
         <div className="selector-group">
-          {/* Dropdown để chọn field */}
           <Select
             size="small"
-            value={field.field}
+            value={field.field || undefined}
             onChange={(value) => onUpdate(category, field.id, "field", value)}
             style={{ width: "100%" }}
             placeholder="Select field"
             options={FIELD_OPTIONS}
+            allowClear
           />
         </div>
         <div className="selector-group">
-          <Space.Compact style={{ width: "100%" }}>
-            <Select
-              size="small"
-              value={field.action}
-              onChange={(value) =>
-                onUpdate(category, field.id, "action", value)
-              }
-              style={{ flex: 1 }}
-              options={FIELD_ACTION_OPTIONS}
-            />
-            <Button
-              size="small"
-              icon={<X size={14} />}
-              onClick={() => onRemove(category, field.id)}
-              danger
-              type="text"
-            />
-          </Space.Compact>
+          <Select
+            size="small"
+            value={field.action || undefined}
+            onChange={(value) => onUpdate(category, field.id, "action", value)}
+            style={{ width: "100%" }}
+            options={FIELD_ACTION_OPTIONS}
+            placeholder="Select action"
+            allowClear
+          />
         </div>
       </div>
     </div>
   );
 
-  // Render chính của Data Config Tab
+  // Determine table name based on chartType
+  let tableName = "";
+  if (chartType === "stackedColumn" || chartType === "stackedBar")
+    tableName = "stackedData";
+  else if (
+    chartType === "clusteredColumn" ||
+    chartType === "clusteredBar" ||
+    chartType === "lineAndColumn" ||
+    chartType === "line"
+  )
+    tableName = "monthlyData";
+  else if (chartType === "pie") tableName = "categories";
+  else tableName = "data";
+
   return (
     <div className="data-config-tab">
-      {/* Phần chọn Data Source và Table */}
       <div className="data-source-section">
         <div className="source-table-row">
-          {/* Selector cho Data Source */}
           <div className="selector-group">
             <Typography.Text className="selector-label">
               Data source:
@@ -190,32 +283,40 @@ export const DataConfigTab: React.FC = () => {
               options={DATA_SOURCE_OPTIONS}
             />
           </div>
-          {/* Selector cho Table */}
           <div className="selector-group">
             <Typography.Text className="selector-label">Table:</Typography.Text>
             <Select
               size="small"
-              value={selectedTable}
-              onChange={setSelectedTable}
+              value={tableName}
               style={{ width: "100%" }}
-              options={TABLE_OPTIONS}
+              disabled
+              options={[{ label: tableName, value: tableName }]}
             />
           </div>
         </div>
       </div>
-
       <Divider style={{ margin: "12px 0" }} />
-
-      {/* Field Categories - Different for each chart type */}
       <div className="field-categories">
         {getAvailableFields().map((fieldKey) => {
           const fieldsForCategory = categoryFields[fieldKey] || [];
-
           return (
             <div key={fieldKey} className="field-category">
               <div className="category-header">
                 <Typography.Text className="category-title">
                   {getFieldDisplayName(fieldKey)}
+                  {fieldKey === "legend" &&
+                  fieldsForCategory.length > 0 &&
+                  fieldsForCategory[0].field ? (
+                    <span
+                      style={{
+                        color: "#1677ff",
+                        marginLeft: 8,
+                        fontWeight: 500,
+                      }}
+                    >
+                      (Color: {fieldsForCategory[0].field})
+                    </span>
+                  ) : null}
                 </Typography.Text>
               </div>
               <div className="field-list">
@@ -225,11 +326,8 @@ export const DataConfigTab: React.FC = () => {
                     field={field}
                     category={fieldKey}
                     onUpdate={updateFieldInCategory}
-                    onRemove={removeFieldFromCategory}
                   />
                 ))}
-
-                {/* Add button inside each category - check specific category rules */}
                 {allowsAddingFieldsToCategory(fieldKey) && (
                   <div className="add-field-button">
                     <Button

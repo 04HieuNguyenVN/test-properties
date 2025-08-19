@@ -11,9 +11,17 @@ import {
   Slider,
   Space,
 } from "antd";
-import { Search, Bold, Italic, Underline, RotateCcw } from "lucide-react";
+import {
+  FunctionSquare,
+  Bold,
+  Italic,
+  Underline,
+  RotateCcw,
+} from "lucide-react";
 import { RootState } from "../../store/store";
 import { toggleSection } from "../../store/chartSlice";
+import { CustomColorPicker } from "../common/CustomColorPicker";
+// import { FunctionButton } from "../common/FunctionButton";
 
 const { TextArea } = Input;
 
@@ -497,7 +505,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     style={{ flex: 1 }}
                   />
-                  <Button size="small" icon={<Search size={12} />} />
+                  {/* <FunctionButton /> */}
                 </div>
               </div>
               <div className="form-group">
@@ -602,19 +610,19 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                   Text color
                 </Typography.Text>
                 <Space align="center">
-                  <ColorPicker
-                    size="small"
+                  <CustomColorPicker
+                    label=""
                     value={generalSettings.title.title.textColor}
                     onChange={(color) =>
                       updateGeneralSetting("title", "title", {
                         ...generalSettings.title.title,
-                        textColor: color.toHexString(),
+                        textColor: color,
                       })
                     }
+                    size="small"
+                    showLabel={false}
+                    showCode={true}
                   />
-                  <Typography.Text code style={{ fontSize: "12px" }}>
-                    {generalSettings.title.title.textColor}
-                  </Typography.Text>
                 </Space>
               </div>
               <div className="form-group">
@@ -622,19 +630,19 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                   Background color
                 </Typography.Text>
                 <Space align="center">
-                  <ColorPicker
-                    size="small"
+                  <CustomColorPicker
+                    label=""
                     value={generalSettings.title.title.backgroundColor}
                     onChange={(color) =>
                       updateGeneralSetting("title", "title", {
                         ...generalSettings.title.title,
-                        backgroundColor: color.toHexString(),
+                        backgroundColor: color,
                       })
                     }
+                    size="small"
+                    showLabel={false}
+                    showCode={true}
                   />
-                  <Typography.Text code style={{ fontSize: "12px" }}>
-                    {generalSettings.title.title.backgroundColor}
-                  </Typography.Text>
                 </Space>
               </div>
               <div className="form-group">
@@ -729,19 +737,19 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                   Background
                 </Typography.Text>
                 <Space align="center">
-                  <ColorPicker
-                    size="small"
+                  <CustomColorPicker
+                    label=""
                     value={generalSettings.effects.background.color}
                     onChange={(color) =>
                       updateGeneralSetting("effects", "background", {
                         ...generalSettings.effects.background,
-                        color: color.toHexString(),
+                        color: color,
                       })
                     }
+                    size="small"
+                    showLabel={false}
+                    showCode={true}
                   />
-                  <Typography.Text code style={{ fontSize: "12px" }}>
-                    {generalSettings.effects.background.color}
-                  </Typography.Text>
                   <Typography.Text>Transparency:</Typography.Text>
                   <div className="transparency-control">
                     <InputNumber

@@ -17,21 +17,63 @@ export const DATA_SOURCE_OPTIONS = [
   { label: "File", value: "File" },
 ];
 
-// Các tùy chọn Table
-export const TABLE_OPTIONS = [
-  { label: "Cities", value: "cities" },
-  { label: "Countries", value: "countries" },
-  { label: "Sales", value: "sales" },
-  { label: "Products", value: "products" },
-];
+// Các tùy chọn Table - sẽ được load từ chartData.json
+export const TABLE_OPTIONS: { label: string; value: string }[] = [];
 
-// Các tùy chọn Field
-export const FIELD_OPTIONS = [
-  { label: "Population", value: "population" },
-  { label: "Area", value: "area" },
-  { label: "GDP", value: "gdp" },
-  { label: "Name", value: "name" },
-];
+// Các tùy chọn Field - sẽ được load động dựa trên table đã chọn
+export const FIELD_OPTIONS: { label: string; value: string }[] = [];
+
+// Hàm để load table options từ chartData.json
+export const loadTableOptions = (chartData: any) => {
+  TABLE_OPTIONS.length = 0; // Clear existing options
+  if (chartData && typeof chartData === "object") {
+    Object.keys(chartData).forEach((key) => {
+      TABLE_OPTIONS.push({
+        label: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize first letter
+        value: key,
+      });
+    });
+  }
+};
+
+// Hàm để load field options dựa trên table đã chọn
+export const loadFieldOptions = (chartData: any, selectedTable: string) => {
+  FIELD_OPTIONS.length = 0; // Clear existing options
+  if (
+    chartData &&
+    chartData[selectedTable] &&
+    Array.isArray(chartData[selectedTable]) &&
+    chartData[selectedTable].length > 0
+  ) {
+    const firstItem = chartData[selectedTable][0];
+    Object.keys(firstItem).forEach((key) => {
+      FIELD_OPTIONS.push({
+        label: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize first letter
+        value: key,
+      });
+    });
+  }
+};
+
+// Hàm để get available fields cho một table cụ thể (không mutate global array)
+export const getFieldOptionsForTable = (
+  chartData: any,
+  selectedTable: string
+): { label: string; value: string }[] => {
+  if (
+    chartData &&
+    chartData[selectedTable] &&
+    Array.isArray(chartData[selectedTable]) &&
+    chartData[selectedTable].length > 0
+  ) {
+    const firstItem = chartData[selectedTable][0];
+    return Object.keys(firstItem).map((key) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      value: key,
+    }));
+  }
+  return [];
+};
 
 // Các tùy chọn Action cho Field
 export const FIELD_ACTION_OPTIONS = [
@@ -107,7 +149,7 @@ export const CHART_AVAILABLE_FIELDS: { [key: string]: string[] } = {
 };
 
 // Chart types không cho phép thêm nhiều fields
-export const SIMPLE_CHART_TYPES = ["column", "bar", "pie"];
+export const SIMPLE_CHART_TYPES = ["pie"];
 
 // Fields chỉ cho phép 1 field
 export const SINGLE_FIELD_TYPES = [
@@ -119,12 +161,47 @@ export const SINGLE_FIELD_TYPES = [
 
 // Chart types và field restrictions
 export const FIELD_RESTRICTIONS = {
-  // Y-axis cho stacked/clustered column charts chỉ 1 field
-  yAxis: ["stackedColumn", "clusteredColumn"],
-  // X-axis cho stacked/clustered bar charts chỉ 1 field
-  xAxis: ["stackedBar", "clusteredBar"],
-  // Line chart tất cả fields chỉ 1 field
-  allFields: ["line"],
+  // Tất cả chart types giới hạn 1 field cho mọi phần
+  yAxis: [
+    "stackedColumn",
+    "clusteredColumn",
+    "stackedBar",
+    "clusteredBar",
+    "line",
+    "lineAndColumn",
+    "pie",
+  ],
+  xAxis: [
+    "stackedColumn",
+    "clusteredColumn",
+    "stackedBar",
+    "clusteredBar",
+    "line",
+    "lineAndColumn",
+    "pie",
+  ],
+  legend: [
+    "stackedColumn",
+    "clusteredColumn",
+    "stackedBar",
+    "clusteredBar",
+    "line",
+    "lineAndColumn",
+    "pie",
+  ],
+  columnY: ["lineAndColumn"],
+  lineY: ["lineAndColumn"],
+  columnLegend: ["lineAndColumn"],
+  // Tất cả fields chỉ được 1 field
+  allFields: [
+    "stackedColumn",
+    "clusteredColumn",
+    "stackedBar",
+    "clusteredBar",
+    "line",
+    "lineAndColumn",
+    "pie",
+  ],
 };
 
 // Các màu mặc định
@@ -136,7 +213,7 @@ export const DEFAULT_COLORS = {
 };
 
 // Bar chart types constant
-export const BAR_CHART_TYPES = ["bar", "stackedBar", "clusteredBar"];
+export const BAR_CHART_TYPES = ["stackedBar", "clusteredBar"];
 
 // Required sections that cannot be toggled
 export const REQUIRED_SECTIONS = ["xAxis", "yAxis"];

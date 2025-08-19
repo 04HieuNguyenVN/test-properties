@@ -1,9 +1,7 @@
-export { ColumnChart } from "./ColumnChart";
-export { StackedColumnChart } from "./StackedColumnChart";
+export { default as StackedColumnChart } from "./StackedColumnChart";
 export { ClusteredColumnChart } from "./ClusteredColumnChart";
 export { PieChart } from "./PieChart";
 export { LineChart } from "./LineChart";
-export { BarChart } from "./BarChart";
 export { LineAndColumnChart } from "./LineAndColumnChart";
 export { StackedBarChart } from "./StackedBarChart";
 export { ClusteredBarChart } from "./ClusteredBarChart";

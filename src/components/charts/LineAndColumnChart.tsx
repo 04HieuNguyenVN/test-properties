@@ -10,16 +10,16 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import chartData from "../../data/chartData.json";
 
 interface LineAndColumnChartProps {
-  data: any[];
   config: any;
 }
 
 export const LineAndColumnChart: React.FC<LineAndColumnChartProps> = ({
-  data,
   config,
 }) => {
+  const data = chartData.monthlyData;
   return (
     <ResponsiveContainer width="100%" height={500}>
       <ComposedChart
@@ -34,7 +34,7 @@ export const LineAndColumnChart: React.FC<LineAndColumnChartProps> = ({
           />
         )}
         <XAxis
-          dataKey="name"
+          dataKey="month"
           tick={{
             fontSize: config.xAxis.fontSize,
             fill: config.xAxis.color,
@@ -60,15 +60,14 @@ export const LineAndColumnChart: React.FC<LineAndColumnChartProps> = ({
         />
         <Tooltip />
         {config.legend?.enabled && <Legend />}
-        <Bar yAxisId="left" dataKey="area" fill="#FF8042" name="Diện tích" />
+        <Bar yAxisId="left" dataKey="sales" fill="#0088FE" name="Sales" />
         <Line
           yAxisId="right"
           type="monotone"
-          dataKey="population"
-          stroke="#0078D4"
-          strokeWidth={3}
-          name="Dân số"
-          dot={{ fill: "#0078D4", strokeWidth: 2, r: 4 }}
+          dataKey="profit"
+          stroke="#00C49F"
+          strokeWidth={2}
+          name="Profit"
         />
       </ComposedChart>
     </ResponsiveContainer>

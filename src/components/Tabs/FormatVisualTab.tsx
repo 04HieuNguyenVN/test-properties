@@ -11,7 +11,7 @@ import {
   ColorPicker,
   Slider,
 } from "antd";
-import { Search, Bold, Italic, Underline, RotateCcw } from "lucide-react";
+import { Bold, Italic, Underline, RotateCcw } from "lucide-react";
 import { RootState } from "../../store/store";
 import { toggleSection, updateFormatConfig } from "../../store/chartSlice";
 import { CustomColorPicker } from "../common/CustomColorPicker";
@@ -184,11 +184,9 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
     const commonSections = ["legend"];
 
     switch (chartType) {
-      case "column": // Column Chart
       case "stackedColumn": // Stacked Column Chart
       case "clusteredColumn": // Clustered Column Chart
         return [...commonSections, "xAxis", "yAxis", "dataLabels", "gridlines"];
-      case "bar": // Bar Chart
       case "stackedBar": // Stacked Bar Chart
       case "clusteredBar": // Clustered Bar Chart
         return [...commonSections, "xAxis", "yAxis", "dataLabels", "gridlines"];
@@ -321,20 +319,16 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
             <div className="form-group">
               <Typography.Text className="form-label">Color</Typography.Text>
               <Space align="center">
-                <ColorPicker
-                  size="small"
+                <CustomColorPicker
+                  label=""
                   value={config.color || "#E1E1E1"}
                   onChange={(color) =>
-                    handleUpdateFormatConfig(
-                      sectionKey,
-                      "color",
-                      color.toHexString()
-                    )
+                    handleUpdateFormatConfig(sectionKey, "color", color)
                   }
+                  size="small"
+                  showLabel={false}
+                  showCode={true}
                 />
-                <Typography.Text code style={{ fontSize: "12px" }}>
-                  {config.color || "#E1E1E1"}
-                </Typography.Text>
               </Space>
             </div>
             <div className="form-group">
@@ -396,7 +390,6 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
         // Enhanced X-axis based on chart type
         if (
           [
-            "column",
             "stackedColumn",
             "clusteredColumn",
             "line",
@@ -483,7 +476,6 @@ export const FormatConfigTab: React.FC<FormatConfigTabProps> = () => {
         // Enhanced Y-axis based on chart type
         if (
           [
-            "column",
             "stackedColumn",
             "clusteredColumn",
             "line",

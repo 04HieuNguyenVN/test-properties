@@ -1,15 +1,13 @@
 import React from "react";
 import { Bar as AntPlotBar } from "@ant-design/plots";
+import chartData from "../../data/chartData.json";
 
 interface StackedBarChartProps {
-  data: any[];
   config: any;
 }
 
-export const StackedBarChart: React.FC<StackedBarChartProps> = ({
-  data,
-  config,
-}) => {
+export const StackedBarChart: React.FC<StackedBarChartProps> = ({ config }) => {
+  const data = chartData.stackedData;
   const stackedBarData = data.flatMap((item) => [
     { state: item.category, population: item.series1, age: "Series 1" },
     { state: item.category, population: item.series2, age: "Series 2" },

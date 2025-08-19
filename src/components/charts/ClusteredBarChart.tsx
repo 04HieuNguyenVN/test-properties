@@ -1,15 +1,15 @@
 import React from "react";
 import { Bar as AntPlotBar } from "@ant-design/plots";
+import chartData from "../../data/chartData.json";
 
 interface ClusteredBarChartProps {
-  data: any[];
   config: any;
 }
 
 export const ClusteredBarChart: React.FC<ClusteredBarChartProps> = ({
-  data,
   config,
 }) => {
+  const data = chartData.monthlyData;
   const clusteredBarData = data.flatMap((item) => [
     { label: item.month, type: "visitors", value: item.visitors },
     { label: item.month, type: "revenue", value: item.revenue },
