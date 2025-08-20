@@ -49,7 +49,7 @@ import chartData from "./data/chartData.json";
 
 // Nhập component hiển thị panel dữ liệu
 import DataDisplayPanels from "./components/DataDisplayPanels";
-import { DataTab } from "./components/tabs/DataTab";
+import { DataTab } from "./components/Tabs/DataTab";
 
 // Nhập các component UI từ thư viện Ant Design
 import {
@@ -551,44 +551,12 @@ const PowerBIDashboard: React.FC = () => {
         case "legend":
           return (
             <div className="properties-container">
-              {/* 
-                LEGEND CONFIGURATION SECTION
-                
-                Phần này cấu hình toàn bộ thuộc tính của Legend trong biểu đồ.
-                Legend giúp người dùng hiểu ý nghĩa của các màu sắc, ký hiệu 
-                trong biểu đồ thông qua chú thích.
-                
-                Cấu trúc gồm 3 sub-sections chính:
-                1. Options: Vị trí hiển thị legend
-                2. Text: Định dạng text (font, size, style, color)  
-                3. Title: Tiêu đề cho legend (có thể bật/tắt)
-              */}
-
-              {/* 
-                OPTIONS SUB-SECTION
-                
-                Cấu hình các tùy chọn cơ bản cho Legend
-                - Position: Vị trí hiển thị legend trên biểu đồ
-                
-                ConfigSection là component tái sử dụng để tạo các section
-                có thể thu gọn/mở rộng với header và nội dung
-              */}
               <ConfigSection
                 title="Options" // Tiêu đề của sub-section
                 isExpanded={expandedSections.legendOptions} // Trạng thái mở/đóng từ Redux store
                 onToggle={() => dispatch(toggleSection("legendOptions"))} // Hàm toggle trạng thái
               >
                 <div className="section-content">
-                  {/* 
-                    POSITION SELECTOR
-                    
-                    Cho phép người dùng chọn vị trí hiển thị legend:
-                    - Top: Phía trên biểu đồ
-                    - Bottom: Phía dưới biểu đồ  
-                    - Left: Bên trái biểu đồ
-                    - Right: Bên phải biểu đồ
-                    - Center right: Giữa bên phải
-                  */}
                   <div className="form-group">
                     <Typography.Text className="form-label">
                       Position
@@ -612,38 +580,17 @@ const PowerBIDashboard: React.FC = () => {
                 </div>
               </ConfigSection>
 
-              {/* 
-                TEXT SUB-SECTION
-                
-                Cấu hình định dạng text cho Legend
-                Bao gồm:
-                - Font family và font size
-                - Text formatting (Bold, Italic, Underline)
-                - Màu sắc text
-              */}
               <ConfigSection
                 title="Text"
                 isExpanded={expandedSections.legendText}
                 onToggle={() => dispatch(toggleSection("legendText"))}
               >
                 <div className="section-content">
-                  {/* 
-                    FONT CONTROLS
-                    
-                    Điều khiển font family và font size
-                    Layout: Select (font family) + InputNumber (font size) nằm cạnh nhau
-                  */}
                   <div className="form-group">
                     <Typography.Text className="form-label">
                       Font
                     </Typography.Text>
                     <div className="font-controls">
-                      {/* 
-                        FONT FAMILY SELECTOR
-                        
-                        Dropdown để chọn font family
-                        Hỗ trợ các font phổ biến: Segoe UI, Arial, Times New Roman, Calibri
-                      */}
                       <Select
                         size="small"
                         value={config.font || "Segoe UI"} // Mặc định Segoe UI
@@ -659,12 +606,6 @@ const PowerBIDashboard: React.FC = () => {
                         ))}
                       </Select>
 
-                      {/* 
-                        FONT SIZE INPUT
-                        
-                        Input number để chọn kích thước font
-                        Giới hạn từ 8px đến 72px để đảm bảo hiển thị hợp lý
-                      */}
                       <InputNumber
                         size="small"
                         value={config.fontSize || 10} // Mặc định 10px
@@ -682,16 +623,6 @@ const PowerBIDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* 
-                    TEXT FORMATTING BUTTONS
-                    
-                    Nhóm 3 button để toggle định dạng text:
-                    - Bold: In đậm
-                    - Italic: In nghiêng  
-                    - Underline: Gạch chân
-                    
-                    Sử dụng type="primary" khi active, "default" khi inactive
-                  */}
                   <div className="form-group">
                     <div className="text-format-buttons">
                       {/* BOLD BUTTON */}
@@ -738,15 +669,6 @@ const PowerBIDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* 
-                    COLOR PICKER
-                    
-                    Cho phép chọn màu sắc cho text legend
-                    Bao gồm:
-                    - ColorPicker component từ Ant Design
-                    - Preview màu hiện tại
-                    - Button search (có thể mở rộng để search màu)
-                  */}
                   <CustomColorPicker
                     label="Color"
                     value={config.color}
@@ -757,15 +679,6 @@ const PowerBIDashboard: React.FC = () => {
                 </div>
               </ConfigSection>
 
-              {/* 
-                TITLE SUB-SECTION
-                
-                Cấu hình tiêu đề cho Legend
-                Đặc biệt:
-                - Có toggle on/off riêng (hasToggle=true)
-                - Chỉ hiển thị input khi được bật
-                - Tiêu đề giúp mô tả ý nghĩa của legend
-              */}
               <ConfigSection
                 title="Title"
                 isExpanded={expandedSections.legendTitle}
@@ -780,12 +693,6 @@ const PowerBIDashboard: React.FC = () => {
                 }
               >
                 <div className="section-content">
-                  {/* 
-                    TITLE TEXT INPUT
-                    
-                    Input field để nhập text cho tiêu đề legend
-                    Chỉ hiển thị khi title được enabled
-                  */}
                   <div className="form-group">
                     <Typography.Text className="form-label">
                       Title text
@@ -805,12 +712,6 @@ const PowerBIDashboard: React.FC = () => {
                 </div>
               </ConfigSection>
 
-              {/* 
-                RESET TO DEFAULT SECTION
-                
-                Button để reset tất cả cài đặt legend về giá trị mặc định
-                Hữu ích khi người dùng muốn quay lại cài đặt ban đầu
-              */}
               <div className="reset-section">
                 <Button
                   type="link" // Style như link, không có border
@@ -821,18 +722,6 @@ const PowerBIDashboard: React.FC = () => {
                     color: "#0078d4", // Màu xanh Microsoft
                   }}
                   onClick={() => {
-                    /* 
-                      RESET FUNCTION
-                      
-                      Gọi handleUpdateFormatConfig để reset từng thuộc tính
-                      về giá trị mặc định của legend:
-                      - Position: "Top"
-                      - Font: "Segoe UI" 
-                      - FontSize: 8
-                      - Bold/Italic/Underline: false
-                      - Color: "#666666" (xám)
-                      - Title: enabled=true, text="Legend"
-                    */
                     // Reset legend config to default values
                     handleUpdateFormatConfig(sectionKey, "position", "Top");
                     handleUpdateFormatConfig(sectionKey, "font", "Segoe UI");

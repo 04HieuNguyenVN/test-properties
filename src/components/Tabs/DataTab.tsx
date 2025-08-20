@@ -348,7 +348,7 @@ export const DataTab: React.FC<DataTabProps> = ({
                           fontWeight: 500,
                         }}
                       >
-                        (Color: {fieldsForCategory[0].field})
+                        {/* (Color :{fieldsForCategory[0].field}) */}
                       </span>
                     ) : null}
                   </Typography.Text>
