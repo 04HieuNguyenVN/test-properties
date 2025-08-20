@@ -33,12 +33,14 @@ const App: React.FC = () => {
     <Layout className="dashboard">
       <Content className="dashboard-content">
         <Layout>
-          <Card className="chart-card">
-            <ChartRenderer
-              chartType={chartType}
-              config={currentConfig.format}
-            />
-          </Card>
+          <Content>
+            <Card className="chart-card">
+              <ChartRenderer
+                chartType={chartType}
+                config={currentConfig.format}
+              />
+            </Card>
+          </Content>
           <Sidebar />
         </Layout>
       </Content>
