@@ -15,21 +15,26 @@ interface ChartRendererProps {
   config: any;
 }
 
-const chartMap: Record<string, { Component: React.FC<any>; data: any }> = {
-  stackedColumn: { Component: StackedColumnChart, data: chartData.monthlyData },
-  clusteredColumn: { Component: ClusteredColumnChart, data: chartData.monthlyData },
-  lineAndColumn: { Component: LineAndColumnChart, data: chartData.monthlyData },
-  pie: { Component: CustomPieChart, data: chartData.categories },
-  line: { Component: CustomLineChart, data: chartData.monthlyData },
-  stackedBar: { Component: StackedBarChart, data: chartData.stackedData },
-  clusteredBar: { Component: ClusteredBarChart, data: chartData.monthlyData },
-};
-
 const ChartRenderer: React.FC<ChartRendererProps> = ({ chartType, config }) => {
-  const chart = chartMap[chartType];
-  if (!chart) return null;
-  const { Component, data } = chart;
-  return <Component config={config} data={data} />;
+  switch (chartType) {
+    case "stackedColumn":
+      return <StackedColumnChart config={config} data={chartData.monthlyData} />;
+    case "clusteredColumn":
+      return <ClusteredColumnChart config={config} data={chartData.monthlyData} />;
+    case "lineAndColumn":
+      return <LineAndColumnChart config={config} data={chartData.monthlyData} />;
+    case "pie":
+      return <CustomPieChart config={config} data={chartData.categories} />;
+    case "line":
+      return <CustomLineChart config={config} data={chartData.monthlyData} />;
+    case "stackedBar":
+      return <StackedBarChart config={config} data={chartData.stackedData} />;
+    case "clusteredBar":
+      return <ClusteredBarChart config={config} data={chartData.monthlyData} />;
+    default:
+      return null;
+  }
 };
 
 export default ChartRenderer;
+
