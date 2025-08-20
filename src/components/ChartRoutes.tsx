@@ -3,16 +3,16 @@ import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ChartRenderer from "./ChartRenderer";
 import { RootState } from "../store/store";
-import { setChartType } from "../store/chartSlice";
+import { setChartType, ChartType } from "../store/chartSlice";
 
 const ChartRoute: React.FC = () => {
-  const { type } = useParams<{ type: string }>();
+  const { type } = useParams<{ type: ChartType }>();
   const dispatch = useDispatch();
   const chartConfigs = useSelector((state: RootState) => state.chart.chartConfigs);
 
   useEffect(() => {
     if (type) {
-      dispatch(setChartType(type as any));
+      dispatch(setChartType(type));
     }
   }, [type, dispatch]);
 

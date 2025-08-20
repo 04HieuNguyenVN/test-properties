@@ -291,6 +291,17 @@ interface ChartConfig {
   };
 }
 
+type ChartType =
+  | "column"
+  | "pie"
+  | "line"
+  | "stackedColumn"
+  | "clusteredColumn"
+  | "lineAndColumn"
+  | "bar"
+  | "stackedBar"
+  | "clusteredBar";
+
 interface ChartState {
   data: typeof sampleData;
   categoryData: typeof categoryData;
@@ -298,14 +309,7 @@ interface ChartState {
   populationData: typeof populationData;
   testStackedData: typeof testStackedData;
   selectedData: any[]; // Dữ liệu được chọn từ chart
-  chartType:
-    | "line"
-    | "pie"
-    | "stackedColumn"
-    | "clusteredColumn"
-    | "lineAndColumn"
-    | "stackedBar"
-    | "clusteredBar";
+  chartType: ChartType;
   activeTab: "data" | "format";
   activeSubTab: "Visual" | "General";
   expandedSections: {
@@ -1055,18 +1059,7 @@ const chartSlice = createSlice({
     setRawChartData: (state, action: PayloadAction<any[]>) => {
       state.rawChartData = action.payload;
     },
-    setChartType: (
-      state,
-      action: PayloadAction<
-        | "line"
-        | "pie"
-        | "stackedColumn"
-        | "clusteredColumn"
-        | "lineAndColumn"
-        | "stackedBar"
-        | "clusteredBar"
-      >
-    ) => {
+    setChartType: (state, action: PayloadAction<ChartType>) => {
       state.chartType = action.payload;
     },
     setSelectedData: (state, action: PayloadAction<any[]>) => {
@@ -1149,5 +1142,5 @@ export const {
   updateFormatConfig,
 } = chartSlice.actions;
 
-export type { ChartState };
+export type { ChartState, ChartType };
 export default chartSlice.reducer;
