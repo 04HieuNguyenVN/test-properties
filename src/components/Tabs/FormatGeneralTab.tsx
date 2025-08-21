@@ -1,808 +1,808 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  Input,
-  Select,
-  Button,
-  Typography,
-  InputNumber,
-  Switch,
-  ColorPicker,
-  Slider,
-  Space,
-  Tooltip,
-} from "antd";
-import {
-  FunctionSquare,
-  Bold,
-  Italic,
-  Underline,
-  RotateCcw,
-} from "lucide-react";
-import { RootState } from "../../store/store";
-import { toggleSection } from "../../store/chartSlice";
-import { CustomColorPicker } from "../common/CustomColorPicker";
-import PaddingControl from "../common/PaddingControl";
-// import { FunctionButton } from "../common/FunctionButton";
+// import React, { useState } from "react";
+// import { useSelector, useDispatch } from "react-redux";
+// import {
+//   Input,
+//   Select,
+//   Button,
+//   Typography,
+//   InputNumber,
+//   Switch,
+//   ColorPicker,
+//   Slider,
+//   Space,
+//   Tooltip,
+// } from "antd";
+// import {
+//   FunctionSquare,
+//   Bold,
+//   Italic,
+//   Underline,
+//   RotateCcw,
+// } from "lucide-react";
+// import { RootState } from "../../store/store";
+// import { toggleSection } from "../../store/chartSlice";
+// import { CustomColorPicker } from "../common/CustomColorPicker";
+// import PaddingControl from "../common/PaddingControl";
+// // import { FunctionButton } from "../common/FunctionButton";
 
-const { TextArea } = Input;
+// const { TextArea } = Input;
 
-interface GeneralConfigTabProps {}
+// interface GeneralConfigTabProps {}
 
-// ConfigSection component for collapsible sections
-interface ConfigSectionProps {
-  title: string;
-  children: React.ReactNode;
-  isExpanded: boolean;
-  onToggle: () => void;
-  hasToggle?: boolean;
-  toggleValue?: boolean;
-  onToggleChange?: (checked: boolean) => void;
-}
+// // ConfigSection component for collapsible sections
+// interface ConfigSectionProps {
+//   title: string;
+//   children: React.ReactNode;
+//   isExpanded: boolean;
+//   onToggle: () => void;
+//   hasToggle?: boolean;
+//   toggleValue?: boolean;
+//   onToggleChange?: (checked: boolean) => void;
+// }
 
-const ConfigSection: React.FC<ConfigSectionProps> = ({
-  title,
-  children,
-  isExpanded,
-  onToggle,
-  hasToggle = false,
-  toggleValue = false,
-  onToggleChange,
-}) => {
-  return (
-    <div className="config-section">
-      <div className="section-header" onClick={onToggle}>
-        <div className="section-title-row">
-          <Typography.Text className="section-title">{title}</Typography.Text>
-          {hasToggle && (
-            <Switch
-              size="small"
-              checked={toggleValue}
-              onChange={(checked) => {
-                onToggleChange?.(checked);
-              }}
-              onClick={(e: any) => e.stopPropagation()}
-            />
-          )}
-        </div>
-        <span className={`expand-icon ${isExpanded ? "expanded" : ""}`}>
-          {isExpanded ? "−" : "+"}
-        </span>
-      </div>
-      {isExpanded && <div className="section-body">{children}</div>}
-    </div>
-  );
-};
+// const ConfigSection: React.FC<ConfigSectionProps> = ({
+//   title,
+//   children,
+//   isExpanded,
+//   onToggle,
+//   hasToggle = false,
+//   toggleValue = false,
+//   onToggleChange,
+// }) => {
+//   return (
+//     <div className="config-section">
+//       <div className="section-header" onClick={onToggle}>
+//         <div className="section-title-row">
+//           <Typography.Text className="section-title">{title}</Typography.Text>
+//           {hasToggle && (
+//             <Switch
+//               size="small"
+//               checked={toggleValue}
+//               onChange={(checked) => {
+//                 onToggleChange?.(checked);
+//               }}
+//               onClick={(e: any) => e.stopPropagation()}
+//             />
+//           )}
+//         </div>
+//         <span className={`expand-icon ${isExpanded ? "expanded" : ""}`}>
+//           {isExpanded ? "−" : "+"}
+//         </span>
+//       </div>
+//       {isExpanded && <div className="section-body">{children}</div>}
+//     </div>
+//   );
+// };
 
-export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
-  const dispatch = useDispatch();
-  const expandedSections = useSelector(
-    (state: RootState) => state.chart.expandedSections
-  );
+// export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
+//   const dispatch = useDispatch();
+//   const expandedSections = useSelector(
+//     (state: RootState) => state.chart.expandedSections
+//   );
 
-  const [generalSettings, setGeneralSettings] = useState({
-    size: {
-      height: 542,
-      width: 595,
-      lockAspectRatio: false,
-    },
-    position: {
-      horizontal: 293,
-      vertical: 82,
-    },
-    padding: {
-      top: 0,
-      right: 5,
-      bottom: 5,
-      left: 5,
-    },
-    advanced: {
-      responsive: false,
-      maintainLayerOrder: false,
-    },
-    title: {
-      title: {
-        enabled: true,
-        text: "Sum of GDPGRDP 2",
-        heading: "Heading 3",
-        font: "DIN",
-        fontSize: 14,
-        bold: false,
-        italic: false,
-        underline: false,
-        textColor: "#000000",
-        backgroundColor: "#ffffff",
-        horizontalAlignment: "left",
-        textWrap: true,
-      },
-      subtitle: {
-        enabled: false,
-        text: "",
-        heading: "Heading 4",
-        font: "Segoe UI",
-        fontSize: 10,
-        bold: false,
-        italic: false,
-        underline: false,
-        textColor: "#000000",
-        horizontalAlignment: "left",
-        textWrap: false,
-      },
-      divider: {
-        enabled: false,
-        color: "#000000",
-        lineStyle: "Solid",
-        width: 1,
-        ignorePadding: false,
-      },
-      spacing: {
-        customizeSpacing: false,
-        spaceBetweenLabelAndValue: 5,
-      },
-    },
-    effects: {
-      background: {
-        enabled: true,
-        color: "#ffffff",
-        transparency: 0,
-      },
-      visualBorder: {
-        enabled: false,
-        color: "#000000",
-        roundedCorners: 0,
-        width: 1,
-      },
-      shadow: {
-        enabled: false,
-        color: "#000000",
-        offset: "Outside",
-        position: "Bottom right",
-      },
-    },
-    dataFormat: {
-      applySettingsTo: "Khu vực",
-      format: "",
-    },
-    headerIcons: {
-      colors: {
-        background: "#ffffff",
-        border: "#000000",
-        icon: "#000000",
-        transparency: 0,
-      },
-      icons: {
-        visualInformation: true,
-        visualWarning: true,
-        visualError: true,
-        drillOnDropdown: true,
-        drillUp: true,
-        drillDown: true,
-        showNextLevel: true,
-        expandToNextLevel: true,
-        pin: true,
-        focusMode: true,
-        seeDataLayout: true,
-        moreOptions: true,
-        filter: true,
-        helpTooltip: false,
-        commentButton: true,
-        copyIcon: true,
-        smartNarrative: false,
-        seeAlertButton: true,
-      },
-    },
-    tooltips: {
-      options: {
-        text: "Report page settings and configurations...",
-      },
-      text: {
-        font: "Segoe UI",
-        fontSize: 10,
-        bold: false,
-        italic: false,
-        underline: false,
-        labelColor: "#000000",
-        valueColor: "#000000",
-        drillTextAndIconColor: "#000000",
-      },
-      background: {
-        color: "#ffffff",
-        transparency: 0,
-      },
-    },
-  });
+//   const [generalSettings, setGeneralSettings] = useState({
+//     size: {
+//       height: 542,
+//       width: 595,
+//       lockAspectRatio: false,
+//     },
+//     position: {
+//       horizontal: 293,
+//       vertical: 82,
+//     },
+//     padding: {
+//       top: 0,
+//       right: 5,
+//       bottom: 5,
+//       left: 5,
+//     },
+//     advanced: {
+//       responsive: false,
+//       maintainLayerOrder: false,
+//     },
+//     title: {
+//       title: {
+//         enabled: true,
+//         text: "Sum of GDPGRDP 2",
+//         heading: "Heading 3",
+//         font: "DIN",
+//         fontSize: 14,
+//         bold: false,
+//         italic: false,
+//         underline: false,
+//         textColor: "#000000",
+//         backgroundColor: "#ffffff",
+//         horizontalAlignment: "left",
+//         textWrap: true,
+//       },
+//       subtitle: {
+//         enabled: false,
+//         text: "",
+//         heading: "Heading 4",
+//         font: "Segoe UI",
+//         fontSize: 10,
+//         bold: false,
+//         italic: false,
+//         underline: false,
+//         textColor: "#000000",
+//         horizontalAlignment: "left",
+//         textWrap: false,
+//       },
+//       divider: {
+//         enabled: false,
+//         color: "#000000",
+//         lineStyle: "Solid",
+//         width: 1,
+//         ignorePadding: false,
+//       },
+//       spacing: {
+//         customizeSpacing: false,
+//         spaceBetweenLabelAndValue: 5,
+//       },
+//     },
+//     effects: {
+//       background: {
+//         enabled: true,
+//         color: "#ffffff",
+//         transparency: 0,
+//       },
+//       visualBorder: {
+//         enabled: false,
+//         color: "#000000",
+//         roundedCorners: 0,
+//         width: 1,
+//       },
+//       shadow: {
+//         enabled: false,
+//         color: "#000000",
+//         offset: "Outside",
+//         position: "Bottom right",
+//       },
+//     },
+//     dataFormat: {
+//       applySettingsTo: "Khu vực",
+//       format: "",
+//     },
+//     headerIcons: {
+//       colors: {
+//         background: "#ffffff",
+//         border: "#000000",
+//         icon: "#000000",
+//         transparency: 0,
+//       },
+//       icons: {
+//         visualInformation: true,
+//         visualWarning: true,
+//         visualError: true,
+//         drillOnDropdown: true,
+//         drillUp: true,
+//         drillDown: true,
+//         showNextLevel: true,
+//         expandToNextLevel: true,
+//         pin: true,
+//         focusMode: true,
+//         seeDataLayout: true,
+//         moreOptions: true,
+//         filter: true,
+//         helpTooltip: false,
+//         commentButton: true,
+//         copyIcon: true,
+//         smartNarrative: false,
+//         seeAlertButton: true,
+//       },
+//     },
+//     tooltips: {
+//       options: {
+//         text: "Report page settings and configurations...",
+//       },
+//       text: {
+//         font: "Segoe UI",
+//         fontSize: 10,
+//         bold: false,
+//         italic: false,
+//         underline: false,
+//         labelColor: "#000000",
+//         valueColor: "#000000",
+//         drillTextAndIconColor: "#000000",
+//       },
+//       background: {
+//         color: "#ffffff",
+//         transparency: 0,
+//       },
+//     },
+//   });
 
-  const [generalExpandedSections, setGeneralExpandedSections] = useState({
-    // Main sections
-    properties: false,
-    title: false,
-    effects: false,
-    dataFormat: false,
-    headerIcons: false,
-    tooltips: false,
+//   const [generalExpandedSections, setGeneralExpandedSections] = useState({
+//     // Main sections
+//     properties: false,
+//     title: false,
+//     effects: false,
+//     dataFormat: false,
+//     headerIcons: false,
+//     tooltips: false,
 
-    // Properties sub-sections
-    size: false,
-    position: false,
-    padding: false,
-    advanced: false,
+//     // Properties sub-sections
+//     size: false,
+//     position: false,
+//     padding: false,
+//     advanced: false,
 
-    // Title sub-sections
-    titleSection: false,
-    subtitle: false,
-    divider: false,
-    spacing: false,
+//     // Title sub-sections
+//     titleSection: false,
+//     subtitle: false,
+//     divider: false,
+//     spacing: false,
 
-    // Effects sub-sections
-    background: false,
-    visualBorder: false,
-    shadow: false,
+//     // Effects sub-sections
+//     background: false,
+//     visualBorder: false,
+//     shadow: false,
 
-    // Data format sub-sections
-    applySettingsTo: false,
-    formatOptions: false,
+//     // Data format sub-sections
+//     applySettingsTo: false,
+//     formatOptions: false,
 
-    // Header icons sub-sections
-    headerIconsColors: false,
-    headerIconsIcons: false,
+//     // Header icons sub-sections
+//     headerIconsColors: false,
+//     headerIconsIcons: false,
 
-    // Tooltips sub-sections
-    tooltipsOptions: false,
-    tooltipsText: false,
-    tooltipsBackground: false,
-  });
+//     // Tooltips sub-sections
+//     tooltipsOptions: false,
+//     tooltipsText: false,
+//     tooltipsBackground: false,
+//   });
 
-  const updateGeneralSetting = (category: string, key: string, value: any) => {
-    setGeneralSettings((prev) => {
-      if (key === "") {
-        // For full object update (like padding)
-        return { ...prev, [category]: value };
-      }
-      return {
-        ...prev,
-        [category]: {
-          ...prev[category as keyof typeof prev],
-          [key]: value,
-        },
-      };
-    });
-  };
+//   const updateGeneralSetting = (category: string, key: string, value: any) => {
+//     setGeneralSettings((prev) => {
+//       if (key === "") {
+//         // For full object update (like padding)
+//         return { ...prev, [category]: value };
+//       }
+//       return {
+//         ...prev,
+//         [category]: {
+//           ...prev[category as keyof typeof prev],
+//           [key]: value,
+//         },
+//       };
+//     });
+//   };
 
-  const handleToggleGeneralSection = (section: string) => {
-    setGeneralExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section as keyof typeof prev],
-    }));
-  };
+//   const handleToggleGeneralSection = (section: string) => {
+//     setGeneralExpandedSections((prev) => ({
+//       ...prev,
+//       [section]: !prev[section as keyof typeof prev],
+//     }));
+//   };
 
-  return (
-    <div className="general-config-tab general-tab">
-      {/* Properties Section - Main Container */}
-      <ConfigSection
-        title="Properties"
-        isExpanded={generalExpandedSections.properties}
-        onToggle={() => handleToggleGeneralSection("properties")}
-      >
-        <div className="properties-container">
-          {/* Size Sub-Section */}
-          <ConfigSection
-            title="Size"
-            isExpanded={generalExpandedSections.size}
-            onToggle={() => handleToggleGeneralSection("size")}
-          >
-            <div className="section-content">
-              <div className="form-group">
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Tooltip title="Chiều cao tổng thể của biểu đồ (px).">
-                    <Typography.Text className="form-label">
-                      Height
-                    </Typography.Text>
-                  </Tooltip>
-                  <Tooltip title="Nhập chiều cao mong muốn cho biểu đồ, đơn vị pixel (px).">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.size.height}
-                      onChange={(value) =>
-                        updateGeneralSetting("size", "height", value)
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-              <div className="form-group">
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Tooltip title="Chiều rộng tổng thể của biểu đồ (px).">
-                    <Typography.Text className="form-label">
-                      Width
-                    </Typography.Text>
-                  </Tooltip>
-                  <Tooltip title="Nhập chiều rộng mong muốn cho biểu đồ, đơn vị pixel (px).">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.size.width}
-                      onChange={(value) =>
-                        updateGeneralSetting("size", "width", value)
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-              <div className="form-group">
-                <div
-                  className="checkbox-row"
-                  style={{ display: "flex", alignItems: "center", gap: 8 }}
-                >
-                  <Tooltip title="Giữ nguyên tỉ lệ chiều rộng/chiều cao khi thay đổi kích thước.">
-                    <Typography.Text className="form-label">
-                      Lock aspect ratio
-                    </Typography.Text>
-                  </Tooltip>
-                  <Tooltip title="Bật để khóa tỉ lệ khung hình, tắt để thay đổi tự do.">
-                    <Switch
-                      size="small"
-                      checked={generalSettings.size.lockAspectRatio}
-                      onChange={(checked) =>
-                        updateGeneralSetting("size", "lockAspectRatio", checked)
-                      }
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-          </ConfigSection>
+//   return (
+//     <div className="general-config-tab general-tab">
+//       {/* Properties Section - Main Container */}
+//       <ConfigSection
+//         title="Properties"
+//         isExpanded={generalExpandedSections.properties}
+//         onToggle={() => handleToggleGeneralSection("properties")}
+//       >
+//         <div className="properties-container">
+//           {/* Size Sub-Section */}
+//           <ConfigSection
+//             title="Size"
+//             isExpanded={generalExpandedSections.size}
+//             onToggle={() => handleToggleGeneralSection("size")}
+//           >
+//             <div className="section-content">
+//               <div className="form-group">
+//                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+//                   <Tooltip title="Chiều cao tổng thể của biểu đồ (px).">
+//                     <Typography.Text className="form-label">
+//                       Height
+//                     </Typography.Text>
+//                   </Tooltip>
+//                   <Tooltip title="Nhập chiều cao mong muốn cho biểu đồ, đơn vị pixel (px).">
+//                     <InputNumber
+//                       size="small"
+//                       value={generalSettings.size.height}
+//                       onChange={(value) =>
+//                         updateGeneralSetting("size", "height", value)
+//                       }
+//                       style={{ width: "100%" }}
+//                     />
+//                   </Tooltip>
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+//                   <Tooltip title="Chiều rộng tổng thể của biểu đồ (px).">
+//                     <Typography.Text className="form-label">
+//                       Width
+//                     </Typography.Text>
+//                   </Tooltip>
+//                   <Tooltip title="Nhập chiều rộng mong muốn cho biểu đồ, đơn vị pixel (px).">
+//                     <InputNumber
+//                       size="small"
+//                       value={generalSettings.size.width}
+//                       onChange={(value) =>
+//                         updateGeneralSetting("size", "width", value)
+//                       }
+//                       style={{ width: "100%" }}
+//                     />
+//                   </Tooltip>
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <div
+//                   className="checkbox-row"
+//                   style={{ display: "flex", alignItems: "center", gap: 8 }}
+//                 >
+//                   <Tooltip title="Giữ nguyên tỉ lệ chiều rộng/chiều cao khi thay đổi kích thước.">
+//                     <Typography.Text className="form-label">
+//                       Lock aspect ratio
+//                     </Typography.Text>
+//                   </Tooltip>
+//                   <Tooltip title="Bật để khóa tỉ lệ khung hình, tắt để thay đổi tự do.">
+//                     <Switch
+//                       size="small"
+//                       checked={generalSettings.size.lockAspectRatio}
+//                       onChange={(checked) =>
+//                         updateGeneralSetting("size", "lockAspectRatio", checked)
+//                       }
+//                     />
+//                   </Tooltip>
+//                 </div>
+//               </div>
+//             </div>
+//           </ConfigSection>
 
-          {/* Position Sub-Section */}
-          <ConfigSection
-            title="Position"
-            isExpanded={generalExpandedSections.position}
-            onToggle={() => handleToggleGeneralSection("position")}
-          >
-            <div className="section-content">
-              <div className="form-group">
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Tooltip title="Vị trí ngang của biểu đồ so với vùng chứa (px).">
-                    <Typography.Text className="form-label">
-                      Horizontal
-                    </Typography.Text>
-                  </Tooltip>
-                  <Tooltip title="Nhập vị trí ngang (từ trái sang phải), đơn vị pixel (px).">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.position.horizontal}
-                      onChange={(value) =>
-                        updateGeneralSetting("position", "horizontal", value)
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-              <div className="form-group">
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Tooltip title="Vị trí dọc của biểu đồ so với vùng chứa (px).">
-                    <Typography.Text className="form-label">
-                      Vertical
-                    </Typography.Text>
-                  </Tooltip>
-                  <Tooltip title="Nhập vị trí dọc (từ trên xuống), đơn vị pixel (px).">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.position.vertical}
-                      onChange={(value) =>
-                        updateGeneralSetting("position", "vertical", value)
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-          </ConfigSection>
+//           {/* Position Sub-Section */}
+//           <ConfigSection
+//             title="Position"
+//             isExpanded={generalExpandedSections.position}
+//             onToggle={() => handleToggleGeneralSection("position")}
+//           >
+//             <div className="section-content">
+//               <div className="form-group">
+//                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+//                   <Tooltip title="Vị trí ngang của biểu đồ so với vùng chứa (px).">
+//                     <Typography.Text className="form-label">
+//                       Horizontal
+//                     </Typography.Text>
+//                   </Tooltip>
+//                   <Tooltip title="Nhập vị trí ngang (từ trái sang phải), đơn vị pixel (px).">
+//                     <InputNumber
+//                       size="small"
+//                       value={generalSettings.position.horizontal}
+//                       onChange={(value) =>
+//                         updateGeneralSetting("position", "horizontal", value)
+//                       }
+//                       style={{ width: "100%" }}
+//                     />
+//                   </Tooltip>
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+//                   <Tooltip title="Vị trí dọc của biểu đồ so với vùng chứa (px).">
+//                     <Typography.Text className="form-label">
+//                       Vertical
+//                     </Typography.Text>
+//                   </Tooltip>
+//                   <Tooltip title="Nhập vị trí dọc (từ trên xuống), đơn vị pixel (px).">
+//                     <InputNumber
+//                       size="small"
+//                       value={generalSettings.position.vertical}
+//                       onChange={(value) =>
+//                         updateGeneralSetting("position", "vertical", value)
+//                       }
+//                       style={{ width: "100%" }}
+//                     />
+//                   </Tooltip>
+//                 </div>
+//               </div>
+//             </div>
+//           </ConfigSection>
 
-          {/* Padding Sub-Section */}
-          <ConfigSection
-            title="Padding"
-            isExpanded={generalExpandedSections.padding}
-            onToggle={() => handleToggleGeneralSection("padding")}
-          >
-            <div className="section-content">
-              <PaddingControl
-                value={generalSettings.padding}
-                onChange={(val) => updateGeneralSetting("padding", "", val)}
-              />
-            </div>
-          </ConfigSection>
+//           {/* Padding Sub-Section */}
+//           <ConfigSection
+//             title="Padding"
+//             isExpanded={generalExpandedSections.padding}
+//             onToggle={() => handleToggleGeneralSection("padding")}
+//           >
+//             <div className="section-content">
+//               <PaddingControl
+//                 value={generalSettings.padding}
+//                 onChange={(val) => updateGeneralSetting("padding", "", val)}
+//               />
+//             </div>
+//           </ConfigSection>
 
-          {/* Advanced Options Sub-Section */}
-          <ConfigSection
-            title="Advanced options"
-            isExpanded={generalExpandedSections.advanced}
-            onToggle={() => handleToggleGeneralSection("advanced")}
-          >
-            <div className="section-content">
-              <div className="form-group">
-                <div
-                  className="checkbox-row"
-                  style={{ display: "flex", alignItems: "center", gap: 8 }}
-                >
-                  <Tooltip title="Tự động điều chỉnh kích thước và bố cục khi thay đổi kích thước vùng chứa.">
-                    <Typography.Text className="form-label">
-                      Responsive
-                    </Typography.Text>
-                  </Tooltip>
-                  <Tooltip title="Bật để biểu đồ tự động co giãn theo vùng chứa.">
-                    <Switch
-                      size="small"
-                      checked={generalSettings.advanced.responsive}
-                      onChange={(checked) =>
-                        updateGeneralSetting("advanced", "responsive", checked)
-                      }
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-              <div className="form-group">
-                <div
-                  className="checkbox-row"
-                  style={{ display: "flex", alignItems: "center", gap: 8 }}
-                >
-                  <Tooltip title="Giữ nguyên thứ tự các lớp khi thay đổi hoặc di chuyển biểu đồ.">
-                    <Typography.Text className="form-label">
-                      Maintain layer order
-                    </Typography.Text>
-                  </Tooltip>
-                  <Tooltip title="Bật để không thay đổi thứ tự các lớp hiển thị.">
-                    <Switch
-                      size="small"
-                      checked={generalSettings.advanced.maintainLayerOrder}
-                      onChange={(checked) =>
-                        updateGeneralSetting(
-                          "advanced",
-                          "maintainLayerOrder",
-                          checked
-                        )
-                      }
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-          </ConfigSection>
-        </div>
-      </ConfigSection>
+//           {/* Advanced Options Sub-Section */}
+//           <ConfigSection
+//             title="Advanced options"
+//             isExpanded={generalExpandedSections.advanced}
+//             onToggle={() => handleToggleGeneralSection("advanced")}
+//           >
+//             <div className="section-content">
+//               <div className="form-group">
+//                 <div
+//                   className="checkbox-row"
+//                   style={{ display: "flex", alignItems: "center", gap: 8 }}
+//                 >
+//                   <Tooltip title="Tự động điều chỉnh kích thước và bố cục khi thay đổi kích thước vùng chứa.">
+//                     <Typography.Text className="form-label">
+//                       Responsive
+//                     </Typography.Text>
+//                   </Tooltip>
+//                   <Tooltip title="Bật để biểu đồ tự động co giãn theo vùng chứa.">
+//                     <Switch
+//                       size="small"
+//                       checked={generalSettings.advanced.responsive}
+//                       onChange={(checked) =>
+//                         updateGeneralSetting("advanced", "responsive", checked)
+//                       }
+//                     />
+//                   </Tooltip>
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <div
+//                   className="checkbox-row"
+//                   style={{ display: "flex", alignItems: "center", gap: 8 }}
+//                 >
+//                   <Tooltip title="Giữ nguyên thứ tự các lớp khi thay đổi hoặc di chuyển biểu đồ.">
+//                     <Typography.Text className="form-label">
+//                       Maintain layer order
+//                     </Typography.Text>
+//                   </Tooltip>
+//                   <Tooltip title="Bật để không thay đổi thứ tự các lớp hiển thị.">
+//                     <Switch
+//                       size="small"
+//                       checked={generalSettings.advanced.maintainLayerOrder}
+//                       onChange={(checked) =>
+//                         updateGeneralSetting(
+//                           "advanced",
+//                           "maintainLayerOrder",
+//                           checked
+//                         )
+//                       }
+//                     />
+//                   </Tooltip>
+//                 </div>
+//               </div>
+//             </div>
+//           </ConfigSection>
+//         </div>
+//       </ConfigSection>
 
-      {/* Title Section - Main Container */}
-      <ConfigSection
-        title="Title"
-        isExpanded={generalExpandedSections.title}
-        onToggle={() => handleToggleGeneralSection("title")}
-      >
-        <div className="properties-container">
-          {/* Title Subsection */}
-          <ConfigSection
-            title="Title"
-            isExpanded={generalExpandedSections.titleSection}
-            onToggle={() => handleToggleGeneralSection("titleSection")}
-            hasToggle={true}
-            toggleValue={generalSettings.title.title.enabled}
-            onToggleChange={(checked) =>
-              updateGeneralSetting("title", "title", {
-                ...generalSettings.title.title,
-                enabled: checked,
-              })
-            }
-          >
-            <div className="section-content">
-              <div className="form-group">
-                <Typography.Text className="form-label">Text</Typography.Text>
-                <div className="title-input-group">
-                  <Input
-                    size="small"
-                    value={generalSettings.title.title.text}
-                    onChange={(e) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        text: e.target.value,
-                      })
-                    }
-                    style={{ flex: 1 }}
-                  />
-                  {/* <FunctionButton /> */}
-                </div>
-              </div>
-              <div className="form-group">
-                <Typography.Text className="form-label">
-                  Heading
-                </Typography.Text>
-                <Select
-                  size="small"
-                  value={generalSettings.title.title.heading}
-                  onChange={(value) =>
-                    updateGeneralSetting("title", "title", {
-                      ...generalSettings.title.title,
-                      heading: value,
-                    })
-                  }
-                  style={{ width: "100%" }}
-                >
-                  <Select.Option value="Heading 1">Heading 1</Select.Option>
-                  <Select.Option value="Heading 2">Heading 2</Select.Option>
-                  <Select.Option value="Heading 3">Heading 3</Select.Option>
-                  <Select.Option value="Heading 4">Heading 4</Select.Option>
-                </Select>
-              </div>
-              <div className="form-group">
-                <Typography.Text className="form-label">Font</Typography.Text>
-                <div className="title-font-group">
-                  <Select
-                    size="small"
-                    value={generalSettings.title.title.font}
-                    onChange={(value) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        font: value,
-                      })
-                    }
-                    style={{ flex: 1 }}
-                  >
-                    <Select.Option value="DIN">DIN</Select.Option>
-                    <Select.Option value="Segoe UI">Segoe UI</Select.Option>
-                    <Select.Option value="Arial">Arial</Select.Option>
-                  </Select>
-                  <InputNumber
-                    size="small"
-                    value={generalSettings.title.title.fontSize}
-                    onChange={(value) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        fontSize: value,
-                      })
-                    }
-                    style={{ width: "60px" }}
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <div className="title-format-buttons">
-                  <Button
-                    size="small"
-                    type={
-                      generalSettings.title.title.bold ? "primary" : "default"
-                    }
-                    icon={<Bold size={12} />}
-                    onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        bold: !generalSettings.title.title.bold,
-                      })
-                    }
-                  />
-                  <Button
-                    size="small"
-                    type={
-                      generalSettings.title.title.italic ? "primary" : "default"
-                    }
-                    icon={<Italic size={12} />}
-                    onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        italic: !generalSettings.title.title.italic,
-                      })
-                    }
-                  />
-                  <Button
-                    size="small"
-                    type={
-                      generalSettings.title.title.underline
-                        ? "primary"
-                        : "default"
-                    }
-                    icon={<Underline size={12} />}
-                    onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        underline: !generalSettings.title.title.underline,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <Typography.Text className="form-label">
-                  Text color
-                </Typography.Text>
-                <Space align="center">
-                  <CustomColorPicker
-                    label=""
-                    value={generalSettings.title.title.textColor}
-                    onChange={(color) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        textColor: color,
-                      })
-                    }
-                    size="small"
-                    showLabel={false}
-                    showCode={true}
-                  />
-                </Space>
-              </div>
-              <div className="form-group">
-                <Typography.Text className="form-label">
-                  Background color
-                </Typography.Text>
-                <Space align="center">
-                  <CustomColorPicker
-                    label=""
-                    value={generalSettings.title.title.backgroundColor}
-                    onChange={(color) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        backgroundColor: color,
-                      })
-                    }
-                    size="small"
-                    showLabel={false}
-                    showCode={true}
-                  />
-                </Space>
-              </div>
-              <div className="form-group">
-                <Typography.Text className="form-label">
-                  Horizontal alignment
-                </Typography.Text>
-                <div className="title-alignment-group">
-                  <Button
-                    size="small"
-                    type={
-                      generalSettings.title.title.horizontalAlignment === "left"
-                        ? "primary"
-                        : "default"
-                    }
-                    className="title-alignment-button"
-                    onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        horizontalAlignment: "left",
-                      })
-                    }
-                  >
-                    ≡
-                  </Button>
-                  <Button
-                    size="small"
-                    type={
-                      generalSettings.title.title.horizontalAlignment ===
-                      "center"
-                        ? "primary"
-                        : "default"
-                    }
-                    className="title-alignment-button"
-                    onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        horizontalAlignment: "center",
-                      })
-                    }
-                  >
-                    ≣
-                  </Button>
-                  <Button
-                    size="small"
-                    type={
-                      generalSettings.title.title.horizontalAlignment ===
-                      "right"
-                        ? "primary"
-                        : "default"
-                    }
-                    className="title-alignment-button"
-                    onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        horizontalAlignment: "right",
-                      })
-                    }
-                  >
-                    ≡
-                  </Button>
-                </div>
-              </div>
-              <div className="form-group">
-                <div className="checkbox-row">
-                  <Typography.Text className="form-label">
-                    Text wrap
-                  </Typography.Text>
-                  <Switch
-                    size="small"
-                    checked={generalSettings.title.title.textWrap}
-                    onChange={(checked) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        textWrap: checked,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </ConfigSection>
+//       {/* Title Section - Main Container */}
+//       <ConfigSection
+//         title="Title"
+//         isExpanded={generalExpandedSections.title}
+//         onToggle={() => handleToggleGeneralSection("title")}
+//       >
+//         <div className="properties-container">
+//           {/* Title Subsection */}
+//           <ConfigSection
+//             title="Title"
+//             isExpanded={generalExpandedSections.titleSection}
+//             onToggle={() => handleToggleGeneralSection("titleSection")}
+//             hasToggle={true}
+//             toggleValue={generalSettings.title.title.enabled}
+//             onToggleChange={(checked) =>
+//               updateGeneralSetting("title", "title", {
+//                 ...generalSettings.title.title,
+//                 enabled: checked,
+//               })
+//             }
+//           >
+//             <div className="section-content">
+//               <div className="form-group">
+//                 <Typography.Text className="form-label">Text</Typography.Text>
+//                 <div className="title-input-group">
+//                   <Input
+//                     size="small"
+//                     value={generalSettings.title.title.text}
+//                     onChange={(e) =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         text: e.target.value,
+//                       })
+//                     }
+//                     style={{ flex: 1 }}
+//                   />
+//                   {/* <FunctionButton /> */}
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <Typography.Text className="form-label">
+//                   Heading
+//                 </Typography.Text>
+//                 <Select
+//                   size="small"
+//                   value={generalSettings.title.title.heading}
+//                   onChange={(value) =>
+//                     updateGeneralSetting("title", "title", {
+//                       ...generalSettings.title.title,
+//                       heading: value,
+//                     })
+//                   }
+//                   style={{ width: "100%" }}
+//                 >
+//                   <Select.Option value="Heading 1">Heading 1</Select.Option>
+//                   <Select.Option value="Heading 2">Heading 2</Select.Option>
+//                   <Select.Option value="Heading 3">Heading 3</Select.Option>
+//                   <Select.Option value="Heading 4">Heading 4</Select.Option>
+//                 </Select>
+//               </div>
+//               <div className="form-group">
+//                 <Typography.Text className="form-label">Font</Typography.Text>
+//                 <div className="title-font-group">
+//                   <Select
+//                     size="small"
+//                     value={generalSettings.title.title.font}
+//                     onChange={(value) =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         font: value,
+//                       })
+//                     }
+//                     style={{ flex: 1 }}
+//                   >
+//                     <Select.Option value="DIN">DIN</Select.Option>
+//                     <Select.Option value="Segoe UI">Segoe UI</Select.Option>
+//                     <Select.Option value="Arial">Arial</Select.Option>
+//                   </Select>
+//                   <InputNumber
+//                     size="small"
+//                     value={generalSettings.title.title.fontSize}
+//                     onChange={(value) =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         fontSize: value,
+//                       })
+//                     }
+//                     style={{ width: "60px" }}
+//                   />
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <div className="title-format-buttons">
+//                   <Button
+//                     size="small"
+//                     type={
+//                       generalSettings.title.title.bold ? "primary" : "default"
+//                     }
+//                     icon={<Bold size={12} />}
+//                     onClick={() =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         bold: !generalSettings.title.title.bold,
+//                       })
+//                     }
+//                   />
+//                   <Button
+//                     size="small"
+//                     type={
+//                       generalSettings.title.title.italic ? "primary" : "default"
+//                     }
+//                     icon={<Italic size={12} />}
+//                     onClick={() =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         italic: !generalSettings.title.title.italic,
+//                       })
+//                     }
+//                   />
+//                   <Button
+//                     size="small"
+//                     type={
+//                       generalSettings.title.title.underline
+//                         ? "primary"
+//                         : "default"
+//                     }
+//                     icon={<Underline size={12} />}
+//                     onClick={() =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         underline: !generalSettings.title.title.underline,
+//                       })
+//                     }
+//                   />
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <Typography.Text className="form-label">
+//                   Text color
+//                 </Typography.Text>
+//                 <Space align="center">
+//                   <CustomColorPicker
+//                     label=""
+//                     value={generalSettings.title.title.textColor}
+//                     onChange={(color) =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         textColor: color,
+//                       })
+//                     }
+//                     size="small"
+//                     showLabel={false}
+//                     showCode={true}
+//                   />
+//                 </Space>
+//               </div>
+//               <div className="form-group">
+//                 <Typography.Text className="form-label">
+//                   Background color
+//                 </Typography.Text>
+//                 <Space align="center">
+//                   <CustomColorPicker
+//                     label=""
+//                     value={generalSettings.title.title.backgroundColor}
+//                     onChange={(color) =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         backgroundColor: color,
+//                       })
+//                     }
+//                     size="small"
+//                     showLabel={false}
+//                     showCode={true}
+//                   />
+//                 </Space>
+//               </div>
+//               <div className="form-group">
+//                 <Typography.Text className="form-label">
+//                   Horizontal alignment
+//                 </Typography.Text>
+//                 <div className="title-alignment-group">
+//                   <Button
+//                     size="small"
+//                     type={
+//                       generalSettings.title.title.horizontalAlignment === "left"
+//                         ? "primary"
+//                         : "default"
+//                     }
+//                     className="title-alignment-button"
+//                     onClick={() =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         horizontalAlignment: "left",
+//                       })
+//                     }
+//                   >
+//                     ≡
+//                   </Button>
+//                   <Button
+//                     size="small"
+//                     type={
+//                       generalSettings.title.title.horizontalAlignment ===
+//                       "center"
+//                         ? "primary"
+//                         : "default"
+//                     }
+//                     className="title-alignment-button"
+//                     onClick={() =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         horizontalAlignment: "center",
+//                       })
+//                     }
+//                   >
+//                     ≣
+//                   </Button>
+//                   <Button
+//                     size="small"
+//                     type={
+//                       generalSettings.title.title.horizontalAlignment ===
+//                       "right"
+//                         ? "primary"
+//                         : "default"
+//                     }
+//                     className="title-alignment-button"
+//                     onClick={() =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         horizontalAlignment: "right",
+//                       })
+//                     }
+//                   >
+//                     ≡
+//                   </Button>
+//                 </div>
+//               </div>
+//               <div className="form-group">
+//                 <div className="checkbox-row">
+//                   <Typography.Text className="form-label">
+//                     Text wrap
+//                   </Typography.Text>
+//                   <Switch
+//                     size="small"
+//                     checked={generalSettings.title.title.textWrap}
+//                     onChange={(checked) =>
+//                       updateGeneralSetting("title", "title", {
+//                         ...generalSettings.title.title,
+//                         textWrap: checked,
+//                       })
+//                     }
+//                   />
+//                 </div>
+//               </div>
+//             </div>
+//           </ConfigSection>
 
-          {/* Effects Section - Simplified */}
-          <ConfigSection
-            title="Effects"
-            isExpanded={generalExpandedSections.effects}
-            onToggle={() => handleToggleGeneralSection("effects")}
-          >
-            <div className="properties-container">
-              <div className="form-group">
-                <Typography.Text className="form-label">
-                  Background
-                </Typography.Text>
-                <Space align="center">
-                  <CustomColorPicker
-                    label=""
-                    value={generalSettings.effects.background.color}
-                    onChange={(color) =>
-                      updateGeneralSetting("effects", "background", {
-                        ...generalSettings.effects.background,
-                        color: color,
-                      })
-                    }
-                    size="small"
-                    showLabel={false}
-                    showCode={true}
-                  />
-                  <Typography.Text>Transparency:</Typography.Text>
-                  <div className="transparency-control">
-                    <InputNumber
-                      size="small"
-                      min={0}
-                      max={100}
-                      value={generalSettings.effects.background.transparency}
-                      onChange={(value) =>
-                        updateGeneralSetting("effects", "background", {
-                          ...generalSettings.effects.background,
-                          transparency: value || 0,
-                        })
-                      }
-                      style={{ width: "60px" }}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => Number(value!.replace("%", ""))}
-                    />
-                    <Slider
-                      min={0}
-                      max={100}
-                      value={generalSettings.effects.background.transparency}
-                      onChange={(value) =>
-                        updateGeneralSetting("effects", "background", {
-                          ...generalSettings.effects.background,
-                          transparency: value,
-                        })
-                      }
-                      style={{ flex: 1, marginLeft: "8px" }}
-                    />
-                  </div>
-                </Space>
-              </div>
-            </div>
-          </ConfigSection>
-        </div>
-      </ConfigSection>
+//           {/* Effects Section - Simplified */}
+//           <ConfigSection
+//             title="Effects"
+//             isExpanded={generalExpandedSections.effects}
+//             onToggle={() => handleToggleGeneralSection("effects")}
+//           >
+//             <div className="properties-container">
+//               <div className="form-group">
+//                 <Typography.Text className="form-label">
+//                   Background
+//                 </Typography.Text>
+//                 <Space align="center">
+//                   <CustomColorPicker
+//                     label=""
+//                     value={generalSettings.effects.background.color}
+//                     onChange={(color) =>
+//                       updateGeneralSetting("effects", "background", {
+//                         ...generalSettings.effects.background,
+//                         color: color,
+//                       })
+//                     }
+//                     size="small"
+//                     showLabel={false}
+//                     showCode={true}
+//                   />
+//                   <Typography.Text>Transparency:</Typography.Text>
+//                   <div className="transparency-control">
+//                     <InputNumber
+//                       size="small"
+//                       min={0}
+//                       max={100}
+//                       value={generalSettings.effects.background.transparency}
+//                       onChange={(value) =>
+//                         updateGeneralSetting("effects", "background", {
+//                           ...generalSettings.effects.background,
+//                           transparency: value || 0,
+//                         })
+//                       }
+//                       style={{ width: "60px" }}
+//                       formatter={(value) => `${value}%`}
+//                       parser={(value) => Number(value!.replace("%", ""))}
+//                     />
+//                     <Slider
+//                       min={0}
+//                       max={100}
+//                       value={generalSettings.effects.background.transparency}
+//                       onChange={(value) =>
+//                         updateGeneralSetting("effects", "background", {
+//                           ...generalSettings.effects.background,
+//                           transparency: value,
+//                         })
+//                       }
+//                       style={{ flex: 1, marginLeft: "8px" }}
+//                     />
+//                   </div>
+//                 </Space>
+//               </div>
+//             </div>
+//           </ConfigSection>
+//         </div>
+//       </ConfigSection>
 
-      {/* Reset to default */}
-      <div className="reset-section">
-        <Button
-          type="link"
-          icon={<RotateCcw size={14} />}
-          style={{ padding: "16px", fontSize: "12px", color: "#0078d4" }}
-        >
-          Reset to default
-        </Button>
-      </div>
-    </div>
-  );
-};
+//       {/* Reset to default */}
+//       <div className="reset-section">
+//         <Button
+//           type="link"
+//           icon={<RotateCcw size={14} />}
+//           style={{ padding: "16px", fontSize: "12px", color: "#0078d4" }}
+//         >
+//           Reset to default
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// };
 
-export default GeneralConfigTab;
+// export default GeneralConfigTab;

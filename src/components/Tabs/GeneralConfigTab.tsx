@@ -1,103 +1,87 @@
+// src/components/Tabs/GeneralConfigTab.tsx
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import PaddingControl from "../common/PaddingControl";
 import {
-  Input,
-  Select,
   Button,
-  Typography,
+  Collapse,
+  Input,
   InputNumber,
-  Switch,
-  ColorPicker,
+  Select,
   Slider,
-  Space,
+  Switch,
+  Typography,
 } from "antd";
-import {
-  FunctionSquare,
-  Bold,
-  Italic,
-  Underline,
-  RotateCcw,
-} from "lucide-react";
-// import { FunctionButton } from "../common/FunctionButton";
-import { RootState } from "../../store/store";
-import { CustomColorPicker } from "../common/CustomColorPicker";
-import { toggleSection } from "../../store/chartSlice";
+import { Bold, Italic, Underline, RotateCcw } from "lucide-react";
+import { CustomColorPicker } from "../../components/common/CustomColorPicker";
 
+const { Panel } = Collapse;
 const { TextArea } = Input;
 
-interface GeneralConfigTabProps {}
-
-// ConfigSection component for collapsible sections
-interface ConfigSectionProps {
+/** Bản sao nhỏ gọn của ConfigSection trong App.tsx */
+const ConfigSection: React.FC<{
   title: string;
   children: React.ReactNode;
   isExpanded: boolean;
   onToggle: () => void;
+  level?: number;
   hasToggle?: boolean;
   toggleValue?: boolean;
-  onToggleChange?: (checked: boolean) => void;
-}
-
-const ConfigSection: React.FC<ConfigSectionProps> = ({
+  onToggleChange?: (value: boolean) => void;
+}> = ({
   title,
   children,
   isExpanded,
   onToggle,
+  level = 0,
   hasToggle = false,
   toggleValue = false,
   onToggleChange,
-}) => {
-  return (
-    <div className="config-section">
-      <div className="section-header" onClick={onToggle}>
-        <div className="section-title-row">
-          <Typography.Text className="section-title">{title}</Typography.Text>
+}) => (
+  <Collapse
+    ghost
+    size="small"
+    activeKey={isExpanded ? ["1"] : []}
+    onChange={onToggle}
+    className="config-section"
+  >
+    <Panel
+      header={
+        <div className="ant-collapse-header-text">
+          <Typography.Text strong style={{ fontSize: 13 }}>
+            {title}
+          </Typography.Text>
           {hasToggle && (
             <Switch
               size="small"
               checked={toggleValue}
-              onChange={(checked) => {
+              onChange={(checked, e) => {
+                e?.stopPropagation();
                 onToggleChange?.(checked);
               }}
-              onClick={(e: any) => e.stopPropagation()}
+              className="section-toggle"
             />
           )}
         </div>
-        <span className={`expand-icon ${isExpanded ? "expanded" : ""}`}>
-          {isExpanded ? "−" : "+"}
-        </span>
+      }
+      key="1"
+    >
+      <div
+        className={
+          level > 0 ? "config-section-indent" : "config-section-no-indent"
+        }
+      >
+        {children}
       </div>
-      {isExpanded && <div className="section-body">{children}</div>}
-    </div>
-  );
-};
+    </Panel>
+  </Collapse>
+);
 
-export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
-  const dispatch = useDispatch();
-  const expandedSections = useSelector(
-    (state: RootState) => state.chart.expandedSections
-  );
-
+const GeneralConfigTab: React.FC = () => {
   const [generalSettings, setGeneralSettings] = useState({
-    size: {
-      height: 542,
-      width: 595,
-      lockAspectRatio: false,
-    },
-    position: {
-      horizontal: 293,
-      vertical: 82,
-    },
-    padding: {
-      top: 0,
-      right: 5,
-      bottom: 5,
-      left: 5,
-    },
-    advanced: {
-      responsive: false,
-      maintainLayerOrder: false,
-    },
+    size: { height: 542, width: 595, lockAspectRatio: false },
+    position: { horizontal: 293, vertical: 82 },
+    padding: { top: 0, right: 5, bottom: 5, left: 5 },
+    advanced: { responsive: false, maintainLayerOrder: false },
     title: {
       title: {
         enabled: true,
@@ -133,17 +117,10 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
         width: 1,
         ignorePadding: false,
       },
-      spacing: {
-        customizeSpacing: false,
-        spaceBetweenLabelAndValue: 5,
-      },
+      spacing: { customizeSpacing: false, spaceBetweenLabelAndValue: 5 },
     },
     effects: {
-      background: {
-        enabled: true,
-        color: "#ffffff",
-        transparency: 0,
-      },
+      background: { enabled: true, color: "#ffffff", transparency: 0 },
       visualBorder: {
         enabled: false,
         color: "#000000",
@@ -157,10 +134,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
         position: "Bottom right",
       },
     },
-    dataFormat: {
-      applySettingsTo: "Khu vực",
-      format: "",
-    },
+    dataFormat: { applySettingsTo: "Khu vực", format: "" },
     headerIcons: {
       colors: {
         background: "#ffffff",
@@ -190,9 +164,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
       },
     },
     tooltips: {
-      options: {
-        text: "Report page settings and configurations...",
-      },
+      options: { text: "Report page settings and configurations..." },
       text: {
         font: "Segoe UI",
         fontSize: 10,
@@ -203,48 +175,39 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
         valueColor: "#000000",
         drillTextAndIconColor: "#000000",
       },
-      background: {
-        color: "#ffffff",
-        transparency: 0,
-      },
+      background: { color: "#ffffff", transparency: 0 },
     },
   });
 
   const [generalExpandedSections, setGeneralExpandedSections] = useState({
-    // Main sections
+    // main
     properties: false,
     title: false,
     effects: false,
     dataFormat: false,
     headerIcons: false,
     tooltips: false,
-
-    // Properties sub-sections
+    // properties
     size: false,
     position: false,
     padding: false,
     advanced: false,
-
-    // Title sub-sections
+    // title
     titleSection: false,
     subtitle: false,
     divider: false,
     spacing: false,
-
-    // Effects sub-sections
+    // effects
     background: false,
     visualBorder: false,
     shadow: false,
-
-    // Data format sub-sections
+    // data-format
     applySettingsTo: false,
     formatOptions: false,
-
-    // Header icons sub-sections
+    // header-icons
     headerIconsColors: false,
     headerIconsIcons: false,
-
-    // Tooltips sub-sections
+    // tooltips
     tooltipsOptions: false,
     tooltipsText: false,
     tooltipsBackground: false,
@@ -253,30 +216,27 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
   const updateGeneralSetting = (category: string, key: string, value: any) => {
     setGeneralSettings((prev) => ({
       ...prev,
-      [category]: {
-        ...prev[category as keyof typeof prev],
-        [key]: value,
-      },
+      [category]: { ...(prev as any)[category], [key]: value },
     }));
   };
 
   const handleToggleGeneralSection = (section: string) => {
     setGeneralExpandedSections((prev) => ({
       ...prev,
-      [section]: !prev[section as keyof typeof prev],
+      [section]: !(prev as any)[section],
     }));
   };
 
   return (
     <div className="general-config-tab general-tab">
-      {/* Properties Section - Main Container */}
+      {/* Properties */}
       <ConfigSection
         title="Properties"
         isExpanded={generalExpandedSections.properties}
         onToggle={() => handleToggleGeneralSection("properties")}
       >
         <div className="properties-container">
-          {/* Size Sub-Section */}
+          {/* Size */}
           <ConfigSection
             title="Size"
             isExpanded={generalExpandedSections.size}
@@ -293,9 +253,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                 <InputNumber
                   size="small"
                   value={generalSettings.size.height}
-                  onChange={(value) =>
-                    updateGeneralSetting("size", "height", value)
-                  }
+                  onChange={(v) => updateGeneralSetting("size", "height", v)}
                   style={{ width: "100%" }}
                   title="Nhập chiều cao (px)"
                 />
@@ -310,15 +268,13 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                 <InputNumber
                   size="small"
                   value={generalSettings.size.width}
-                  onChange={(value) =>
-                    updateGeneralSetting("size", "width", value)
-                  }
-                  className="general-input-fullwidth"
+                  onChange={(v) => updateGeneralSetting("size", "width", v)}
+                  style={{ width: "100%" }}
                   title="Nhập chiều rộng (px)"
                 />
               </div>
               <div className="form-group">
-                <div className="checkbox-row general-flex-gap">
+                <div className="checkbox-row">
                   <Typography.Text className="form-label">
                     Lock aspect ratio
                   </Typography.Text>
@@ -335,7 +291,7 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
             </div>
           </ConfigSection>
 
-          {/* Position Sub-Section */}
+          {/* Position */}
           <ConfigSection
             title="Position"
             isExpanded={generalExpandedSections.position}
@@ -352,10 +308,10 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                 <InputNumber
                   size="small"
                   value={generalSettings.position.horizontal}
-                  onChange={(value) =>
-                    updateGeneralSetting("position", "horizontal", value)
+                  onChange={(v) =>
+                    updateGeneralSetting("position", "horizontal", v)
                   }
-                  className="general-input-fullwidth"
+                  style={{ width: "100%" }}
                   title="Nhập vị trí ngang (px)"
                 />
               </div>
@@ -369,84 +325,31 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                 <InputNumber
                   size="small"
                   value={generalSettings.position.vertical}
-                  onChange={(value) =>
-                    updateGeneralSetting("position", "vertical", value)
+                  onChange={(v) =>
+                    updateGeneralSetting("position", "vertical", v)
                   }
-                  className="general-input-fullwidth"
+                  style={{ width: "100%" }}
                   title="Nhập vị trí dọc (px)"
                 />
               </div>
             </div>
           </ConfigSection>
 
-          {/* Padding Sub-Section */}
+          {/* Padding */}
           <ConfigSection
             title="Padding"
             isExpanded={generalExpandedSections.padding}
             onToggle={() => handleToggleGeneralSection("padding")}
           >
             <div className="section-content">
-              <div className="padding-grid">
-                <div className="padding-row">
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.top}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "top", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                </div>
-                <div className="padding-row">
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.left}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "left", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                  <div className="padding-center">
-                    <div className="padding-visual">
-                      <div className="padding-box"></div>
-                    </div>
-                  </div>
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.right}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "right", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                </div>
-                <div className="padding-row">
-                  <div className="padding-input-wrapper">
-                    <InputNumber
-                      size="small"
-                      value={generalSettings.padding.bottom}
-                      onChange={(value) =>
-                        updateGeneralSetting("padding", "bottom", value)
-                      }
-                      addonAfter="px"
-                      style={{ width: "70px" }}
-                    />
-                  </div>
-                </div>
-              </div>
+              <PaddingControl
+                value={generalSettings.padding}
+                onChange={(val) => updateGeneralSetting("padding", "", val)}
+              />
             </div>
           </ConfigSection>
 
-          {/* Advanced Options Sub-Section */}
+          {/* Advanced options */}
           <ConfigSection
             title="Advanced options"
             isExpanded={generalExpandedSections.advanced}
@@ -492,25 +395,28 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
         </div>
       </ConfigSection>
 
-      {/* Title Section - Main Container */}
+      {/* Title */}
       <ConfigSection
         title="Title"
         isExpanded={generalExpandedSections.title}
         onToggle={() => handleToggleGeneralSection("title")}
       >
         <div className="properties-container">
-          {/* Title Subsection */}
+          {/* Title */}
           <ConfigSection
             title="Title"
             isExpanded={generalExpandedSections.titleSection}
             onToggle={() => handleToggleGeneralSection("titleSection")}
-            hasToggle={true}
+            hasToggle
             toggleValue={generalSettings.title.title.enabled}
             onToggleChange={(checked) =>
-              updateGeneralSetting("title", "title", {
-                ...generalSettings.title.title,
-                enabled: checked,
-              })
+              setGeneralSettings((p) => ({
+                ...p,
+                title: {
+                  ...p.title,
+                  title: { ...p.title.title, enabled: checked },
+                },
+              }))
             }
           >
             <div className="section-content">
@@ -521,14 +427,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     size="small"
                     value={generalSettings.title.title.text}
                     onChange={(e) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        text: e.target.value,
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: { ...p.title.title, text: e.target.value },
+                        },
+                      }))
                     }
                     style={{ flex: 1 }}
                   />
-                  {/* <FunctionButton /> */}
                 </div>
               </div>
               <div className="form-group">
@@ -538,17 +446,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                 <Select
                   size="small"
                   value={generalSettings.title.title.heading}
-                  onChange={(value) =>
-                    updateGeneralSetting("title", "title", {
-                      ...generalSettings.title.title,
-                      heading: value,
-                    })
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        title: { ...p.title.title, heading: v },
+                      },
+                    }))
                   }
-                  className="general-input-fullwidth"
-                  dropdownMatchSelectWidth={false}
-                  placement="bottomLeft"
-                  getPopupContainer={(trigger) => trigger.parentNode}
-                  title="Chọn cấp độ tiêu đề cho biểu đồ. Heading 1 là lớn nhất, Heading 4 là nhỏ nhất."
+                  style={{ width: "100%" }}
                 >
                   <Select.Option value="Heading 1">Heading 1</Select.Option>
                   <Select.Option value="Heading 2">Heading 2</Select.Option>
@@ -562,17 +469,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                   <Select
                     size="small"
                     value={generalSettings.title.title.font}
-                    onChange={(value) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        font: value,
-                      })
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: { ...p.title.title, font: v },
+                        },
+                      }))
                     }
-                    className="general-input-flex"
-                    dropdownMatchSelectWidth={false}
-                    placement="bottomLeft"
-                    getPopupContainer={(trigger) => trigger.parentNode}
-                    title="Chọn font chữ cho tiêu đề."
+                    style={{ flex: 1 }}
                   >
                     <Select.Option value="DIN">DIN</Select.Option>
                     <Select.Option value="Segoe UI">Segoe UI</Select.Option>
@@ -581,14 +487,19 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                   <InputNumber
                     size="small"
                     value={generalSettings.title.title.fontSize}
-                    onChange={(value) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        fontSize: value,
-                      })
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: {
+                            ...p.title.title,
+                            fontSize: v ?? p.title.title.fontSize,
+                          },
+                        },
+                      }))
                     }
-                    className="general-input-60px"
-                    title="Cỡ chữ tiêu đề (px)"
+                    style={{ width: 60 }}
                   />
                 </div>
               </div>
@@ -601,10 +512,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     icon={<Bold size={12} />}
                     onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        bold: !generalSettings.title.title.bold,
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: {
+                            ...p.title.title,
+                            bold: !p.title.title.bold,
+                          },
+                        },
+                      }))
                     }
                   />
                   <Button
@@ -614,10 +531,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     icon={<Italic size={12} />}
                     onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        italic: !generalSettings.title.title.italic,
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: {
+                            ...p.title.title,
+                            italic: !p.title.title.italic,
+                          },
+                        },
+                      }))
                     }
                   />
                   <Button
@@ -629,34 +552,64 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     icon={<Underline size={12} />}
                     onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        underline: !generalSettings.title.title.underline,
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: {
+                            ...p.title.title,
+                            underline: !p.title.title.underline,
+                          },
+                        },
+                      }))
                     }
                   />
                 </div>
               </div>
-              <CustomColorPicker
-                label="Text color"
-                value={generalSettings.title.title.textColor}
-                onChange={(color) =>
-                  updateGeneralSetting("title", "title", {
-                    ...generalSettings.title.title,
-                    textColor: color,
-                  })
-                }
-              />
-              <CustomColorPicker
-                label="Background color"
-                value={generalSettings.title.title.backgroundColor}
-                onChange={(color) =>
-                  updateGeneralSetting("title", "title", {
-                    ...generalSettings.title.title,
-                    backgroundColor: color,
-                  })
-                }
-              />
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Text color
+                </Typography.Text>
+                <div className="title-color-group">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.title.title.textColor}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: { ...p.title.title, textColor: color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Background color
+                </Typography.Text>
+                <div className="title-color-group">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.title.title.backgroundColor}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: { ...p.title.title, backgroundColor: color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
               <div className="form-group">
                 <Typography.Text className="form-label">
                   Horizontal alignment
@@ -671,10 +624,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     className="title-alignment-button"
                     onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        horizontalAlignment: "left",
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: {
+                            ...p.title.title,
+                            horizontalAlignment: "left",
+                          },
+                        },
+                      }))
                     }
                   >
                     ≡
@@ -689,10 +648,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     className="title-alignment-button"
                     onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        horizontalAlignment: "center",
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: {
+                            ...p.title.title,
+                            horizontalAlignment: "center",
+                          },
+                        },
+                      }))
                     }
                   >
                     ≣
@@ -707,10 +672,16 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     }
                     className="title-alignment-button"
                     onClick={() =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        horizontalAlignment: "right",
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: {
+                            ...p.title.title,
+                            horizontalAlignment: "right",
+                          },
+                        },
+                      }))
                     }
                   >
                     ≡
@@ -726,10 +697,13 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
                     size="small"
                     checked={generalSettings.title.title.textWrap}
                     onChange={(checked) =>
-                      updateGeneralSetting("title", "title", {
-                        ...generalSettings.title.title,
-                        textWrap: checked,
-                      })
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          title: { ...p.title.title, textWrap: checked },
+                        },
+                      }))
                     }
                   />
                 </div>
@@ -737,68 +711,1234 @@ export const GeneralConfigTab: React.FC<GeneralConfigTabProps> = () => {
             </div>
           </ConfigSection>
 
-          {/* Effects Section - Simplified */}
+          {/* Subtitle */}
           <ConfigSection
-            title="Effects"
-            isExpanded={generalExpandedSections.effects}
-            onToggle={() => handleToggleGeneralSection("effects")}
+            title="Subtitle"
+            isExpanded={generalExpandedSections.subtitle}
+            onToggle={() => handleToggleGeneralSection("subtitle")}
+            hasToggle
+            toggleValue={generalSettings.title.subtitle.enabled}
+            onToggleChange={(checked) =>
+              setGeneralSettings((p) => ({
+                ...p,
+                title: {
+                  ...p.title,
+                  subtitle: { ...p.title.subtitle, enabled: checked },
+                },
+              }))
+            }
           >
-            <div className="properties-container">
-              <CustomColorPicker
-                label="Background"
-                value={generalSettings.effects.background.color}
-                onChange={(color) =>
-                  updateGeneralSetting("effects", "background", {
-                    ...generalSettings.effects.background,
-                    color: color,
-                  })
-                }
-              />
-              <div className="form-group" style={{ marginTop: "8px" }}>
-                <Space align="center" size={8}>
-                  <Typography.Text>Transparency:</Typography.Text>
-                  <div className="transparency-control">
-                    <InputNumber
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Text</Typography.Text>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <Input
+                    size="small"
+                    value={generalSettings.title.subtitle.text}
+                    onChange={(e) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          subtitle: {
+                            ...p.title.subtitle,
+                            text: e.target.value,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ flex: 1 }}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Heading
+                </Typography.Text>
+                <Select
+                  size="small"
+                  value={generalSettings.title.subtitle.heading}
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        subtitle: { ...p.title.subtitle, heading: v },
+                      },
+                    }))
+                  }
+                  style={{ width: "100%" }}
+                >
+                  <Select.Option value="Heading 1">Heading 1</Select.Option>
+                  <Select.Option value="Heading 2">Heading 2</Select.Option>
+                  <Select.Option value="Heading 3">Heading 3</Select.Option>
+                  <Select.Option value="Heading 4">Heading 4</Select.Option>
+                </Select>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">Font</Typography.Text>
+                <div style={{ display: "flex", gap: 4 }}>
+                  <Select
+                    size="small"
+                    value={generalSettings.title.subtitle.font}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          subtitle: { ...p.title.subtitle, font: v },
+                        },
+                      }))
+                    }
+                    style={{ flex: 1 }}
+                  >
+                    <Select.Option value="DIN">DIN</Select.Option>
+                    <Select.Option value="Segoe UI">Segoe UI</Select.Option>
+                    <Select.Option value="Arial">Arial</Select.Option>
+                  </Select>
+                  <InputNumber
+                    size="small"
+                    value={generalSettings.title.subtitle.fontSize}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          subtitle: {
+                            ...p.title.subtitle,
+                            fontSize: v ?? p.title.subtitle.fontSize,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ width: 60 }}
+                  />
+                </div>
+              </div>
+              <div
+                className="form-group"
+                style={{ display: "flex", gap: 4, alignItems: "center" }}
+              >
+                <Button
+                  size="small"
+                  type={
+                    generalSettings.title.subtitle.bold ? "primary" : "default"
+                  }
+                  icon={<Bold size={12} />}
+                  onClick={() =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        subtitle: {
+                          ...p.title.subtitle,
+                          bold: !p.title.subtitle.bold,
+                        },
+                      },
+                    }))
+                  }
+                />
+                <Button
+                  size="small"
+                  type={
+                    generalSettings.title.subtitle.italic
+                      ? "primary"
+                      : "default"
+                  }
+                  icon={<Italic size={12} />}
+                  onClick={() =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        subtitle: {
+                          ...p.title.subtitle,
+                          italic: !p.title.subtitle.italic,
+                        },
+                      },
+                    }))
+                  }
+                />
+                <Button
+                  size="small"
+                  type={
+                    generalSettings.title.subtitle.underline
+                      ? "primary"
+                      : "default"
+                  }
+                  icon={<Underline size={12} />}
+                  onClick={() =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        subtitle: {
+                          ...p.title.subtitle,
+                          underline: !p.title.subtitle.underline,
+                        },
+                      },
+                    }))
+                  }
+                />
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Text color
+                </Typography.Text>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.title.subtitle.textColor}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          subtitle: { ...p.title.subtitle, textColor: color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Horizontal alignment
+                </Typography.Text>
+                <div style={{ display: "flex", gap: 2 }}>
+                  {(["left", "center", "right"] as const).map((pos) => (
+                    <Button
+                      key={pos}
                       size="small"
-                      min={0}
-                      max={100}
-                      value={generalSettings.effects.background.transparency}
-                      onChange={(value) =>
-                        updateGeneralSetting("effects", "background", {
-                          ...generalSettings.effects.background,
-                          transparency: value || 0,
-                        })
+                      type={
+                        generalSettings.title.subtitle.horizontalAlignment ===
+                        pos
+                          ? "primary"
+                          : "default"
                       }
-                      style={{ width: "60px" }}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => Number(value!.replace("%", ""))}
-                    />
-                    <Slider
-                      min={0}
-                      max={100}
-                      value={generalSettings.effects.background.transparency}
-                      onChange={(value) =>
-                        updateGeneralSetting("effects", "background", {
-                          ...generalSettings.effects.background,
-                          transparency: value,
-                        })
+                      style={{ width: 32, textAlign: "center" }}
+                      onClick={() =>
+                        setGeneralSettings((p) => ({
+                          ...p,
+                          title: {
+                            ...p.title,
+                            subtitle: {
+                              ...p.title.subtitle,
+                              horizontalAlignment: pos,
+                            },
+                          },
+                        }))
                       }
-                      style={{ flex: 1, marginLeft: "8px" }}
-                    />
-                  </div>
-                </Space>
+                    >
+                      {pos === "center" ? "≣" : "≡"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="form-group">
+                <div className="checkbox-row">
+                  <Typography.Text className="form-label">
+                    Text wrap
+                  </Typography.Text>
+                  <Switch
+                    size="small"
+                    checked={generalSettings.title.subtitle.textWrap}
+                    onChange={(checked) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          subtitle: { ...p.title.subtitle, textWrap: checked },
+                        },
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </ConfigSection>
+
+          {/* Divider */}
+          <ConfigSection
+            title="Divider"
+            isExpanded={generalExpandedSections.divider}
+            onToggle={() => handleToggleGeneralSection("divider")}
+            hasToggle
+            toggleValue={generalSettings.title.divider.enabled}
+            onToggleChange={(checked) =>
+              setGeneralSettings((p) => ({
+                ...p,
+                title: {
+                  ...p.title,
+                  divider: { ...p.title.divider, enabled: checked },
+                },
+              }))
+            }
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Color</Typography.Text>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.title.divider.color}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          divider: { ...p.title.divider, color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Line style
+                </Typography.Text>
+                <Select
+                  size="small"
+                  value={generalSettings.title.divider.lineStyle}
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        divider: { ...p.title.divider, lineStyle: v },
+                      },
+                    }))
+                  }
+                  style={{ width: "100%" }}
+                >
+                  <Select.Option value="Solid">Solid</Select.Option>
+                  <Select.Option value="Dashed">Dashed</Select.Option>
+                  <Select.Option value="Dotted">Dotted</Select.Option>
+                </Select>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">Width</Typography.Text>
+                <InputNumber
+                  size="small"
+                  value={generalSettings.title.divider.width}
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        divider: {
+                          ...p.title.divider,
+                          width: v ?? p.title.divider.width,
+                        },
+                      },
+                    }))
+                  }
+                  addonAfter="px"
+                  style={{ width: "100%" }}
+                />
+              </div>
+              <div className="form-group">
+                <div className="checkbox-row">
+                  <Typography.Text className="form-label">
+                    Ignore padding
+                  </Typography.Text>
+                  <Switch
+                    size="small"
+                    checked={generalSettings.title.divider.ignorePadding}
+                    onChange={(checked) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          divider: {
+                            ...p.title.divider,
+                            ignorePadding: checked,
+                          },
+                        },
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </ConfigSection>
+
+          {/* Spacing */}
+          <ConfigSection
+            title="Spacing"
+            isExpanded={generalExpandedSections.spacing}
+            onToggle={() => handleToggleGeneralSection("spacing")}
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <div className="checkbox-row">
+                  <Typography.Text className="form-label">
+                    Customize spacing
+                  </Typography.Text>
+                  <Switch
+                    size="small"
+                    checked={generalSettings.title.spacing.customizeSpacing}
+                    onChange={(checked) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        title: {
+                          ...p.title,
+                          spacing: {
+                            ...p.title.spacing,
+                            customizeSpacing: checked,
+                          },
+                        },
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Space between label and ...
+                </Typography.Text>
+                <InputNumber
+                  size="small"
+                  value={
+                    generalSettings.title.spacing.spaceBetweenLabelAndValue
+                  }
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      title: {
+                        ...p.title,
+                        spacing: {
+                          ...p.title.spacing,
+                          spaceBetweenLabelAndValue:
+                            v ?? p.title.spacing.spaceBetweenLabelAndValue,
+                        },
+                      },
+                    }))
+                  }
+                  addonAfter="px"
+                  style={{ width: "100%" }}
+                />
               </div>
             </div>
           </ConfigSection>
         </div>
       </ConfigSection>
 
-      {/* Reset to default */}
+      {/* Effects */}
+      <ConfigSection
+        title="Effects"
+        isExpanded={generalExpandedSections.effects}
+        onToggle={() => handleToggleGeneralSection("effects")}
+      >
+        <div className="properties-container">
+          {/* Background */}
+          <ConfigSection
+            title="Background"
+            isExpanded={generalExpandedSections.background}
+            onToggle={() => handleToggleGeneralSection("background")}
+            hasToggle
+            toggleValue={generalSettings.effects.background.enabled}
+            onToggleChange={(checked) =>
+              setGeneralSettings((p) => ({
+                ...p,
+                effects: {
+                  ...p.effects,
+                  background: { ...p.effects.background, enabled: checked },
+                },
+              }))
+            }
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Color</Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.effects.background.color}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        effects: {
+                          ...p.effects,
+                          background: { ...p.effects.background, color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Transparency
+                </Typography.Text>
+                <div className="transparency-control">
+                  <InputNumber
+                    size="small"
+                    min={0}
+                    max={100}
+                    value={generalSettings.effects.background.transparency}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        effects: {
+                          ...p.effects,
+                          background: {
+                            ...p.effects.background,
+                            transparency: v || 0,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ width: 60 }}
+                    formatter={(val) => `${val}%`}
+                    parser={(val) => Number(val!.replace("%", ""))}
+                  />
+                  <Slider
+                    min={0}
+                    max={100}
+                    value={generalSettings.effects.background.transparency}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        effects: {
+                          ...p.effects,
+                          background: {
+                            ...p.effects.background,
+                            transparency: v,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ flex: 1, marginLeft: 8 }}
+                  />
+                </div>
+              </div>
+            </div>
+          </ConfigSection>
+
+          {/* Visual border */}
+          <ConfigSection
+            title="Visual border"
+            isExpanded={generalExpandedSections.visualBorder}
+            onToggle={() => handleToggleGeneralSection("visualBorder")}
+            hasToggle
+            toggleValue={generalSettings.effects.visualBorder.enabled}
+            onToggleChange={(checked) =>
+              setGeneralSettings((p) => ({
+                ...p,
+                effects: {
+                  ...p.effects,
+                  visualBorder: { ...p.effects.visualBorder, enabled: checked },
+                },
+              }))
+            }
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Color</Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.effects.visualBorder.color}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        effects: {
+                          ...p.effects,
+                          visualBorder: { ...p.effects.visualBorder, color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Rounded corners
+                </Typography.Text>
+                <div className="rounded-corners-row">
+                  <InputNumber
+                    size="small"
+                    value={generalSettings.effects.visualBorder.roundedCorners}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        effects: {
+                          ...p.effects,
+                          visualBorder: {
+                            ...p.effects.visualBorder,
+                            roundedCorners:
+                              v ?? p.effects.visualBorder.roundedCorners,
+                          },
+                        },
+                      }))
+                    }
+                    addonAfter="px"
+                    style={{ width: 80 }}
+                    min={0}
+                  />
+                  <div className="effects-indicator" />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">Width</Typography.Text>
+                <InputNumber
+                  size="small"
+                  value={generalSettings.effects.visualBorder.width}
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      effects: {
+                        ...p.effects,
+                        visualBorder: {
+                          ...p.effects.visualBorder,
+                          width: v ?? p.effects.visualBorder.width,
+                        },
+                      },
+                    }))
+                  }
+                  addonAfter="px"
+                  style={{ width: "100%" }}
+                  min={0}
+                />
+              </div>
+            </div>
+          </ConfigSection>
+
+          {/* Shadow */}
+          <ConfigSection
+            title="Shadow"
+            isExpanded={generalExpandedSections.shadow}
+            onToggle={() => handleToggleGeneralSection("shadow")}
+            hasToggle
+            toggleValue={generalSettings.effects.shadow.enabled}
+            onToggleChange={(checked) =>
+              setGeneralSettings((p) => ({
+                ...p,
+                effects: {
+                  ...p.effects,
+                  shadow: { ...p.effects.shadow, enabled: checked },
+                },
+              }))
+            }
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Color</Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.effects.shadow.color}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        effects: {
+                          ...p.effects,
+                          shadow: { ...p.effects.shadow, color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">Offset</Typography.Text>
+                <Select
+                  size="small"
+                  value={generalSettings.effects.shadow.offset}
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      effects: {
+                        ...p.effects,
+                        shadow: { ...p.effects.shadow, offset: v },
+                      },
+                    }))
+                  }
+                  style={{ width: "100%" }}
+                >
+                  <Select.Option value="Outside">Outside</Select.Option>
+                  <Select.Option value="Inside">Inside</Select.Option>
+                </Select>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Position
+                </Typography.Text>
+                <Select
+                  size="small"
+                  value={generalSettings.effects.shadow.position}
+                  onChange={(v) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      effects: {
+                        ...p.effects,
+                        shadow: { ...p.effects.shadow, position: v },
+                      },
+                    }))
+                  }
+                  style={{ width: "100%" }}
+                >
+                  <Select.Option value="Bottom right">
+                    Bottom right
+                  </Select.Option>
+                  <Select.Option value="Bottom left">Bottom left</Select.Option>
+                  <Select.Option value="Top right">Top right</Select.Option>
+                  <Select.Option value="Top left">Top left</Select.Option>
+                </Select>
+              </div>
+            </div>
+          </ConfigSection>
+        </div>
+      </ConfigSection>
+
+      {/* Data format */}
+      <ConfigSection
+        title="Data format"
+        isExpanded={generalExpandedSections.dataFormat}
+        onToggle={() => handleToggleGeneralSection("dataFormat")}
+      >
+        <div className="properties-container">
+          <div className="form-group">
+            <Typography.Text className="form-label">
+              Apply settings to
+            </Typography.Text>
+            <Select
+              size="small"
+              value={generalSettings.dataFormat.applySettingsTo}
+              onChange={(v) =>
+                updateGeneralSetting("dataFormat", "applySettingsTo", v)
+              }
+              style={{ width: "100%" }}
+            >
+              <Select.Option value="Khu vực">Khu vực</Select.Option>
+              <Select.Option value="Tất cả">Tất cả</Select.Option>
+              <Select.Option value="Tùy chọn">Tùy chọn</Select.Option>
+            </Select>
+          </div>
+
+          <ConfigSection
+            title="Format options"
+            isExpanded={generalExpandedSections.formatOptions}
+            onToggle={() => handleToggleGeneralSection("formatOptions")}
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Format</Typography.Text>
+                <Select
+                  size="small"
+                  value={generalSettings.dataFormat.format}
+                  onChange={(v) =>
+                    updateGeneralSetting("dataFormat", "format", v)
+                  }
+                  style={{ width: "100%" }}
+                  placeholder="Select format"
+                >
+                  <Select.Option value="General">General</Select.Option>
+                  <Select.Option value="Number">Number</Select.Option>
+                  <Select.Option value="Currency">Currency</Select.Option>
+                  <Select.Option value="Percentage">Percentage</Select.Option>
+                  <Select.Option value="Date">Date</Select.Option>
+                  <Select.Option value="Custom">Custom</Select.Option>
+                </Select>
+              </div>
+            </div>
+          </ConfigSection>
+        </div>
+      </ConfigSection>
+
+      {/* Header icons */}
+      <ConfigSection
+        title="Header icons"
+        isExpanded={generalExpandedSections.headerIcons}
+        onToggle={() => handleToggleGeneralSection("headerIcons")}
+      >
+        <div className="properties-container">
+          {/* Colors */}
+          <ConfigSection
+            title="Colors"
+            isExpanded={generalExpandedSections.headerIconsColors}
+            onToggle={() => handleToggleGeneralSection("headerIconsColors")}
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Background
+                </Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.headerIcons.colors.background}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        headerIcons: {
+                          ...p.headerIcons,
+                          colors: {
+                            ...p.headerIcons.colors,
+                            background: color,
+                          },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">Border</Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.headerIcons.colors.border}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        headerIcons: {
+                          ...p.headerIcons,
+                          colors: { ...p.headerIcons.colors, border: color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">Icon</Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.headerIcons.colors.icon}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        headerIcons: {
+                          ...p.headerIcons,
+                          colors: { ...p.headerIcons.colors, icon: color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Transparency
+                </Typography.Text>
+                <div className="transparency-control">
+                  <InputNumber
+                    size="small"
+                    min={0}
+                    max={100}
+                    value={generalSettings.headerIcons.colors.transparency}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        headerIcons: {
+                          ...p.headerIcons,
+                          colors: {
+                            ...p.headerIcons.colors,
+                            transparency: v || 0,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ width: 60 }}
+                    formatter={(val) => `${val}%`}
+                    parser={(val) => Number(val!.replace("%", ""))}
+                  />
+                  <Slider
+                    min={0}
+                    max={100}
+                    value={generalSettings.headerIcons.colors.transparency}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        headerIcons: {
+                          ...p.headerIcons,
+                          colors: { ...p.headerIcons.colors, transparency: v },
+                        },
+                      }))
+                    }
+                    style={{ flex: 1, marginLeft: 8 }}
+                  />
+                </div>
+              </div>
+            </div>
+          </ConfigSection>
+
+          {/* Icons */}
+          <ConfigSection
+            title="Icons"
+            isExpanded={generalExpandedSections.headerIconsIcons}
+            onToggle={() => handleToggleGeneralSection("headerIconsIcons")}
+          >
+            <div className="section-content">
+              {Object.entries(generalSettings.headerIcons.icons).map(
+                ([key, val]) => (
+                  <div className="form-group" key={key}>
+                    <div className="checkbox-row">
+                      <Typography.Text className="checkbox-label">
+                        {key
+                          .replace(/([A-Z])/g, " $1")
+                          .replace(/^./, (c) => c.toUpperCase())}
+                      </Typography.Text>
+                      <Switch
+                        size="small"
+                        checked={Boolean(val)}
+                        onChange={(checked) =>
+                          setGeneralSettings((p) => ({
+                            ...p,
+                            headerIcons: {
+                              ...p.headerIcons,
+                              icons: { ...p.headerIcons.icons, [key]: checked },
+                            },
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          </ConfigSection>
+        </div>
+      </ConfigSection>
+
+      {/* Tooltips */}
+      <ConfigSection
+        title="Tooltips"
+        isExpanded={generalExpandedSections.tooltips}
+        onToggle={() => handleToggleGeneralSection("tooltips")}
+        hasToggle
+        toggleValue={true}
+        onToggleChange={() => {}}
+      >
+        <div className="properties-container">
+          {/* Content */}
+          <ConfigSection
+            title="Content"
+            isExpanded={generalExpandedSections.tooltipsOptions}
+            onToggle={() => handleToggleGeneralSection("tooltipsOptions")}
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Text Content
+                </Typography.Text>
+                <TextArea
+                  rows={4}
+                  value={generalSettings.tooltips.options.text}
+                  onChange={(e) =>
+                    setGeneralSettings((p) => ({
+                      ...p,
+                      tooltips: {
+                        ...p.tooltips,
+                        options: { text: e.target.value },
+                      },
+                    }))
+                  }
+                  placeholder="Enter tooltip options text content..."
+                  style={{ width: "100%" }}
+                />
+              </div>
+            </div>
+          </ConfigSection>
+
+          {/* Text */}
+          <ConfigSection
+            title="Text"
+            isExpanded={generalExpandedSections.tooltipsText}
+            onToggle={() => handleToggleGeneralSection("tooltipsText")}
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Font</Typography.Text>
+                <div className="font-controls">
+                  <Select
+                    size="small"
+                    value={generalSettings.tooltips.text.font}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: { ...p.tooltips.text, font: v },
+                        },
+                      }))
+                    }
+                    style={{ width: 120 }}
+                  >
+                    <Select.Option value="Segoe UI">Segoe UI</Select.Option>
+                    <Select.Option value="Arial">Arial</Select.Option>
+                    <Select.Option value="Times New Roman">
+                      Times New Roman
+                    </Select.Option>
+                    <Select.Option value="Calibri">Calibri</Select.Option>
+                  </Select>
+                  <InputNumber
+                    size="small"
+                    value={generalSettings.tooltips.text.fontSize}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: {
+                            ...p.tooltips.text,
+                            fontSize: v ?? p.tooltips.text.fontSize,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ width: 60 }}
+                    min={8}
+                    max={72}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <div className="text-format-buttons">
+                  <Button
+                    size="small"
+                    type={
+                      generalSettings.tooltips.text.bold ? "primary" : "default"
+                    }
+                    icon={<Bold size={12} />}
+                    onClick={() =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: {
+                            ...p.tooltips.text,
+                            bold: !p.tooltips.text.bold,
+                          },
+                        },
+                      }))
+                    }
+                  />
+                  <Button
+                    size="small"
+                    type={
+                      generalSettings.tooltips.text.italic
+                        ? "primary"
+                        : "default"
+                    }
+                    icon={<Italic size={12} />}
+                    onClick={() =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: {
+                            ...p.tooltips.text,
+                            italic: !p.tooltips.text.italic,
+                          },
+                        },
+                      }))
+                    }
+                  />
+                  <Button
+                    size="small"
+                    type={
+                      generalSettings.tooltips.text.underline
+                        ? "primary"
+                        : "default"
+                    }
+                    icon={<Underline size={12} />}
+                    onClick={() =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: {
+                            ...p.tooltips.text,
+                            underline: !p.tooltips.text.underline,
+                          },
+                        },
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Label color
+                </Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.tooltips.text.labelColor}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: { ...p.tooltips.text, labelColor: color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Value color
+                </Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.tooltips.text.valueColor}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: { ...p.tooltips.text, valueColor: color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Drill text and icon color
+                </Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.tooltips.text.drillTextAndIconColor}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          text: {
+                            ...p.tooltips.text,
+                            drillTextAndIconColor: color,
+                          },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+            </div>
+          </ConfigSection>
+
+          {/* Background */}
+          <ConfigSection
+            title="Background"
+            isExpanded={generalExpandedSections.tooltipsBackground}
+            onToggle={() => handleToggleGeneralSection("tooltipsBackground")}
+          >
+            <div className="section-content">
+              <div className="form-group">
+                <Typography.Text className="form-label">Color</Typography.Text>
+                <div className="color-picker-row">
+                  <CustomColorPicker
+                    label=""
+                    value={generalSettings.tooltips.background.color}
+                    onChange={(color) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          background: { ...p.tooltips.background, color },
+                        },
+                      }))
+                    }
+                    size="small"
+                    showLabel={false}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <Typography.Text className="form-label">
+                  Transparency
+                </Typography.Text>
+                <div className="transparency-control">
+                  <InputNumber
+                    size="small"
+                    min={0}
+                    max={100}
+                    value={generalSettings.tooltips.background.transparency}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          background: {
+                            ...p.tooltips.background,
+                            transparency: v || 0,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ width: 60 }}
+                    formatter={(val) => `${val}%`}
+                    parser={(val) => Number(val!.replace("%", ""))}
+                  />
+                  <Slider
+                    min={0}
+                    max={100}
+                    value={generalSettings.tooltips.background.transparency}
+                    onChange={(v) =>
+                      setGeneralSettings((p) => ({
+                        ...p,
+                        tooltips: {
+                          ...p.tooltips,
+                          background: {
+                            ...p.tooltips.background,
+                            transparency: v,
+                          },
+                        },
+                      }))
+                    }
+                    style={{ flex: 1, marginLeft: 8 }}
+                  />
+                </div>
+              </div>
+            </div>
+          </ConfigSection>
+        </div>
+      </ConfigSection>
+
+      {/* Reset */}
       <div className="reset-section">
         <Button
           type="link"
           icon={<RotateCcw size={14} />}
-          style={{ padding: "16px", fontSize: "12px", color: "#0078d4" }}
+          style={{ padding: 16, fontSize: 12, color: "#0078d4" }}
         >
           Reset to default
         </Button>

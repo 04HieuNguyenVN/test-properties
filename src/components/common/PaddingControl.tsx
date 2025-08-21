@@ -42,19 +42,6 @@ const PaddingControl: React.FC<PaddingControlProps> = ({ value, onChange }) => {
         }}
       >
         <span className="custom-padding-title">{t("padding.label")}</span>
-        <button
-          onClick={handleLangSwitch}
-          style={{
-            fontSize: 12,
-            padding: "2px 8px",
-            border: "1px solid #ccc",
-            borderRadius: 4,
-            background: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          {i18n.language === "vi" ? "EN" : "VI"}
-        </button>
       </div>
       <div className="custom-padding-grid">
         <div></div>
