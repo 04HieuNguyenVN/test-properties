@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography, Select, InputNumber, Button, Input } from "antd";
 import { Bold, Italic, Underline, RotateCcw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { FONT_FAMILY_OPTIONS } from "../../../../constants";
 import { CustomColorPicker } from "../../../common/CustomColorPicker";
 import ConfigSection from "../common/ConfigSection";
@@ -18,27 +19,48 @@ const LegendPanel: React.FC<Props> = ({
   onToggle,
   onUpdate,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="properties-container">
       <ConfigSection
-        title="Options"
+        title={t("formatTab.legend.options", "Options")}
         isExpanded={expanded.legendOptions}
         onToggle={() => onToggle("legendOptions")}
       >
         <div className="section-content">
           <div className="form-group">
-            <Typography.Text className="form-label">Position</Typography.Text>
+            <Typography.Text className="form-label">
+              {t("formatTab.legend.position", "Position")}
+            </Typography.Text>
             <Select
               size="small"
               value={cfg.position || "Top"}
               onChange={(v) => onUpdate("legend", "position", v)}
               style={{ width: "100%" }}
               options={[
-                { label: "Top", value: "Top" },
-                { label: "Bottom", value: "Bottom" },
-                { label: "Left", value: "Left" },
-                { label: "Right", value: "Right" },
-                { label: "Center right", value: "Center right" },
+                {
+                  label: t("formatTab.legend.positionTop", "Top"),
+                  value: "Top",
+                },
+                {
+                  label: t("formatTab.legend.positionBottom", "Bottom"),
+                  value: "Bottom",
+                },
+                {
+                  label: t("formatTab.legend.positionLeft", "Left"),
+                  value: "Left",
+                },
+                {
+                  label: t("formatTab.legend.positionRight", "Right"),
+                  value: "Right",
+                },
+                {
+                  label: t(
+                    "formatTab.legend.positionCenterRight",
+                    "Center right"
+                  ),
+                  value: "Center right",
+                },
               ]}
             />
           </div>
@@ -46,13 +68,15 @@ const LegendPanel: React.FC<Props> = ({
       </ConfigSection>
 
       <ConfigSection
-        title="Text"
+        title={t("formatTab.legend.text", "Text")}
         isExpanded={expanded.legendText}
         onToggle={() => onToggle("legendText")}
       >
         <div className="section-content">
           <div className="form-group">
-            <Typography.Text className="form-label">Font</Typography.Text>
+            <Typography.Text className="form-label">
+              {t("formatTab.legend.font", "Font")}
+            </Typography.Text>
             <div className="font-controls">
               <Select
                 size="small"
@@ -79,24 +103,27 @@ const LegendPanel: React.FC<Props> = ({
                 type={cfg.bold ? "primary" : "default"}
                 icon={<Bold size={12} />}
                 onClick={() => onUpdate("legend", "bold", !cfg.bold)}
+                title={t("formatTab.legend.bold", "Bold")}
               />
               <Button
                 size="small"
                 type={cfg.italic ? "primary" : "default"}
                 icon={<Italic size={12} />}
                 onClick={() => onUpdate("legend", "italic", !cfg.italic)}
+                title={t("formatTab.legend.italic", "Italic")}
               />
               <Button
                 size="small"
                 type={cfg.underline ? "primary" : "default"}
                 icon={<Underline size={12} />}
                 onClick={() => onUpdate("legend", "underline", !cfg.underline)}
+                title={t("formatTab.legend.underline", "Underline")}
               />
             </div>
           </div>
 
           <CustomColorPicker
-            label="Color"
+            label={t("formatTab.legend.color", "Color")}
             value={cfg.color}
             onChange={(c) => onUpdate("legend", "color", c)}
           />
@@ -104,7 +131,7 @@ const LegendPanel: React.FC<Props> = ({
       </ConfigSection>
 
       <ConfigSection
-        title="Title"
+        title={t("formatTab.legend.title", "Title")}
         isExpanded={expanded.legendTitle}
         onToggle={() => onToggle("legendTitle")}
         hasToggle
@@ -115,10 +142,14 @@ const LegendPanel: React.FC<Props> = ({
       >
         <div className="section-content">
           <div className="form-group">
-            <Typography.Text className="form-label">Title text</Typography.Text>
+            <Typography.Text className="form-label">
+              {t("formatTab.legend.titleText", "Title text")}
+            </Typography.Text>
             <Input
               size="small"
-              value={cfg.title?.text || "Legend"}
+              value={
+                cfg.title?.text || t("formatTab.legend.defaultTitle", "Legend")
+              }
               onChange={(e) =>
                 onUpdate("legend", "title", {
                   ...cfg.title,
@@ -144,10 +175,13 @@ const LegendPanel: React.FC<Props> = ({
             onUpdate("legend", "italic", false);
             onUpdate("legend", "underline", false);
             onUpdate("legend", "color", "#666666");
-            onUpdate("legend", "title", { enabled: true, text: "Legend" });
+            onUpdate("legend", "title", {
+              enabled: true,
+              text: t("formatTab.legend.defaultTitle", "Legend"),
+            });
           }}
         >
-          Reset to default
+          {t("formatTab.reset", "Reset to default")}
         </Button>
       </div>
     </div>

@@ -1,0 +1,9 @@
+{
+  "stackedColumn": "Stacked Column",
+  "clusteredColumn": "Clustered Column",
+  "lineAndColumn": "Line & Column",
+  "pie": "Pie Chart",
+  "line": "Line Chart",
+  "stackedBar": "Stacked Bar",
+  "clusteredBar": "Clustered Bar"
+}

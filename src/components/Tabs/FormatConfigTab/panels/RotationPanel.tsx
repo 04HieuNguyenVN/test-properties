@@ -1,23 +1,29 @@
 import React from "react";
 import { Typography, InputNumber } from "antd";
+import { useTranslation } from "react-i18next";
 
 const RotationPanel: React.FC<{
   cfg: any;
   onUpdate: (section: string, key: string, value: any) => void;
-}> = ({ cfg, onUpdate }) => (
-  <div className="section-content">
-    <div className="form-group">
-      <Typography.Text className="form-label">Angle</Typography.Text>
-      <InputNumber
-        size="small"
-        value={cfg.angle || 0}
-        min={0}
-        max={360}
-        onChange={(v) => onUpdate("rotation", "angle", v)}
-        style={{ width: "100%" }}
-      />
+}> = ({ cfg, onUpdate }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="section-content">
+      <div className="form-group">
+        <Typography.Text className="form-label">
+          {t("formatTab.rotation.angle", "Angle")}
+        </Typography.Text>
+        <InputNumber
+          size="small"
+          value={cfg.angle || 0}
+          min={0}
+          max={360}
+          onChange={(v) => onUpdate("rotation", "angle", v)}
+          style={{ width: "100%" }}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default RotationPanel;

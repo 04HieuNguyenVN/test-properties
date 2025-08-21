@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Space } from "antd";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
   BarChart4,
   BarChart2,
@@ -13,17 +15,21 @@ import type { RootState } from "../store/store";
 
 const ChartToolbar: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { chartType } = useSelector((s: RootState) => s.chart) as ChartState;
+  const { t } = useTranslation();
 
   const btn = (
     key: ChartState["chartType"],
-    title: string,
+    titleKey: string,
     icon: React.ReactNode
   ) => (
     <Button
-      onClick={() => dispatch(setChartType(key))}
+      onClick={() => {
+        navigate(`/chart/${key}`);
+      }}
       className={`chart-type-button ${chartType === key ? "active" : ""}`}
-      title={title}
+      title={t(titleKey)}
     >
       {icon}
     </Button>
@@ -31,19 +37,27 @@ const ChartToolbar: React.FC = () => {
 
   return (
     <Space>
-      {btn("stackedColumn", "Stacked Column", <BarChart4 size={20} />)}
-      {btn("clusteredColumn", "Clustered Column", <BarChart2 size={20} />)}
-      {btn("lineAndColumn", "Line & Column", <LineChartIcon size={20} />)}
-      {btn("pie", "Pie Chart", <PieChartIcon size={20} />)}
-      {btn("line", "Line Chart", <TrendingUp size={20} />)}
+      {btn("stackedColumn", "charts.stackedColumn", <BarChart4 size={20} />)}
+      {btn(
+        "clusteredColumn",
+        "charts.clusteredColumn",
+        <BarChart2 size={20} />
+      )}
+      {btn(
+        "lineAndColumn",
+        "charts.lineAndColumn",
+        <LineChartIcon size={20} />
+      )}
+      {btn("pie", "charts.pie", <PieChartIcon size={20} />)}
+      {btn("line", "charts.line", <TrendingUp size={20} />)}
       {btn(
         "stackedBar",
-        "Stacked Bar",
+        "charts.stackedBar",
         <BarChart4 size={20} style={{ transform: "rotate(90deg)" }} />
       )}
       {btn(
         "clusteredBar",
-        "Clustered Bar",
+        "charts.clusteredBar",
         <BarChart2 size={20} style={{ transform: "rotate(90deg)" }} />
       )}
     </Space>

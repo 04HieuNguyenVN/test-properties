@@ -1,5 +1,6 @@
 import React from "react";
 import { InputNumber, Switch, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import type {
   GeneralSettings,
@@ -19,15 +20,18 @@ export default function SizeSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation();
   return (
     <ConfigSection
-      title="Size"
+      title={t("generalTab.size", "Size")}
       isExpanded={expanded.size}
       onToggle={() => toggle("size")}
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Height</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("generalTab.height", "Height")}
+          </Typography.Text>
           <InputNumber
             size="small"
             value={settings.size.height}
@@ -36,7 +40,9 @@ export default function SizeSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Width</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("generalTab.width", "Width")}
+          </Typography.Text>
           <InputNumber
             size="small"
             value={settings.size.width}
@@ -47,7 +53,7 @@ export default function SizeSection({
         <div className="form-group">
           <div className="checkbox-row">
             <Typography.Text className="form-label">
-              Lock aspect ratio
+              {t("generalTab.lockAspectRatio", "Lock aspect ratio")}
             </Typography.Text>
             <Switch
               size="small"

@@ -8,9 +8,11 @@ import {
   FIELD_DISPLAY_NAMES,
   loadFieldOptions,
 } from "../../../../constants";
+import { useTranslation } from "react-i18next";
 import type { CategoryFields } from "../types";
 
 export function useCategoryFields(chartType: string, rawData: any[]) {
+  const { t } = useTranslation();
   const [dataSource, setDataSource] = useState("API");
   const [categoryFields, setCategoryFields] = useState<CategoryFields>({
     yAxis: [],

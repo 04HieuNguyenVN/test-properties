@@ -1,6 +1,7 @@
 import React from "react";
 import { Select } from "antd";
-import { FIELD_OPTIONS, FIELD_ACTION_OPTIONS } from "../../../../constants"; // Ensure this path is correct and the file exists
+import { useTranslation } from "react-i18next";
+import { FIELD_OPTIONS, FIELD_ACTION_OPTIONS } from "../../../../constants";
 import type { FieldItem } from "../types";
 
 type Props = {
@@ -18,35 +19,59 @@ const SimpleFieldSelector: React.FC<Props> = ({
   field,
   category,
   onUpdate,
-}) => (
-  <div className="simple-field-selector">
-    <div className="selector-row">
-      <div className="selector-group">
-        <Select
-          title="Chọn trường dữ liệu"
-          size="small"
-          value={field.field || undefined}
-          onChange={(value) => onUpdate(category, field.id, "field", value)}
-          style={{ width: "100%" }}
-          placeholder="Select field"
-          options={FIELD_OPTIONS}
-          allowClear
-        />
-      </div>
-      <div className="selector-group">
-        <Select
-          title="Chọn hành động cho trường"
-          size="small"
-          value={field.action || undefined}
-          onChange={(value) => onUpdate(category, field.id, "action", value)}
-          style={{ width: "100%" }}
-          options={FIELD_ACTION_OPTIONS}
-          placeholder="Select action"
-          allowClear
-        />
+}) => {
+  const { t } = useTranslation();
+  return (
+    <div className="simple-field-selector">
+      <div className="selector-row">
+        <div className="selector-group">
+          <Select
+            title={t("dataTab.fieldSelector.fieldTitle", "Chọn trường dữ liệu")}
+            size="small"
+            value={field.field || undefined}
+            onChange={(value) => onUpdate(category, field.id, "field", value)}
+            style={{ width: "100%" }}
+            placeholder={t(
+              "dataTab.fieldSelector.fieldPlaceholder",
+              "Select field"
+            )}
+            options={FIELD_OPTIONS.map((opt) => ({
+              ...opt,
+              label: t(
+                `dataTab.fieldSelector.options.${opt.value}`,
+                opt.label || opt.value
+              ),
+            }))}
+            allowClear
+          />
+        </div>
+        <div className="selector-group">
+          <Select
+            title={t(
+              "dataTab.fieldSelector.actionTitle",
+              "Chọn hành động cho trường"
+            )}
+            size="small"
+            value={field.action || undefined}
+            onChange={(value) => onUpdate(category, field.id, "action", value)}
+            style={{ width: "100%" }}
+            options={FIELD_ACTION_OPTIONS.map((opt) => ({
+              ...opt,
+              label: t(
+                `dataTab.fieldSelector.actionOptions.${opt.value}`,
+                opt.label || opt.value
+              ),
+            }))}
+            placeholder={t(
+              "dataTab.fieldSelector.actionPlaceholder",
+              "Select action"
+            )}
+            allowClear
+          />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default SimpleFieldSelector;

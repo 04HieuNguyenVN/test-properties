@@ -1,8 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store/store";
 import type { ChartState } from "../store/chartSlice";
 import { Layout, Card } from "antd";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useParams,
+  Navigate,
+} from "react-router-dom";
+import { setChartType } from "../store/chartSlice";
 
 // Styles (giữ nguyên các import từ App.tsx cũ)
 import "../styles/dashboard.css";
@@ -26,22 +35,46 @@ import LanguageSwitch from "../components/common/LanguageSwitch";
 
 const { Content, Sider } = Layout;
 
-const PowerBIDashboard: React.FC = () => {
+const ChartRouterSync: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { type } = useParams();
   const { chartType, chartConfigs } = useSelector(
     (state: RootState) => state.chart
   ) as ChartState;
-
   const config = chartConfigs[chartType]?.format;
+
+  // Khi URL đổi, set chartType nếu khác
+  React.useEffect(() => {
+    if (type && type !== chartType) {
+      dispatch(setChartType(type as any));
+    }
+  }, [type]);
+
+  // Khi chartType đổi, đổi URL nếu khác
+  React.useEffect(() => {
+    if (type !== chartType) {
+      navigate(`/chart/${chartType}`, { replace: true });
+    }
+  }, [chartType]);
 
   return (
     <Layout className="powerbi-dashboard">
-      <LanguageSwitch />
       <Content>
         <Layout>
           <Content>
             <Card className="chart-container" bodyStyle={{ padding: 0 }}>
-              <div className="chart-toolbar">
+              <div
+                className="chart-toolbar"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  justifyContent: "space-between",
+                }}
+              >
                 <ChartToolbar />
+                <LanguageSwitch />
               </div>
 
               <DataDisplayPanels
@@ -60,5 +93,17 @@ const PowerBIDashboard: React.FC = () => {
     </Layout>
   );
 };
+
+const PowerBIDashboard: React.FC = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/chart/:type" element={<ChartRouterSync />} />
+      <Route
+        path="*"
+        element={<Navigate to="/chart/stackedColumn" replace />}
+      />
+    </Routes>
+  </BrowserRouter>
+);
 
 export default PowerBIDashboard;

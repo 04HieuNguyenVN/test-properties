@@ -1,0 +1,43 @@
+{
+  "legend": {
+    "title": "Legend",
+    "options": "Options",
+    "position": "Position",
+    "text": "Text",
+    "titleText": "Title text",
+    "positions": ["Top", "Bottom", "Left", "Right", "Center right"]
+  },
+  "gridlines": {
+    "title": "Gridlines",
+    "strokeWidth": "Stroke Width"
+  },
+  "slices": {
+    "title": "Slices",
+    "showSlices": "Show slices"
+  },
+  "rotation": {
+    "title": "Rotation",
+    "angle": "Angle"
+  },
+  "axis": {
+    "x": "X-axis",
+    "y": "Y-axis",
+    "values": "Values",
+    "title": "Title",
+    "layout": "Layout",
+    "range": "Range",
+    "min": "Minimum",
+    "max": "Maximum",
+    "logScale": "Logarithmic scale",
+    "invertRange": "Invert range",
+    "displayUnits": "Display units",
+    "valueDecimalPlaces": "Value decimal places",
+    "units": "Units",
+    "precision": "Precision",
+    "concatenateLabels": "Concatenate labels",
+    "maxHeight": "Maximum height",
+    "minCategoryWidth": "Minimum category width",
+    "titleOnly": "Show title only",
+    "titleAndUnits": "Show title and units"
+  }
+}

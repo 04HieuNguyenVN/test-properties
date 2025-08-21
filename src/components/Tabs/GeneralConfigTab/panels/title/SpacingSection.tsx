@@ -1,5 +1,6 @@
 import React from "react";
 import { InputNumber, Switch, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import type { GeneralSettings, ExpandedState, ToggleFn } from "../../types";
 
@@ -14,11 +15,12 @@ export default function SpacingSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation("generalTab");
   const s = settings.title.spacing;
 
   return (
     <ConfigSection
-      title="Spacing"
+      title={t("spacing")}
       isExpanded={expanded.spacing}
       onToggle={() => toggle("spacing")}
     >
@@ -26,7 +28,7 @@ export default function SpacingSection({
         <div className="form-group">
           <div className="checkbox-row">
             <Typography.Text className="form-label">
-              Customize spacing
+              {t("customizeSpacing")}
             </Typography.Text>
             <Switch
               size="small"
@@ -45,7 +47,7 @@ export default function SpacingSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            Space between label and value
+            {t("spaceBetweenLabelAndValue")}
           </Typography.Text>
           <InputNumber
             size="small"

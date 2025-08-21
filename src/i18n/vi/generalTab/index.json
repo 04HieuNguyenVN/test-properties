@@ -1,0 +1,58 @@
+{
+  "properties": "Thuộc tính",
+  "size": {
+    "title": "Kích thước",
+    "height": "Cao",
+    "width": "Rộng",
+    "lockAspectRatio": "Khoá tỉ lệ"
+  },
+  "position": { "title": "Vị trí", "horizontal": "Ngang", "vertical": "Dọc" },
+  "padding": { "title": "Khoảng cách" },
+  "advanced": {
+    "title": "Tùy chọn nâng cao",
+    "responsive": "Tự thích ứng",
+    "maintainLayerOrder": "Giữ thứ tự lớp"
+  },
+
+  "title": {
+    "title": "Tiêu đề",
+    "subtitle": "Phụ đề",
+    "divider": "Đường phân cách",
+    "spacing": "Giãn cách",
+    "textWrap": "Xuống dòng",
+    "horizontalAlignment": "Căn ngang",
+    "backgroundColor": "Màu nền",
+    "labelColor": "Màu nhãn",
+    "valueColor": "Màu giá trị",
+    "drillTextAndIconColor": "Màu chữ & icon drill",
+    "lineStyle": "Kiểu đường",
+    "width": "Độ dày",
+    "ignorePadding": "Bỏ qua padding",
+    "customizeSpacing": "Tùy chỉnh giãn cách",
+    "spaceBetweenLabelAndValue": "Khoảng cách nhãn–giá trị"
+  },
+
+  "effects": {
+    "title": "Hiệu ứng",
+    "background": "Nền",
+    "visualBorder": "Viền",
+    "shadow": "Bóng",
+    "offset": "Vị trí offset",
+    "position": "Vị trí",
+    "outside": "Bên ngoài",
+    "inside": "Bên trong",
+    "positions": ["Phải dưới", "Trái dưới", "Phải trên", "Trái trên"]
+  },
+
+  "dataFormat": {
+    "title": "Định dạng dữ liệu",
+    "applySettingsTo": "Áp dụng cho",
+    "format": "Định dạng"
+  },
+
+  "headerIcons": {
+    "title": "Biểu tượng tiêu đề",
+    "colors": "Màu sắc",
+    "icons": "Biểu tượng"
+  }
+}

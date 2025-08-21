@@ -1,5 +1,6 @@
 import React from "react";
 import { Select, Switch, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import type {
   GeneralSettings,
@@ -19,16 +20,19 @@ function AdvancedOptions({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation("generalTab");
   return (
     <ConfigSection
-      title="Advanced options"
+      title={t("advancedOptions")}
       isExpanded={expanded.advanced}
       onToggle={() => toggle("advanced")}
     >
       <div className="section-content">
         <div className="form-group">
           <div className="checkbox-row">
-            <Typography.Text className="form-label">Responsive</Typography.Text>
+            <Typography.Text className="form-label">
+              {t("responsive")}
+            </Typography.Text>
             <Switch
               size="small"
               checked={settings.advanced.responsive}
@@ -39,7 +43,7 @@ function AdvancedOptions({
         <div className="form-group">
           <div className="checkbox-row">
             <Typography.Text className="form-label">
-              Maintain layer order
+              {t("maintainLayerOrder")}
             </Typography.Text>
             <Switch
               size="small"
@@ -61,11 +65,12 @@ function DataFormatRoot({
   settings: GeneralSettings;
   update: UpdateFn;
 }) {
+  const { t } = useTranslation("generalTab");
   return (
     <>
       <div className="form-group">
         <Typography.Text className="form-label">
-          Apply settings to
+          {t("applySettingsTo")}
         </Typography.Text>
         <Select
           size="small"
@@ -73,32 +78,52 @@ function DataFormatRoot({
           onChange={(v) => update("dataFormat", "applySettingsTo", v)}
           style={{ width: "100%" }}
         >
-          <Select.Option value="Khu vực">Khu vực</Select.Option>
-          <Select.Option value="Tất cả">Tất cả</Select.Option>
-          <Select.Option value="Tùy chọn">Tùy chọn</Select.Option>
+          <Select.Option value="Khu vực">
+            {t("applySettingsToArea", "Khu vực")}
+          </Select.Option>
+          <Select.Option value="Tất cả">
+            {t("applySettingsToAll", "Tất cả")}
+          </Select.Option>
+          <Select.Option value="Tùy chọn">
+            {t("applySettingsToCustom", "Tùy chọn")}
+          </Select.Option>
         </Select>
       </div>
       <ConfigSection
-        title="Format options"
+        title={t("formatOptions")}
         isExpanded={false}
         onToggle={() => {}}
       >
         <div className="section-content">
           <div className="form-group">
-            <Typography.Text className="form-label">Format</Typography.Text>
+            <Typography.Text className="form-label">
+              {t("format")}
+            </Typography.Text>
             <Select
               size="small"
               value={settings.dataFormat.format}
               onChange={(v) => update("dataFormat", "format", v)}
               style={{ width: "100%" }}
-              placeholder="Select format"
+              placeholder={t("selectFormat", "Select format")}
             >
-              <Select.Option value="General">General</Select.Option>
-              <Select.Option value="Number">Number</Select.Option>
-              <Select.Option value="Currency">Currency</Select.Option>
-              <Select.Option value="Percentage">Percentage</Select.Option>
-              <Select.Option value="Date">Date</Select.Option>
-              <Select.Option value="Custom">Custom</Select.Option>
+              <Select.Option value="General">
+                {t("formatGeneral", "General")}
+              </Select.Option>
+              <Select.Option value="Number">
+                {t("formatNumber", "Number")}
+              </Select.Option>
+              <Select.Option value="Currency">
+                {t("formatCurrency", "Currency")}
+              </Select.Option>
+              <Select.Option value="Percentage">
+                {t("formatPercentage", "Percentage")}
+              </Select.Option>
+              <Select.Option value="Date">
+                {t("formatDate", "Date")}
+              </Select.Option>
+              <Select.Option value="Custom">
+                {t("formatCustom", "Custom")}
+              </Select.Option>
             </Select>
           </div>
         </div>

@@ -27,10 +27,6 @@ const PaddingControl: React.FC<PaddingControlProps> = ({ value, onChange }) => {
     setActiveDirection(direction);
   const handleBlur = () => setTimeout(() => setActiveDirection(null), 150);
 
-  const handleLangSwitch = () => {
-    i18n.changeLanguage(i18n.language === "vi" ? "en" : "vi");
-  };
-
   return (
     <div className="custom-padding-control">
       <div
@@ -55,6 +51,7 @@ const PaddingControl: React.FC<PaddingControlProps> = ({ value, onChange }) => {
             name="top"
           />
         </div>
+        <div></div>
         <div className="custom-padding-center">
           <SpinButton
             value={value.left}

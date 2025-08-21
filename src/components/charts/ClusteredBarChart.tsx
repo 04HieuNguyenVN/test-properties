@@ -1,23 +1,31 @@
 import React from "react";
 import { Bar as AntPlotBar } from "@ant-design/plots";
 import chartData from "../../data/chartData.json";
+import { useTranslation } from "react-i18next";
 
-// ===== Props cho biểu đồ cột nhóm ngang =====
 // Thêm prop data để nhận dữ liệu từ ngoài vào
 interface ClusteredBarChartProps {
   config: any;
   data: any[];
 }
 
-// ===== Biểu đồ cột nhóm ngang (Clustered Bar Chart) =====
 export const ClusteredBarChart: React.FC<ClusteredBarChartProps> = ({
   config,
   data,
 }) => {
-  // Nhận dữ liệu từ prop data
+  // Dùng i18n để dịch các nhãn
+  const { t } = useTranslation();
   const clusteredBarData = data.flatMap((item) => [
-    { label: item.month, type: "visitors", value: item.visitors },
-    { label: item.month, type: "revenue", value: item.revenue },
+    {
+      label: item.month,
+      type: t("charts.visitors", "Visitors"),
+      value: item.visitors,
+    },
+    {
+      label: item.month,
+      type: t("charts.revenue", "Revenue"),
+      value: item.revenue,
+    },
   ]);
 
   // Cấu hình cho biểu đồ cột nhóm ngang

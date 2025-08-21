@@ -1,0 +1,19 @@
+{
+  "padding": {
+    "label": "Padding",
+    "top": "Top",
+    "left": "Left",
+    "right": "Right",
+    "bottom": "Bottom"
+  },
+  "color": "Color",
+  "transparency": "Transparency",
+  "font": "Font",
+  "fontSize": "Font size",
+  "formatting": "Formatting",
+  "resetToDefault": "Reset to default",
+  "enabled": "Enabled",
+  "text": "Text",
+  "heading": "Heading",
+  "style": "Style"
+}

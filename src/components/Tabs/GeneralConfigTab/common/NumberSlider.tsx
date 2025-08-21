@@ -1,5 +1,6 @@
 import React from "react";
 import { InputNumber, Slider } from "antd";
+import { useTranslation } from "react-i18next";
 
 export default function NumberSlider({
   value,
@@ -16,6 +17,7 @@ export default function NumberSlider({
   step?: number;
   asPercent?: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="transparency-control">
       <InputNumber
@@ -32,8 +34,9 @@ export default function NumberSlider({
           ? {
               formatter: (val) => `${val}%`,
               parser: (val) => Number(String(val).replace("%", "")),
+              placeholder: t("generalTab.percentPlaceholder", "%"),
             }
-          : {})}
+          : { placeholder: t("generalTab.numberPlaceholder", "0") })}
       />
       <Slider
         min={min}
@@ -42,6 +45,9 @@ export default function NumberSlider({
         value={value}
         onChange={(v) => onChange(v as number)}
         style={{ flex: 1, marginLeft: 8 }}
+        tooltip={{
+          formatter: (val) => (asPercent ? `${val}%` : `${val}`),
+        }}
       />
     </div>
   );

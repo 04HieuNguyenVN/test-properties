@@ -1,5 +1,6 @@
 import React from "react";
 import { InputNumber, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import type {
   GeneralSettings,
@@ -19,15 +20,18 @@ export default function PositionSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation();
   return (
     <ConfigSection
-      title="Position"
+      title={t("generalTab.position", "Position")}
       isExpanded={expanded.position}
       onToggle={() => toggle("position")}
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Horizontal</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("generalTab.horizontal", "Horizontal")}
+          </Typography.Text>
           <InputNumber
             size="small"
             value={settings.position.horizontal}
@@ -36,7 +40,9 @@ export default function PositionSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Vertical</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("generalTab.vertical", "Vertical")}
+          </Typography.Text>
           <InputNumber
             size="small"
             value={settings.position.vertical}

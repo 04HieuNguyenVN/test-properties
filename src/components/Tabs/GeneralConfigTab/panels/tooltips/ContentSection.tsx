@@ -1,5 +1,6 @@
 import React from "react";
 import { Input, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import type { GeneralSettings, ExpandedState, ToggleFn } from "../../types";
 
@@ -14,15 +15,18 @@ export default function ContentSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation();
   return (
     <ConfigSection
-      title="Content"
+      title={t("generalTab.tooltips.content", "Content")}
       isExpanded={expanded.tooltipsOptions}
       onToggle={() => toggle("tooltipsOptions")}
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Text</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("generalTab.tooltips.text", "Text")}
+          </Typography.Text>
           <Input.TextArea
             value={settings.tooltips.options.text}
             onChange={(e) =>

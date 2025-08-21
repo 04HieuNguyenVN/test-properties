@@ -1,0 +1,23 @@
+{
+  "dataSource": "Data source",
+  "table": "Table",
+  "selectField": "Select field",
+  "selectAction": "Select action",
+  "addField": "Add field",
+  "groups": {
+    "xAxis": "X-axis",
+    "yAxis": "Y-axis",
+    "legend": "Legend",
+    "values": "Values",
+    "detail": "Detail",
+    "columnY": "Column Y",
+    "lineY": "Line Y",
+    "columnLegend": "Column legend",
+    "secondaryYAxis": "Secondary Y-axis"
+  },
+  "hints": {
+    "xAxis": "Choose a field for the X axis",
+    "yAxis": "Choose a field for the Y axis",
+    "legend": "Choose a field to color/legend"
+  }
+}

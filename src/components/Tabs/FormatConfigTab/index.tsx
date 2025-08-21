@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../../store/store";
 import {
@@ -18,6 +19,7 @@ import RotationPanel from "./panels/RotationPanel";
 import AxisPanel from "./panels/AxisPanel";
 
 const FormatConfigTab: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { chartType, expandedSections, chartConfigs } = useSelector(
     (s: RootState) => s.chart
@@ -52,7 +54,7 @@ const FormatConfigTab: React.FC = () => {
       <div className="config-sections">
         {available.includes("legend") && (
           <ConfigSection
-            title="Legend"
+            title={t("formatTab.legend", "Legend")}
             isExpanded={expandedSections.legend}
             onToggle={() => handleToggle("legend")}
             hasToggle
@@ -70,7 +72,7 @@ const FormatConfigTab: React.FC = () => {
 
         {available.includes("gridlines") && (
           <ConfigSection
-            title="Gridlines"
+            title={t("formatTab.gridlines", "Gridlines")}
             isExpanded={expandedSections.gridlines}
             onToggle={() => handleToggle("gridlines")}
             hasToggle
@@ -86,7 +88,7 @@ const FormatConfigTab: React.FC = () => {
 
         {available.includes("slices") && (
           <ConfigSection
-            title="Slices"
+            title={t("formatTab.slices", "Slices")}
             isExpanded={expandedSections.slices}
             onToggle={() => handleToggle("slices")}
             hasToggle
@@ -102,7 +104,7 @@ const FormatConfigTab: React.FC = () => {
 
         {available.includes("rotation") && (
           <ConfigSection
-            title="Rotation"
+            title={t("formatTab.rotation", "Rotation")}
             isExpanded={expandedSections.rotation}
             onToggle={() => handleToggle("rotation")}
             hasToggle
@@ -118,7 +120,7 @@ const FormatConfigTab: React.FC = () => {
 
         {available.includes("xAxis") && (
           <ConfigSection
-            title="X-axis"
+            title={t("formatTab.xAxis", "X-axis")}
             isExpanded={expandedSections.xAxis}
             onToggle={() => handleToggle("xAxis")}
           >
@@ -136,7 +138,7 @@ const FormatConfigTab: React.FC = () => {
 
         {available.includes("yAxis") && (
           <ConfigSection
-            title="Y-axis"
+            title={t("formatTab.yAxis", "Y-axis")}
             isExpanded={expandedSections.yAxis}
             onToggle={() => handleToggle("yAxis")}
           >
@@ -159,7 +161,7 @@ const FormatConfigTab: React.FC = () => {
           icon={<RotateCcw size={14} />}
           style={{ padding: 16, fontSize: 12, color: "#0078d4" }}
         >
-          Reset to default
+          {t("formatTab.reset", "Reset to default")}
         </Button>
       </div>
     </div>

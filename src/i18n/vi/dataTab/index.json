@@ -1,0 +1,23 @@
+{
+  "dataSource": "Nguồn dữ liệu",
+  "table": "Bảng",
+  "selectField": "Chọn trường",
+  "selectAction": "Chọn thao tác",
+  "addField": "Thêm trường",
+  "groups": {
+    "xAxis": "Trục X",
+    "yAxis": "Trục Y",
+    "legend": "Chú giải (Legend)",
+    "values": "Giá trị",
+    "detail": "Chi tiết",
+    "columnY": "Cột Y",
+    "lineY": "Đường Y",
+    "columnLegend": "Chú giải cột",
+    "secondaryYAxis": "Trục Y phụ"
+  },
+  "hints": {
+    "xAxis": "Chọn trường cho trục X",
+    "yAxis": "Chọn trường cho trục Y",
+    "legend": "Chọn trường để phân màu (legend)"
+  }
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { ColorPicker, Space, Typography } from "antd";
 import { Color } from "antd/es/color-picker";
+import { useTranslation } from "react-i18next";
 
 // ===== Props cho CustomColorPicker =====
 interface CustomColorPickerProps {
@@ -23,6 +24,7 @@ export const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
   showCode = true,
   defaultValue = "#1677FF",
 }) => {
+  const { t } = useTranslation();
   // Xử lý khi đổi màu
   const handleColorChange = (color: Color) => {
     if (onChange) {
@@ -35,7 +37,7 @@ export const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
 
   return (
     <div className="custom-color-picker">
-      {showLabel && label && (
+      {showLabel && (
         <Typography.Text
           className="form-label"
           style={{
@@ -44,7 +46,7 @@ export const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
             marginBottom: "4px",
           }}
         >
-          {label}
+          {label || t("color", "Color")}
         </Typography.Text>
       )}
       <div className="color-picker-wrapper">

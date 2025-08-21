@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography, Switch } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import { CustomColorPicker } from "../../../../common/CustomColorPicker";
 import NumberSlider from "../../common/NumberSlider";
@@ -16,11 +17,12 @@ export default function BackgroundSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation();
   const bg = settings.effects.background;
 
   return (
     <ConfigSection
-      title="Background"
+      title={t("generalTab.background", "Background")}
       isExpanded={expanded.background}
       onToggle={() => toggle("background")}
       hasToggle
@@ -37,7 +39,9 @@ export default function BackgroundSection({
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Color</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("generalTab.color", "Color")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
             value={bg.color}
@@ -55,7 +59,9 @@ export default function BackgroundSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Transparency</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("generalTab.transparency", "Transparency")}
+          </Typography.Text>
           <NumberSlider
             value={bg.transparency}
             onChange={(v) =>

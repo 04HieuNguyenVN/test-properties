@@ -1,5 +1,6 @@
 import React from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface PaddingValues {
   left: number;
@@ -38,6 +39,7 @@ export const SpinButton: React.FC<SpinButtonProps> = ({
     onChange(Math.max(0, value - 1));
   };
 
+  const { t } = useTranslation();
   return (
     <div
       className="custom-spin-button"
@@ -63,7 +65,7 @@ export const SpinButton: React.FC<SpinButtonProps> = ({
           onMouseLeave={onBlur}
           className="custom-spin-btn"
           tabIndex={-1}
-          aria-label="Increase value"
+          aria-label={t("increaseValue", "Increase value")}
         >
           <ChevronUp size={8} className="custom-spin-icon" />
         </button>
@@ -74,7 +76,7 @@ export const SpinButton: React.FC<SpinButtonProps> = ({
           onMouseLeave={onBlur}
           className="custom-spin-btn"
           tabIndex={-1}
-          aria-label="Decrease value"
+          aria-label={t("decreaseValue", "Decrease value")}
         >
           <ChevronDown size={8} className="custom-spin-icon" />
         </button>

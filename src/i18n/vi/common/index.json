@@ -1,0 +1,19 @@
+{
+  "padding": {
+    "label": "Khoảng cách (Padding)",
+    "top": "Trên",
+    "left": "Trái",
+    "right": "Phải",
+    "bottom": "Dưới"
+  },
+  "color": "Màu sắc",
+  "transparency": "Độ trong suốt",
+  "font": "Phông chữ",
+  "fontSize": "Cỡ chữ",
+  "formatting": "Định dạng",
+  "resetToDefault": "Khôi phục mặc định",
+  "enabled": "Bật",
+  "text": "Nội dung",
+  "heading": "Tiêu đề",
+  "style": "Kiểu"
+}

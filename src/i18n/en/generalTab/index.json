@@ -1,0 +1,62 @@
+{
+  "properties": "Properties",
+  "size": {
+    "title": "Size",
+    "height": "Height",
+    "width": "Width",
+    "lockAspectRatio": "Lock aspect ratio"
+  },
+  "position": {
+    "title": "Position",
+    "horizontal": "Horizontal",
+    "vertical": "Vertical"
+  },
+  "padding": { "title": "Padding" },
+  "advanced": {
+    "title": "Advanced options",
+    "responsive": "Responsive",
+    "maintainLayerOrder": "Maintain layer order"
+  },
+
+  "title": {
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "divider": "Divider",
+    "spacing": "Spacing",
+    "textWrap": "Text wrap",
+    "horizontalAlignment": "Horizontal alignment",
+    "backgroundColor": "Background color",
+    "labelColor": "Label color",
+    "valueColor": "Value color",
+    "drillTextAndIconColor": "Drill text & icon color",
+    "lineStyle": "Line style",
+    "width": "Width",
+    "ignorePadding": "Ignore padding",
+    "customizeSpacing": "Customize spacing",
+    "spaceBetweenLabelAndValue": "Space between label and value"
+  },
+
+  "effects": {
+    "title": "Effects",
+    "background": "Background",
+    "visualBorder": "Visual border",
+    "shadow": "Shadow",
+    "offset": "Offset",
+    "position": "Position",
+    "outside": "Outside",
+    "inside": "Inside",
+    "positions": ["Bottom right", "Bottom left", "Top right", "Top left"]
+  },
+
+  "dataFormat": {
+    "title": "Data format",
+    "applySettingsTo": "Apply settings to",
+    "format": "Format"
+  },
+
+  "headerIcons": {
+    "title": "Header icons",
+    "colors": "Colors",
+    "icons": "Icons"
+  }
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Collapse, Switch, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 const { Panel } = Collapse;
 
 const ConfigSection: React.FC<{
@@ -20,44 +21,47 @@ const ConfigSection: React.FC<{
   hasToggle,
   toggleValue,
   onToggleChange,
-}) => (
-  <Collapse
-    ghost
-    size="small"
-    activeKey={isExpanded ? ["1"] : []}
-    onChange={onToggle}
-    className="config-section"
-  >
-    <Panel
-      header={
-        <div className="ant-collapse-header-text">
-          <Typography.Text strong style={{ fontSize: 13 }}>
-            {title}
-          </Typography.Text>
-          {hasToggle && (
-            <Switch
-              size="small"
-              checked={!!toggleValue}
-              onChange={(checked, e) => {
-                e?.stopPropagation();
-                onToggleChange?.(checked);
-              }}
-              className="section-toggle"
-            />
-          )}
-        </div>
-      }
-      key="1"
+}) => {
+  const { t } = useTranslation();
+  return (
+    <Collapse
+      ghost
+      size="small"
+      activeKey={isExpanded ? ["1"] : []}
+      onChange={onToggle}
+      className="config-section"
     >
-      <div
-        className={
-          level > 0 ? "config-section-indent" : "config-section-no-indent"
+      <Panel
+        header={
+          <div className="ant-collapse-header-text">
+            <Typography.Text strong style={{ fontSize: 13 }}>
+              {t(title, title)}
+            </Typography.Text>
+            {hasToggle && (
+              <Switch
+                size="small"
+                checked={!!toggleValue}
+                onChange={(checked, e) => {
+                  e?.stopPropagation();
+                  onToggleChange?.(checked);
+                }}
+                className="section-toggle"
+              />
+            )}
+          </div>
         }
+        key="1"
       >
-        {children}
-      </div>
-    </Panel>
-  </Collapse>
-);
+        <div
+          className={
+            level > 0 ? "config-section-indent" : "config-section-no-indent"
+          }
+        >
+          {children}
+        </div>
+      </Panel>
+    </Collapse>
+  );
+};
 
 export default ConfigSection;

@@ -6,12 +6,14 @@ import DataSourceSelector from "./components/DataSourceSelector";
 import FieldCategoryBlock from "./components/FieldCategoryBlock";
 import SimpleFieldSelector from "./components/SimpleFieldSelector";
 import { getTableName } from "./utils/getTableName";
+import { useTranslation } from "react-i18next";
 
 export const DataTab: React.FC<DataTabProps> = ({
   chartType,
   rawData,
   data,
 }) => {
+  const { t } = useTranslation();
   const {
     dataSource,
     setDataSource,
@@ -23,14 +25,14 @@ export const DataTab: React.FC<DataTabProps> = ({
     updateFieldInCategory,
   } = useCategoryFields(chartType, rawData);
 
-  const tableName = getTableName(chartType);
+  const tableInfo = getTableName(chartType);
 
   return (
     <div className="data-config-tab">
       <DataSourceSelector
         dataSource={dataSource}
         onChange={setDataSource}
-        tableName={tableName}
+        tableName={t(tableInfo.i18nKey, tableInfo.name)}
       />
 
       <Divider style={{ margin: "12px 0" }} />
@@ -42,7 +44,10 @@ export const DataTab: React.FC<DataTabProps> = ({
             <FieldCategoryBlock
               key={fieldKey}
               fieldKey={fieldKey}
-              title={getFieldDisplayName(fieldKey)}
+              title={t(
+                `dataTab.fieldCategory.${fieldKey}`,
+                getFieldDisplayName(fieldKey)
+              )}
               fields={fieldsForCategory}
               canAdd={allowsAddingFieldsToCategory(fieldKey)}
               onAdd={() => addFieldToCategory(fieldKey)}

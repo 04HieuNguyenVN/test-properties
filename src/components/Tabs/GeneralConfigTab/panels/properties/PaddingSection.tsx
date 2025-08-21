@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import type { GeneralSettings, ExpandedState, ToggleFn } from "../../types";
 import PaddingControl from "../../../../common/PaddingControl";
@@ -14,9 +15,10 @@ export default function PaddingSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation();
   return (
     <ConfigSection
-      title="Padding"
+      title={t("generalTab.padding", "Padding")}
       isExpanded={expanded.padding}
       onToggle={() => toggle("padding")}
     >
