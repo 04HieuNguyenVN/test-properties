@@ -16,26 +16,21 @@ import { useTranslation } from "react-i18next";
 
 const { TabPane } = Tabs;
 
-const PropertiesPanel: React.FC = () => {
+interface PropertiesPanelProps {
+  chartType: string;
+  rawData: any;
+  data: any;
+}
+
+const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
+  chartType,
+  rawData,
+  data,
+}) => {
   const dispatch = useDispatch();
-  const { activeTab, activeSubTab, chartType } = useSelector(
+  const { activeTab, activeSubTab } = useSelector(
     (s: RootState) => s.chart
   ) as ChartState;
-
-  const rawData =
-    chartType === "pie"
-      ? chartData.categories
-      : chartType === "stackedBar"
-      ? chartData.stackedData
-      : chartData.monthlyData;
-
-  const data =
-    chartType === "stackedBar"
-      ? chartData.stackedData
-      : chartType === "pie"
-      ? chartData.categories
-      : chartData.monthlyData;
-
   const { t } = useTranslation("propertiesPanel");
   return (
     <Tabs

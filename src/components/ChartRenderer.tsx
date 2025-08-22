@@ -20,30 +20,25 @@ type Props = {
     | "stackedBar"
     | "clusteredBar";
   config: any;
+  data: any;
 };
 
-const ChartRenderer: React.FC<Props> = ({ chartType, config }) => {
+const ChartRenderer: React.FC<Props> = ({ chartType, config, data }) => {
   switch (chartType) {
     case "stackedColumn":
-      return (
-        <StackedColumnChart config={config} data={chartData.monthlyData} />
-      );
+      return <StackedColumnChart config={config} data={data} />;
     case "clusteredColumn":
-      return (
-        <ClusteredColumnChart config={config} data={chartData.monthlyData} />
-      );
+      return <ClusteredColumnChart config={config} data={data} />;
     case "lineAndColumn":
-      return (
-        <LineAndColumnChart config={config} data={chartData.monthlyData} />
-      );
+      return <LineAndColumnChart config={config} data={data} />;
     case "pie":
-      return <CustomPieChart config={config} data={chartData.categories} />;
+      return <CustomPieChart config={config} data={data} />;
     case "line":
-      return <CustomLineChart config={config} data={chartData.monthlyData} />;
+      return <CustomLineChart config={config} data={data} />;
     case "stackedBar":
-      return <StackedBarChart config={config} data={chartData.stackedData} />;
+      return <StackedBarChart config={config} data={data} />;
     case "clusteredBar":
-      return <ClusteredBarChart config={config} data={chartData.monthlyData} />;
+      return <ClusteredBarChart config={config} data={data} />;
     default:
       return null;
   }

@@ -32,6 +32,7 @@ import ChartRenderer from "../components/ChartRenderer";
 import ChartToolbar from "../components/ChartToolbar";
 import PropertiesPanel from "../components/PropertiesPanel";
 import LanguageSwitch from "../components/common/LanguageSwitch";
+import DashboardDataProvider from "./DashboardDataProvider";
 
 const { Content, Sider } = Layout;
 
@@ -39,10 +40,9 @@ const ChartRouterSync: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { type } = useParams();
-  const { chartType, chartConfigs } = useSelector(
+  const { chartType } = useSelector(
     (state: RootState) => state.chart
   ) as ChartState;
-  const config = chartConfigs[chartType]?.format;
 
   // Khi URL đổi, set chartType nếu khác
   React.useEffect(() => {
@@ -59,38 +59,50 @@ const ChartRouterSync: React.FC = () => {
   }, [chartType]);
 
   return (
-    <Layout className="powerbi-dashboard">
-      <Content>
-        <Layout>
+    <DashboardDataProvider>
+      {({ chartType, config, rawData, data }) => (
+        <Layout className="powerbi-dashboard">
           <Content>
-            <Card className="chart-container" bodyStyle={{ padding: 0 }}>
-              <div
-                className="chart-toolbar"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  justifyContent: "space-between",
-                }}
-              >
-                <ChartToolbar />
-                <LanguageSwitch />
-              </div>
+            <Layout>
+              <Content>
+                <Card className="chart-container" bodyStyle={{ padding: 0 }}>
+                  <div
+                    className="chart-toolbar"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <ChartToolbar />
+                    <LanguageSwitch />
+                  </div>
 
-              <DataDisplayPanels
-                chartComponent={
-                  <ChartRenderer chartType={chartType} config={config} />
-                }
-              />
-            </Card>
+                  <DataDisplayPanels
+                    chartComponent={
+                      <ChartRenderer
+                        chartType={chartType as any}
+                        config={config}
+                        data={data}
+                      />
+                    }
+                  />
+                </Card>
+              </Content>
+
+              <Sider width={320} className="properties-panel">
+                <PropertiesPanel
+                  chartType={chartType}
+                  rawData={rawData}
+                  data={data}
+                />
+              </Sider>
+            </Layout>
           </Content>
-
-          <Sider width={320} className="properties-panel">
-            <PropertiesPanel />
-          </Sider>
         </Layout>
-      </Content>
-    </Layout>
+      )}
+    </DashboardDataProvider>
   );
 };
 
