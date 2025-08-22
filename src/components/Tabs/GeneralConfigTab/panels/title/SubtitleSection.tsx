@@ -1,5 +1,6 @@
 import React from "react";
 import { Input, InputNumber, Select, Typography, Switch } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import TextStyleToggles from "../../common/TextStyleToggles";
 import { CustomColorPicker } from "../../../../common/CustomColorPicker";
@@ -19,10 +20,11 @@ export default function SubtitleSection({
   toggle: ToggleFn;
 }) {
   const s = settings.title.subtitle;
+  const { t } = useTranslation("generalTab");
 
   return (
     <ConfigSection
-      title="Subtitle"
+      title={"subtitle.title"}
       isExpanded={expanded.subtitle}
       onToggle={() => toggle("subtitle")}
       hasToggle
@@ -39,7 +41,9 @@ export default function SubtitleSection({
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Text</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("subtitle.text")}
+          </Typography.Text>
           <Input
             size="small"
             value={s.text}
@@ -56,7 +60,9 @@ export default function SubtitleSection({
         </div>
 
         <div className="form-group">
-          <Typography.Text className="form-label">Heading</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("subtitle.heading")}
+          </Typography.Text>
           <Select
             size="small"
             value={s.heading}
@@ -71,15 +77,17 @@ export default function SubtitleSection({
             }
             style={{ width: "100%" }}
           >
-            <Option value="Heading 1">Heading 1</Option>
-            <Option value="Heading 2">Heading 2</Option>
-            <Option value="Heading 3">Heading 3</Option>
-            <Option value="Heading 4">Heading 4</Option>
+            <Option value="Heading 1">{t("subtitle.heading1")}</Option>
+            <Option value="Heading 2">{t("subtitle.heading2")}</Option>
+            <Option value="Heading 3">{t("subtitle.heading3")}</Option>
+            <Option value="Heading 4">{t("subtitle.heading4")}</Option>
           </Select>
         </div>
 
         <div className="form-group">
-          <Typography.Text className="form-label">Font</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("subtitle.font")}
+          </Typography.Text>
           <div className="title-font-group">
             <Select
               size="small"
@@ -95,9 +103,9 @@ export default function SubtitleSection({
               }
               style={{ flex: 1 }}
             >
-              <Option value="DIN">DIN</Option>
-              <Option value="Segoe UI">Segoe UI</Option>
-              <Option value="Arial">Arial</Option>
+              <Option value="DIN">{t("subtitle.fontDIN")}</Option>
+              <Option value="Segoe UI">{t("subtitle.fontSegoeUI")}</Option>
+              <Option value="Arial">{t("subtitle.fontArial")}</Option>
             </Select>
             <InputNumber
               size="small"
@@ -137,7 +145,9 @@ export default function SubtitleSection({
         </div>
 
         <div className="form-group">
-          <Typography.Text className="form-label">Text color</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("subtitle.textColor")}
+          </Typography.Text>
           <div className="title-color-group">
             <CustomColorPicker
               label=""
@@ -159,7 +169,9 @@ export default function SubtitleSection({
 
         <div className="form-group">
           <div className="checkbox-row">
-            <Typography.Text className="form-label">Text wrap</Typography.Text>
+            <Typography.Text className="form-label">
+              {t("subtitle.textWrap")}
+            </Typography.Text>
             <Switch
               size="small"
               checked={s.textWrap}

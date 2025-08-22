@@ -17,12 +17,12 @@ export default function BackgroundSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("generalTab");
   const bg = settings.effects.background;
 
   return (
     <ConfigSection
-      title={t("generalTab.background", "Background")}
+      title={"background"}
       isExpanded={expanded.background}
       onToggle={() => toggle("background")}
       hasToggle
@@ -40,7 +40,7 @@ export default function BackgroundSection({
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("generalTab.color", "Color")}
+            {t("color", "Color")}
           </Typography.Text>
           <CustomColorPicker
             label=""
@@ -60,7 +60,7 @@ export default function BackgroundSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("generalTab.transparency", "Transparency")}
+            {t("transparency", "Transparency")}
           </Typography.Text>
           <NumberSlider
             value={bg.transparency}

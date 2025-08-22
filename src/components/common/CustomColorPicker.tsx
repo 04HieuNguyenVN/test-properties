@@ -24,7 +24,7 @@ export const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
   showCode = true,
   defaultValue = "#1677FF",
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   // Xử lý khi đổi màu
   const handleColorChange = (color: Color) => {
     if (onChange) {

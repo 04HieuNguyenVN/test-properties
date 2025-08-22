@@ -1,19 +1,22 @@
 {
+  "color": {
+    "label": "Màu sắc"
+  },
+  "enabled": "Bật",
+  "font": "Phông chữ",
+  "fontSize": "Cỡ chữ",
+  "formatting": "Định dạng",
+  "heading": "Tiêu đề",
   "padding": {
     "label": "Khoảng cách (Padding)",
+    "color": "Màu sắc",
     "top": "Trên",
     "left": "Trái",
     "right": "Phải",
     "bottom": "Dưới"
   },
-  "color": "Màu sắc",
-  "transparency": "Độ trong suốt",
-  "font": "Phông chữ",
-  "fontSize": "Cỡ chữ",
-  "formatting": "Định dạng",
   "resetToDefault": "Khôi phục mặc định",
-  "enabled": "Bật",
+  "style": "Kiểu",
   "text": "Nội dung",
-  "heading": "Tiêu đề",
-  "style": "Kiểu"
+  "transparency": "Độ trong suốt"
 }

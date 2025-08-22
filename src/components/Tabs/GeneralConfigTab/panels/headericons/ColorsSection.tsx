@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import NumberSlider from "../../common/NumberSlider";
 import { CustomColorPicker } from "../../../../common/CustomColorPicker";
@@ -16,17 +17,20 @@ export default function ColorsSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation("generalTab");
   const c = settings.headerIcons.colors;
 
   return (
     <ConfigSection
-      title="Colors"
+      title={"headerIcons.colors"}
       isExpanded={expanded.headerIconsColors}
       onToggle={() => toggle("headerIconsColors")}
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Background</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("headerIcons.background", "Background")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
             value={c.background}
@@ -44,7 +48,9 @@ export default function ColorsSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Border</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("headerIcons.border", "Border")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
             value={c.border}
@@ -62,7 +68,9 @@ export default function ColorsSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Icon</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("headerIcons.icon", "Icon")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
             value={c.icon}
@@ -80,7 +88,9 @@ export default function ColorsSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Transparency</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("headerIcons.transparency", "Transparency")}
+          </Typography.Text>
           <NumberSlider
             value={c.transparency}
             onChange={(v) =>

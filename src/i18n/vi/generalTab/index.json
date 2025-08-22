@@ -4,16 +4,34 @@
     "title": "Kích thước",
     "height": "Cao",
     "width": "Rộng",
-    "lockAspectRatio": "Khoá tỉ lệ"
+    "lockAspectRatio": "Khoá tỉ lệ",
+    "auto": "Tự động",
+    "minWidth": "Chiều rộng tối thiểu",
+    "minHeight": "Chiều cao tối thiểu",
+    "maxWidth": "Chiều rộng tối đa",
+    "maxHeight": "Chiều cao tối đa"
   },
-  "position": { "title": "Vị trí", "horizontal": "Ngang", "vertical": "Dọc" },
-  "padding": { "title": "Khoảng cách" },
+  "position": {
+    "title": "Vị trí",
+    "horizontal": "Ngang",
+    "vertical": "Dọc",
+    "zIndex": "Thứ tự lớp (z-index)",
+    "alignment": "Căn chỉnh"
+  },
+  "padding": {
+    "title": "Khoảng cách",
+    "top": "Trên",
+    "bottom": "Dưới",
+    "left": "Trái",
+    "right": "Phải"
+  },
   "advanced": {
     "title": "Tùy chọn nâng cao",
     "responsive": "Tự thích ứng",
-    "maintainLayerOrder": "Giữ thứ tự lớp"
+    "maintainLayerOrder": "Giữ thứ tự lớp",
+    "customCSS": "CSS tuỳ chỉnh",
+    "customClass": "Lớp tuỳ chỉnh"
   },
-
   "title": {
     "title": "Tiêu đề",
     "subtitle": "Phụ đề",
@@ -21,6 +39,7 @@
     "spacing": "Giãn cách",
     "textWrap": "Xuống dòng",
     "horizontalAlignment": "Căn ngang",
+    "verticalAlignment": "Căn dọc",
     "backgroundColor": "Màu nền",
     "labelColor": "Màu nhãn",
     "valueColor": "Màu giá trị",
@@ -29,9 +48,17 @@
     "width": "Độ dày",
     "ignorePadding": "Bỏ qua padding",
     "customizeSpacing": "Tùy chỉnh giãn cách",
-    "spaceBetweenLabelAndValue": "Khoảng cách nhãn–giá trị"
+    "spaceBetweenLabelAndValue": "Khoảng cách nhãn–giá trị",
+    "font": "Phông chữ",
+    "fontSize": "Cỡ chữ",
+    "bold": "Đậm",
+    "italic": "Nghiêng",
+    "underline": "Gạch chân",
+    "textColor": "Màu chữ",
+    "heading": "Tiêu đề",
+    "show": "Hiển thị tiêu đề",
+    "showSubtitle": "Hiển thị phụ đề"
   },
-
   "effects": {
     "title": "Hiệu ứng",
     "background": "Nền",
@@ -41,18 +68,29 @@
     "position": "Vị trí",
     "outside": "Bên ngoài",
     "inside": "Bên trong",
-    "positions": ["Phải dưới", "Trái dưới", "Phải trên", "Trái trên"]
+    "positions": ["Phải dưới", "Trái dưới", "Phải trên", "Trái trên"],
+    "color": "Màu hiệu ứng",
+    "transparency": "Độ trong suốt",
+    "roundedCorners": "Bo góc",
+    "width": "Độ dày viền",
+    "enabled": "Bật hiệu ứng"
   },
-
   "dataFormat": {
     "title": "Định dạng dữ liệu",
     "applySettingsTo": "Áp dụng cho",
-    "format": "Định dạng"
+    "format": "Định dạng",
+    "decimalPlaces": "Số thập phân",
+    "thousandSeparator": "Dấu phân cách hàng nghìn",
+    "prefix": "Tiền tố",
+    "suffix": "Hậu tố"
   },
-
   "headerIcons": {
     "title": "Biểu tượng tiêu đề",
     "colors": "Màu sắc",
-    "icons": "Biểu tượng"
+    "icons": "Biểu tượng",
+    "show": "Hiển thị biểu tượng",
+    "background": "Nền biểu tượng",
+    "border": "Viền biểu tượng",
+    "icon": "Màu biểu tượng"
   }
 }

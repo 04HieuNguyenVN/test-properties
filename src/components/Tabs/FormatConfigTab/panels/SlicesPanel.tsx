@@ -6,12 +6,12 @@ const SlicesPanel: React.FC<{
   cfg: any;
   onUpdate: (section: string, key: string, value: any) => void;
 }> = ({ cfg, onUpdate }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("formatTab");
   return (
     <div className="section-content">
       <div className="form-group">
         <Typography.Text className="form-label">
-          {t("formatTab.slices.show", "Show slices")}
+          {t("slices.showSlices", "Show slices")}
         </Typography.Text>
         <Switch
           size="small"

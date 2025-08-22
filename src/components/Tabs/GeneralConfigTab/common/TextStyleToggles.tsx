@@ -16,7 +16,7 @@ export default function TextStyleToggles({
     next: Partial<{ bold: boolean; italic: boolean; underline: boolean }>
   ) => void;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("generalTab");
   return (
     <Space size="small" className="text-format-buttons">
       <Button
@@ -24,24 +24,24 @@ export default function TextStyleToggles({
         type={bold ? "primary" : "default"}
         icon={<Bold size={12} />}
         onClick={() => onChange({ bold: !bold })}
-        title={t("generalTab.bold", "Bold")}
-        aria-label={t("generalTab.bold", "Bold")}
+        title={t("bold", "Bold")}
+        aria-label={t("bold", "Bold")}
       />
       <Button
         size="small"
         type={italic ? "primary" : "default"}
         icon={<Italic size={12} />}
         onClick={() => onChange({ italic: !italic })}
-        title={t("generalTab.italic", "Italic")}
-        aria-label={t("generalTab.italic", "Italic")}
+        title={t("italic", "Italic")}
+        aria-label={t("italic", "Italic")}
       />
       <Button
         size="small"
         type={underline ? "primary" : "default"}
         icon={<Underline size={12} />}
         onClick={() => onChange({ underline: !underline })}
-        title={t("generalTab.underline", "Underline")}
-        aria-label={t("generalTab.underline", "Underline")}
+        title={t("underline", "Underline")}
+        aria-label={t("underline", "Underline")}
       />
     </Space>
   );

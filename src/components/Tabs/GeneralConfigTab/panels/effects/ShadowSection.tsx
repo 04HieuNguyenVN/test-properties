@@ -1,5 +1,6 @@
 import React from "react";
 import { Select, Typography, Switch } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import { CustomColorPicker } from "../../../../common/CustomColorPicker";
 import type { GeneralSettings, ExpandedState, ToggleFn } from "../../types";
@@ -17,11 +18,12 @@ export default function ShadowSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation("generalTab");
   const sh = settings.effects.shadow;
 
   return (
     <ConfigSection
-      title="Shadow"
+      title={"effects.title"}
       isExpanded={expanded.shadow}
       onToggle={() => toggle("shadow")}
       hasToggle
@@ -38,7 +40,9 @@ export default function ShadowSection({
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Color</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("effects.color", "Color")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
             value={sh.color}
@@ -57,7 +61,9 @@ export default function ShadowSection({
         </div>
 
         <div className="form-group">
-          <Typography.Text className="form-label">Offset</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("effects.offset", "Offset")}
+          </Typography.Text>
           <Select
             size="small"
             value={sh.offset}
@@ -72,13 +78,15 @@ export default function ShadowSection({
             }
             style={{ width: "100%" }}
           >
-            <Option value="Outside">Outside</Option>
-            <Option value="Inside">Inside</Option>
+            <Option value="Outside">{t("effects.outside", "Outside")}</Option>
+            <Option value="Inside">{t("effects.inside", "Inside")}</Option>
           </Select>
         </div>
 
         <div className="form-group">
-          <Typography.Text className="form-label">Position</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("effects.position", "Position")}
+          </Typography.Text>
           <Select
             size="small"
             value={sh.position}
@@ -93,10 +101,18 @@ export default function ShadowSection({
             }
             style={{ width: "100%" }}
           >
-            <Option value="Bottom right">Bottom right</Option>
-            <Option value="Bottom left">Bottom left</Option>
-            <Option value="Top right">Top right</Option>
-            <Option value="Top left">Top left</Option>
+            <Option value="Bottom right">
+              {t("effects.positions.0", "Bottom right")}
+            </Option>
+            <Option value="Bottom left">
+              {t("effects.positions.1", "Bottom left")}
+            </Option>
+            <Option value="Top right">
+              {t("effects.positions.2", "Top right")}
+            </Option>
+            <Option value="Top left">
+              {t("effects.positions.3", "Top left")}
+            </Option>
           </Select>
         </div>
       </div>

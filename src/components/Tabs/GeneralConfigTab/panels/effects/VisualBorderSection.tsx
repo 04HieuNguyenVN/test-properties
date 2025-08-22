@@ -1,5 +1,6 @@
 import React from "react";
 import { InputNumber, Typography, Switch } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import { CustomColorPicker } from "../../../../common/CustomColorPicker";
 import type { GeneralSettings, ExpandedState, ToggleFn } from "../../types";
@@ -15,11 +16,12 @@ export default function VisualBorderSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
+  const { t } = useTranslation("generalTab");
   const vb = settings.effects.visualBorder;
 
   return (
     <ConfigSection
-      title="Visual border"
+      title={"effects.visualBorder"}
       isExpanded={expanded.visualBorder}
       onToggle={() => toggle("visualBorder")}
       hasToggle
@@ -36,7 +38,9 @@ export default function VisualBorderSection({
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Color</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("effects.color", "Color")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
             value={vb.color}
@@ -55,7 +59,7 @@ export default function VisualBorderSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            Rounded corners
+            {t("effects.roundedCorners", "Rounded corners")}
           </Typography.Text>
           <InputNumber
             size="small"
@@ -77,7 +81,9 @@ export default function VisualBorderSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Width</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("effects.width", "Width")}
+          </Typography.Text>
           <InputNumber
             size="small"
             value={vb.width}

@@ -1,43 +1,88 @@
 {
-  "legend": {
-    "title": "Legend",
-    "options": "Options",
-    "position": "Position",
-    "text": "Text",
-    "titleText": "Title text",
-    "positions": ["Top", "Bottom", "Left", "Right", "Center right"]
-  },
-  "gridlines": {
-    "title": "Gridlines",
-    "strokeWidth": "Stroke Width"
-  },
-  "slices": {
-    "title": "Slices",
-    "showSlices": "Show slices"
-  },
-  "rotation": {
-    "title": "Rotation",
-    "angle": "Angle"
-  },
   "axis": {
     "x": "X-axis",
     "y": "Y-axis",
     "values": "Values",
     "title": "Title",
+    "titleText": "Title text",
     "layout": "Layout",
     "range": "Range",
-    "min": "Minimum",
-    "max": "Maximum",
-    "logScale": "Logarithmic scale",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "logarithmicScale": "Logarithmic scale",
     "invertRange": "Invert range",
     "displayUnits": "Display units",
+    "displayUnitsAuto": "Auto",
+    "displayUnitsNone": "None",
+    "displayUnitsThousands": "Thousands",
+    "displayUnitsMillions": "Millions",
+    "displayUnitsBillions": "Billions",
     "valueDecimalPlaces": "Value decimal places",
+    "valueDecimalPlacesAuto": "Auto",
     "units": "Units",
     "precision": "Precision",
     "concatenateLabels": "Concatenate labels",
     "maxHeight": "Maximum height",
     "minCategoryWidth": "Minimum category width",
-    "titleOnly": "Show title only",
-    "titleAndUnits": "Show title and units"
-  }
+    "showTitleOnly": "Show title only",
+    "showTitleAndUnits": "Show title and units",
+    "switchAxisPosition": "Switch axis position",
+    "color": "Axis color",
+    "lineStyle": "Line style",
+    "thickness": "Thickness",
+    "showTicks": "Show ticks",
+    "tickColor": "Tick color",
+    "tickSize": "Tick size",
+    "tickInterval": "Tick interval",
+    "labelRotation": "Label rotation",
+    "labelColor": "Label color",
+    "labelFont": "Label font",
+    "labelFontSize": "Label font size"
+  },
+  "legend": {
+    "title": "Legend",
+    "options": "Options",
+    "position": "Position",
+    "positionTop": "Top",
+    "positionBottom": "Bottom",
+    "positionLeft": "Left",
+    "positionRight": "Right",
+    "positionCenterRight": "Center right",
+    "text": "Text",
+    "titleText": "Title text",
+    "show": "Show legend",
+    "color": "Color",
+    "font": "Font",
+    "fontSize": "Font size",
+    "iconSize": "Icon size",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "defaultTitle": "Legend"
+  },
+  "gridlines": {
+    "title": "Gridlines",
+    "show": "Show gridlines",
+    "color": "Gridline color",
+    "dashType": "Dash type",
+    "strokeWidth": "Stroke width",
+    "interval": "Gridline interval"
+  },
+  "slices": {
+    "title": "Slices",
+    "showSlices": "Show slices",
+    "explode": "Explode slices",
+    "explodeDistance": "Explode distance",
+    "label": "Slice label",
+    "labelPosition": "Label position",
+    "labelColor": "Label color",
+    "labelFont": "Label font",
+    "labelFontSize": "Label font size"
+  },
+  "rotation": {
+    "title": "Rotation",
+    "angle": "Angle",
+    "autoRotate": "Auto rotate"
+  },
+  "reset": "Reset to default"
 }

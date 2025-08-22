@@ -1,6 +1,29 @@
 {
-  "dataSource": "Data source",
-  "table": "Table",
+  "dataSource": {
+    "label": "Data source:",
+    "tooltip": "Select the data source for the chart",
+    "selectTooltip": "Choose the data source (API, file, etc.)",
+    "selectTitle": "Select a field for this group",
+    "selectPlaceholder": "Select data source",
+    "options": {
+      "API": "API",
+      "file": "File",
+      "other": "Other"
+    }
+  },
+  "table": {
+    "label": "Table:",
+    "tooltip": "The data table currently used for the chart",
+    "selectTooltip": "The data table corresponding to the selected chart type",
+    "selectTitle": "Select an action for the field in the group",
+    "selectPlaceholder": "Select table",
+    "options": {
+      "monthlyData": "Monthly Data",
+      "stackedData": "Stacked Data",
+      "categories": "Categories",
+      "data": "Data"
+    }
+  },
   "selectField": "Select field",
   "selectAction": "Select action",
   "addField": "Add field",

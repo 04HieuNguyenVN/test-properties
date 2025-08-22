@@ -20,7 +20,7 @@ export default function SpacingSection({
 
   return (
     <ConfigSection
-      title={t("spacing")}
+      title={"spacing.title"}
       isExpanded={expanded.spacing}
       onToggle={() => toggle("spacing")}
     >
@@ -28,7 +28,7 @@ export default function SpacingSection({
         <div className="form-group">
           <div className="checkbox-row">
             <Typography.Text className="form-label">
-              {t("customizeSpacing")}
+              {t("spacing.customizeSpacing")}
             </Typography.Text>
             <Switch
               size="small"
@@ -47,7 +47,7 @@ export default function SpacingSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("spaceBetweenLabelAndValue")}
+            {t("spacing.spaceBetweenLabelAndValue")}
           </Typography.Text>
           <InputNumber
             size="small"

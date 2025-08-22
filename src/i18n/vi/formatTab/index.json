@@ -1,43 +1,80 @@
 {
-  "legend": {
-    "title": "Chú giải",
-    "options": "Tùy chọn",
-    "position": "Vị trí",
-    "text": "Văn bản",
-    "titleText": "Tiêu đề",
-    "positions": ["Trên", "Dưới", "Trái", "Phải", "Giữa bên phải"]
-  },
-  "gridlines": {
-    "title": "Đường lưới",
-    "strokeWidth": "Độ dày nét"
-  },
-  "slices": {
-    "title": "Lát cắt",
-    "showSlices": "Hiển thị lát cắt"
-  },
-  "rotation": {
-    "title": "Xoay",
-    "angle": "Góc"
-  },
   "axis": {
     "x": "Trục X",
     "y": "Trục Y",
     "values": "Giá trị",
     "title": "Tiêu đề",
+    "titleText": "Tiêu đề trục",
     "layout": "Bố cục",
     "range": "Khoảng",
-    "min": "Tối thiểu",
-    "max": "Tối đa",
-    "logScale": "Thang logarit",
+    "minimum": "Tối thiểu",
+    "maximum": "Tối đa",
+    "logarithmicScale": "Thang logarit",
     "invertRange": "Đảo chiều",
     "displayUnits": "Đơn vị hiển thị",
+    "displayUnitsAuto": "Tự động",
+    "displayUnitsNone": "Không",
+    "displayUnitsThousands": "Nghìn",
+    "displayUnitsMillions": "Triệu",
+    "displayUnitsBillions": "Tỷ",
     "valueDecimalPlaces": "Số thập phân",
+    "valueDecimalPlacesAuto": "Tự động",
     "units": "Đơn vị",
     "precision": "Độ chính xác",
     "concatenateLabels": "Ghép nhãn",
     "maxHeight": "Chiều cao tối đa",
     "minCategoryWidth": "Độ rộng danh mục tối thiểu",
-    "titleOnly": "Chỉ tiêu đề",
-    "titleAndUnits": "Tiêu đề và đơn vị"
+    "showTitleOnly": "Chỉ tiêu đề",
+    "showTitleAndUnits": "Tiêu đề và đơn vị",
+    "switchAxisPosition": "Đổi vị trí trục",
+    "show": "Hiển thị trục",
+    "color": "Màu trục",
+    "lineStyle": "Kiểu đường",
+    "thickness": "Độ dày",
+    "showTicks": "Hiển thị vạch chia",
+    "tickColor": "Màu vạch chia",
+    "tickSize": "Kích thước vạch chia",
+    "tickInterval": "Khoảng cách vạch chia",
+    "labelRotation": "Xoay nhãn",
+    "labelColor": "Màu nhãn",
+    "labelFont": "Phông chữ nhãn",
+    "labelFontSize": "Cỡ chữ nhãn"
+  },
+  "legend": {
+    "title": "Chú giải",
+    "options": "Tùy chọn",
+    "position": "Vị trí",
+    "positions": ["Trên", "Dưới", "Trái", "Phải", "Giữa bên phải"],
+    "text": "Văn bản",
+    "titleText": "Tiêu đề",
+    "show": "Hiển thị chú giải",
+    "color": "Màu chú giải",
+    "font": "Phông chữ chú giải",
+    "fontSize": "Cỡ chữ chú giải",
+    "iconSize": "Cỡ biểu tượng"
+  },
+  "gridlines": {
+    "title": "Đường lưới",
+    "show": "Hiển thị đường lưới",
+    "color": "Màu đường lưới",
+    "dashType": "Kiểu gạch",
+    "strokeWidth": "Độ dày nét",
+    "interval": "Khoảng cách đường lưới"
+  },
+  "slices": {
+    "title": "Lát cắt",
+    "showSlices": "Hiển thị lát cắt",
+    "explode": "Tách lát cắt",
+    "explodeDistance": "Khoảng cách tách",
+    "label": "Nhãn lát cắt",
+    "labelPosition": "Vị trí nhãn",
+    "labelColor": "Màu nhãn",
+    "labelFont": "Phông chữ nhãn",
+    "labelFontSize": "Cỡ chữ nhãn"
+  },
+  "rotation": {
+    "title": "Xoay",
+    "angle": "Góc",
+    "autoRotate": "Tự động xoay"
   }
 }

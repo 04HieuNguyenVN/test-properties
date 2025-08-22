@@ -23,6 +23,8 @@ const ConfigSection: React.FC<{
   onToggleChange,
 }) => {
   const { t } = useTranslation();
+  // Nếu title là key dạng a.b.c thì dịch, còn nếu là text thì giữ nguyên
+  const isI18nKey = typeof title === "string" && title.includes(".");
   return (
     <Collapse
       ghost
@@ -35,7 +37,7 @@ const ConfigSection: React.FC<{
         header={
           <div className="ant-collapse-header-text">
             <Typography.Text strong style={{ fontSize: 13 }}>
-              {t(title, title)}
+              {isI18nKey ? t(title) : title}
             </Typography.Text>
             {hasToggle && (
               <Switch

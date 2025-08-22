@@ -1,4 +1,10 @@
 {
+  "color": "Color",
+  "enabled": "Enabled",
+  "font": "Font",
+  "fontSize": "Font size",
+  "formatting": "Formatting",
+  "heading": "Heading",
   "padding": {
     "label": "Padding",
     "top": "Top",
@@ -6,14 +12,8 @@
     "right": "Right",
     "bottom": "Bottom"
   },
-  "color": "Color",
-  "transparency": "Transparency",
-  "font": "Font",
-  "fontSize": "Font size",
-  "formatting": "Formatting",
   "resetToDefault": "Reset to default",
-  "enabled": "Enabled",
+  "style": "Style",
   "text": "Text",
-  "heading": "Heading",
-  "style": "Style"
+  "transparency": "Transparency"
 }

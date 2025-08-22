@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Typography,
   Select,
@@ -42,6 +43,7 @@ const AxisPanel: React.FC<Props> = ({
   onUpdate,
   isBar,
 }) => {
+  const { t } = useTranslation("formatTab");
   const sectionKey = axis === "x" ? "xAxis" : "yAxis";
   const isLineOrColumn = [
     "stackedColumn",
@@ -57,31 +59,31 @@ const AxisPanel: React.FC<Props> = ({
         {/* Range (only for Y in column/line) */}
         {axis === "y" && (
           <ConfigSection
-            title="Range"
+            title={t("axis.range", "Range")}
             isExpanded={expanded.yAxisRange || false}
             onToggle={() => onToggle("yAxisRange")}
           >
             <div className="section-content">
               <div className="form-group">
                 <Typography.Text className="form-label">
-                  Minimum
+                  {t("axis.minimum", "Minimum")}
                 </Typography.Text>
                 <div className="range-input-group">
                   <Input
                     size="small"
-                    value={cfg.rangeMin || "Auto"}
+                    value={cfg.rangeMin || t("axis.displayUnitsAuto", "Auto")}
                     style={{ width: 100 }}
                   />
                 </div>
               </div>
               <div className="form-group">
                 <Typography.Text className="form-label">
-                  Maximum
+                  {t("axis.maximum", "Maximum")}
                 </Typography.Text>
                 <div className="range-input-group">
                   <Input
                     size="small"
-                    value={cfg.rangeMax || "Auto"}
+                    value={cfg.rangeMax || t("axis.displayUnitsAuto", "Auto")}
                     style={{ width: 100 }}
                   />
                 </div>
@@ -89,7 +91,7 @@ const AxisPanel: React.FC<Props> = ({
               <div className="form-group">
                 <div className="checkbox-row">
                   <Typography.Text className="checkbox-label">
-                    Logarithmic scale
+                    {t("axis.logarithmicScale", "Logarithmic scale")}
                   </Typography.Text>
                   <Switch
                     size="small"
@@ -100,7 +102,7 @@ const AxisPanel: React.FC<Props> = ({
               <div className="form-group">
                 <div className="checkbox-row">
                   <Typography.Text className="checkbox-label">
-                    Invert range
+                    {t("axis.invertRange", "Invert range")}
                   </Typography.Text>
                   <Switch size="small" checked={cfg.invertRange || false} />
                 </div>
@@ -111,7 +113,7 @@ const AxisPanel: React.FC<Props> = ({
 
         {/* Values */}
         <ConfigSection
-          title="Values"
+          title={t("axis.values", "Values")}
           isExpanded={
             (axis === "x" ? expanded.xAxisValues : expanded.yAxisValues) ||
             false
@@ -124,7 +126,9 @@ const AxisPanel: React.FC<Props> = ({
         >
           <div className="section-content">
             <div className="form-group">
-              <Typography.Text className="form-label">Font</Typography.Text>
+              <Typography.Text className="form-label">
+                {t("axis.font", "Font")}
+              </Typography.Text>
               <div className="font-controls">
                 <Select
                   size="small"
@@ -146,22 +150,34 @@ const AxisPanel: React.FC<Props> = ({
             </div>
             <div className="form-group">
               <div className="text-format-buttons">
-                <Button size="small" icon={<Bold size={12} />} />
-                <Button size="small" icon={<Italic size={12} />} />
-                <Button size="small" icon={<Underline size={12} />} />
+                <Button
+                  size="small"
+                  icon={<Bold size={12} />}
+                  title={t("axis.bold", "Bold")}
+                />
+                <Button
+                  size="small"
+                  icon={<Italic size={12} />}
+                  title={t("axis.italic", "Italic")}
+                />
+                <Button
+                  size="small"
+                  icon={<Underline size={12} />}
+                  title={t("axis.underline", "Underline")}
+                />
               </div>
             </div>
 
             {axis === "x" && (
               <>
                 <CustomColorPicker
-                  label="Color"
+                  label={t("axis.color", "Color")}
                   value={cfg.valuesColor}
                   onChange={(c) => onUpdate("xAxis", "valuesColor", c)}
                 />
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Maximum height
+                    {t("axis.maxHeight", "Maximum height")}
                   </Typography.Text>
                   <div className="transparency-control">
                     <InputNumber
@@ -186,7 +202,7 @@ const AxisPanel: React.FC<Props> = ({
                 <div className="form-group">
                   <div className="checkbox-row">
                     <Typography.Text className="checkbox-label">
-                      Concatenate labels
+                      {t("axis.concatenateLabels", "Concatenate labels")}
                     </Typography.Text>
                     <Switch
                       size="small"
@@ -201,7 +217,7 @@ const AxisPanel: React.FC<Props> = ({
               <>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Color
+                    {t("axis.color", "Color")}
                   </Typography.Text>
                   <div className="color-picker-row">
                     <CustomColorPicker
@@ -215,30 +231,42 @@ const AxisPanel: React.FC<Props> = ({
                 </div>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Display units
+                    {t("axis.displayUnits", "Display units")}
                   </Typography.Text>
                   <Select
                     size="small"
                     value={cfg.displayUnits || "Auto"}
                     style={{ width: "100%" }}
                   >
-                    <Select.Option value="Auto">Auto</Select.Option>
-                    <Select.Option value="None">None</Select.Option>
-                    <Select.Option value="Thousands">Thousands</Select.Option>
-                    <Select.Option value="Millions">Millions</Select.Option>
-                    <Select.Option value="Billions">Billions</Select.Option>
+                    <Select.Option value="Auto">
+                      {t("axis.displayUnitsAuto", "Auto")}
+                    </Select.Option>
+                    <Select.Option value="None">
+                      {t("axis.displayUnitsNone", "None")}
+                    </Select.Option>
+                    <Select.Option value="Thousands">
+                      {t("axis.displayUnitsThousands", "Thousands")}
+                    </Select.Option>
+                    <Select.Option value="Millions">
+                      {t("axis.displayUnitsMillions", "Millions")}
+                    </Select.Option>
+                    <Select.Option value="Billions">
+                      {t("axis.displayUnitsBillions", "Billions")}
+                    </Select.Option>
                   </Select>
                 </div>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Value decimal places
+                    {t("axis.valueDecimalPlaces", "Value decimal places")}
                   </Typography.Text>
                   <Select
                     size="small"
                     value={cfg.valueDecimalPlaces || "Auto"}
                     style={{ width: "100%" }}
                   >
-                    <Select.Option value="Auto">Auto</Select.Option>
+                    <Select.Option value="Auto">
+                      {t("axis.valueDecimalPlacesAuto", "Auto")}
+                    </Select.Option>
                     <Select.Option value="0">0</Select.Option>
                     <Select.Option value="1">1</Select.Option>
                     <Select.Option value="2">2</Select.Option>
@@ -248,7 +276,7 @@ const AxisPanel: React.FC<Props> = ({
                 <div className="form-group">
                   <div className="checkbox-row">
                     <Typography.Text className="checkbox-label">
-                      Switch axis position
+                      {t("axis.switchAxisPosition", "Switch axis position")}
                     </Typography.Text>
                     <Switch
                       size="small"
@@ -263,7 +291,7 @@ const AxisPanel: React.FC<Props> = ({
 
         {/* Title */}
         <ConfigSection
-          title="Title"
+          title={t("axis.title", "Title")}
           isExpanded={
             (axis === "x" ? expanded.xAxisTitle : expanded.yAxisTitle) || false
           }
@@ -274,31 +302,37 @@ const AxisPanel: React.FC<Props> = ({
           <div className="section-content">
             <div className="form-group">
               <Typography.Text className="form-label">
-                Title text
+                {t("axis.titleText", "Title text")}
               </Typography.Text>
               <Input
                 size="small"
-                value={cfg.titleText || "Auto"}
+                value={cfg.titleText || t("axis.displayUnitsAuto", "Auto")}
                 style={{ width: "100%" }}
               />
             </div>
             <div className="form-group">
-              <Typography.Text className="form-label">Style</Typography.Text>
+              <Typography.Text className="form-label">
+                {t("axis.style", "Style")}
+              </Typography.Text>
               <Select
                 size="small"
-                value={cfg.titleStyle || "Show title only"}
+                value={
+                  cfg.titleStyle || t("axis.showTitleOnly", "Show title only")
+                }
                 style={{ width: "100%" }}
               >
                 <Select.Option value="Show title only">
-                  Show title only
+                  {t("axis.showTitleOnly", "Show title only")}
                 </Select.Option>
                 <Select.Option value="Show title and units">
-                  Show title and units
+                  {t("axis.showTitleAndUnits", "Show title and units")}
                 </Select.Option>
               </Select>
             </div>
             <div className="form-group">
-              <Typography.Text className="form-label">Font</Typography.Text>
+              <Typography.Text className="form-label">
+                {t("axis.font", "Font")}
+              </Typography.Text>
               <div className="font-controls">
                 <Select
                   size="small"
@@ -320,20 +354,34 @@ const AxisPanel: React.FC<Props> = ({
             </div>
             <div className="form-group">
               <div className="text-format-buttons">
-                <Button size="small" icon={<Bold size={12} />} />
-                <Button size="small" icon={<Italic size={12} />} />
-                <Button size="small" icon={<Underline size={12} />} />
+                <Button
+                  size="small"
+                  icon={<Bold size={12} />}
+                  title={t("axis.bold", "Bold")}
+                />
+                <Button
+                  size="small"
+                  icon={<Italic size={12} />}
+                  title={t("axis.italic", "Italic")}
+                />
+                <Button
+                  size="small"
+                  icon={<Underline size={12} />}
+                  title={t("axis.underline", "Underline")}
+                />
               </div>
             </div>
             {axis === "x" ? (
               <CustomColorPicker
-                label="Color"
+                label={t("axis.color", "Color")}
                 value={cfg.titleColor}
                 onChange={(c) => onUpdate("xAxis", "titleColor", c)}
               />
             ) : (
               <div className="form-group">
-                <Typography.Text className="form-label">Color</Typography.Text>
+                <Typography.Text className="form-label">
+                  {t("axis.color", "Color")}
+                </Typography.Text>
                 <div className="color-picker-row">
                   <CustomColorPicker
                     label=""
@@ -351,14 +399,14 @@ const AxisPanel: React.FC<Props> = ({
         {/* Layout (only x in column/line) */}
         {axis === "x" && (
           <ConfigSection
-            title="Layout"
+            title={t("axis.layout", "Layout")}
             isExpanded={expanded.xAxisLayout || false}
             onToggle={() => onToggle("xAxisLayout")}
           >
             <div className="section-content">
               <div className="form-group">
                 <Typography.Text className="form-label">
-                  Minimum category width
+                  {t("axis.minCategoryWidth", "Minimum category width")}
                 </Typography.Text>
                 <div className="transparency-control">
                   <InputNumber
@@ -393,31 +441,31 @@ const AxisPanel: React.FC<Props> = ({
       <div className="properties-container">
         {axis === "x" && (
           <ConfigSection
-            title="Range"
+            title={t("axis.range", "Range")}
             isExpanded={expanded.xAxisRange || false}
             onToggle={() => onToggle("xAxisRange")}
           >
             <div className="section-content">
               <div className="form-group">
                 <Typography.Text className="form-label">
-                  Minimum
+                  {t("axis.minimum", "Minimum")}
                 </Typography.Text>
                 <div className="range-input-group">
                   <Input
                     size="small"
-                    value={cfg.rangeMin || "Auto"}
+                    value={cfg.rangeMin || t("axis.displayUnitsAuto", "Auto")}
                     style={{ width: 100 }}
                   />
                 </div>
               </div>
               <div className="form-group">
                 <Typography.Text className="form-label">
-                  Maximum
+                  {t("axis.maximum", "Maximum")}
                 </Typography.Text>
                 <div className="range-input-group">
                   <Input
                     size="small"
-                    value={cfg.rangeMax || "Auto"}
+                    value={cfg.rangeMax || t("axis.displayUnitsAuto", "Auto")}
                     style={{ width: 100 }}
                   />
                 </div>
@@ -425,7 +473,7 @@ const AxisPanel: React.FC<Props> = ({
               <div className="form-group">
                 <div className="checkbox-row">
                   <Typography.Text className="checkbox-label">
-                    Logarithmic scale
+                    {t("axis.logarithmicScale", "Logarithmic scale")}
                   </Typography.Text>
                   <Switch
                     size="small"
@@ -438,7 +486,7 @@ const AxisPanel: React.FC<Props> = ({
         )}
 
         <ConfigSection
-          title="Values"
+          title={t("axis.values", "Values")}
           isExpanded={
             (axis === "x" ? expanded.xAxisValues : expanded.yAxisValues) ||
             false
@@ -451,7 +499,9 @@ const AxisPanel: React.FC<Props> = ({
         >
           <div className="section-content">
             <div className="form-group">
-              <Typography.Text className="form-label">Font</Typography.Text>
+              <Typography.Text className="form-label">
+                {t("axis.font", "Font")}
+              </Typography.Text>
               <div className="font-controls">
                 <Select
                   size="small"
@@ -473,9 +523,21 @@ const AxisPanel: React.FC<Props> = ({
             </div>
             <div className="form-group">
               <div className="text-format-buttons">
-                <Button size="small" icon={<Bold size={12} />} />
-                <Button size="small" icon={<Italic size={12} />} />
-                <Button size="small" icon={<Underline size={12} />} />
+                <Button
+                  size="small"
+                  icon={<Bold size={12} />}
+                  title={t("axis.bold", "Bold")}
+                />
+                <Button
+                  size="small"
+                  icon={<Italic size={12} />}
+                  title={t("axis.italic", "Italic")}
+                />
+                <Button
+                  size="small"
+                  icon={<Underline size={12} />}
+                  title={t("axis.underline", "Underline")}
+                />
               </div>
             </div>
 
@@ -483,7 +545,7 @@ const AxisPanel: React.FC<Props> = ({
               <>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Color
+                    {t("axis.color", "Color")}
                   </Typography.Text>
                   <div className="color-picker-row">
                     <CustomColorPicker
@@ -497,26 +559,47 @@ const AxisPanel: React.FC<Props> = ({
                 </div>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Units
+                    {t("axis.units", "Units")}
                   </Typography.Text>
                   <Select
                     size="small"
                     value={cfg.valuesUnits || "Auto"}
                     style={{ width: "100%" }}
                     options={[
-                      { label: "Auto", value: "Auto" },
-                      { label: "None", value: "None" },
-                      { label: "Hundreds", value: "Hundreds" },
-                      { label: "Thousands", value: "Thousands" },
-                      { label: "Millions", value: "Millions" },
-                      { label: "Billions", value: "Billions" },
-                      { label: "Trillions", value: "Trillions" },
+                      {
+                        label: t("axis.displayUnitsAuto", "Auto"),
+                        value: "Auto",
+                      },
+                      {
+                        label: t("axis.displayUnitsNone", "None"),
+                        value: "None",
+                      },
+                      {
+                        label: t("axis.unitsHundreds", "Hundreds"),
+                        value: "Hundreds",
+                      },
+                      {
+                        label: t("axis.displayUnitsThousands", "Thousands"),
+                        value: "Thousands",
+                      },
+                      {
+                        label: t("axis.displayUnitsMillions", "Millions"),
+                        value: "Millions",
+                      },
+                      {
+                        label: t("axis.displayUnitsBillions", "Billions"),
+                        value: "Billions",
+                      },
+                      {
+                        label: t("axis.unitsTrillions", "Trillions"),
+                        value: "Trillions",
+                      },
                     ]}
                   />
                 </div>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Precision
+                    {t("axis.precision", "Precision")}
                   </Typography.Text>
                   <InputNumber
                     size="small"
@@ -532,7 +615,7 @@ const AxisPanel: React.FC<Props> = ({
               <>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Color
+                    {t("axis.color", "Color")}
                   </Typography.Text>
                   <div className="color-picker-row">
                     <CustomColorPicker
@@ -546,7 +629,7 @@ const AxisPanel: React.FC<Props> = ({
                 </div>
                 <div className="form-group">
                   <Typography.Text className="form-label">
-                    Maximum height
+                    {t("axis.maxHeight", "Maximum height")}
                   </Typography.Text>
                   <div className="transparency-control">
                     <InputNumber
@@ -571,7 +654,7 @@ const AxisPanel: React.FC<Props> = ({
                 <div className="form-group">
                   <div className="checkbox-row">
                     <Typography.Text className="checkbox-label">
-                      Concatenate labels
+                      {t("axis.concatenateLabels", "Concatenate labels")}
                     </Typography.Text>
                     <Switch
                       size="small"
@@ -587,14 +670,14 @@ const AxisPanel: React.FC<Props> = ({
         {/* Layout (only y in bar branch) */}
         {axis === "y" && (
           <ConfigSection
-            title="Layout"
+            title={t("axis.layout", "Layout")}
             isExpanded={expanded.yAxisLayout || false}
             onToggle={() => onToggle("yAxisLayout")}
           >
             <div className="section-content">
               <div className="form-group">
                 <Typography.Text className="form-label">
-                  Minimum category width
+                  {t("axis.minCategoryWidth", "Minimum category width")}
                 </Typography.Text>
                 <div className="transparency-control">
                   <InputNumber
@@ -667,7 +750,6 @@ const AxisPanel: React.FC<Props> = ({
     );
   }
 
-  // Fallback: chỉ hiển thị FontControls
   return (
     <div className="section-content">
       <FontControls config={cfg} section={sectionKey} onUpdate={onUpdate} />

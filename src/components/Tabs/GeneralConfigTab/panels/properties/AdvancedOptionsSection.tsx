@@ -23,7 +23,7 @@ function AdvancedOptions({
   const { t } = useTranslation("generalTab");
   return (
     <ConfigSection
-      title={t("advancedOptions")}
+      title={"advanced.title"}
       isExpanded={expanded.advanced}
       onToggle={() => toggle("advanced")}
     >
@@ -31,7 +31,7 @@ function AdvancedOptions({
         <div className="form-group">
           <div className="checkbox-row">
             <Typography.Text className="form-label">
-              {t("responsive")}
+              {t("advanced.responsive")}
             </Typography.Text>
             <Switch
               size="small"
@@ -43,7 +43,7 @@ function AdvancedOptions({
         <div className="form-group">
           <div className="checkbox-row">
             <Typography.Text className="form-label">
-              {t("maintainLayerOrder")}
+              {t("advanced.maintainLayerOrder")}
             </Typography.Text>
             <Switch
               size="small"
@@ -70,7 +70,7 @@ function DataFormatRoot({
     <>
       <div className="form-group">
         <Typography.Text className="form-label">
-          {t("applySettingsTo")}
+          {t("dataFormat.applySettingsTo")}
         </Typography.Text>
         <Select
           size="small"
@@ -79,50 +79,50 @@ function DataFormatRoot({
           style={{ width: "100%" }}
         >
           <Select.Option value="Khu vực">
-            {t("applySettingsToArea", "Khu vực")}
+            {t("dataFormat.applySettingsToArea", "Khu vực")}
           </Select.Option>
           <Select.Option value="Tất cả">
-            {t("applySettingsToAll", "Tất cả")}
+            {t("dataFormat.applySettingsToAll", "Tất cả")}
           </Select.Option>
           <Select.Option value="Tùy chọn">
-            {t("applySettingsToCustom", "Tùy chọn")}
+            {t("dataFormat.applySettingsToCustom", "Tùy chọn")}
           </Select.Option>
         </Select>
       </div>
       <ConfigSection
-        title={t("formatOptions")}
+        title={"dataFormat.title"}
         isExpanded={false}
         onToggle={() => {}}
       >
         <div className="section-content">
           <div className="form-group">
             <Typography.Text className="form-label">
-              {t("format")}
+              {t("dataFormat.format")}
             </Typography.Text>
             <Select
               size="small"
               value={settings.dataFormat.format}
               onChange={(v) => update("dataFormat", "format", v)}
               style={{ width: "100%" }}
-              placeholder={t("selectFormat", "Select format")}
+              placeholder={t("dataFormat.selectFormat", "Select format")}
             >
               <Select.Option value="General">
-                {t("formatGeneral", "General")}
+                {t("dataFormat.formatGeneral", "General")}
               </Select.Option>
               <Select.Option value="Number">
-                {t("formatNumber", "Number")}
+                {t("dataFormat.formatNumber", "Number")}
               </Select.Option>
               <Select.Option value="Currency">
-                {t("formatCurrency", "Currency")}
+                {t("dataFormat.formatCurrency", "Currency")}
               </Select.Option>
               <Select.Option value="Percentage">
-                {t("formatPercentage", "Percentage")}
+                {t("dataFormat.formatPercentage", "Percentage")}
               </Select.Option>
               <Select.Option value="Date">
-                {t("formatDate", "Date")}
+                {t("dataFormat.formatDate", "Date")}
               </Select.Option>
               <Select.Option value="Custom">
-                {t("formatCustom", "Custom")}
+                {t("dataFormat.formatCustom", "Custom")}
               </Select.Option>
             </Select>
           </div>

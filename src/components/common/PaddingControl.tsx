@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SpinButton } from "../common/SpinButton";
+import { SpinButton } from "./SpinButton";
 
 interface PaddingValues {
   left: number;

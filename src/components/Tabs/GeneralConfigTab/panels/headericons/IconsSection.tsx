@@ -5,24 +5,24 @@ import ConfigSection from "../../common/ConfigSection";
 import type { GeneralSettings, ExpandedState, ToggleFn } from "../../types";
 
 const LABEL_KEYS: Record<string, string> = {
-  visualInformation: "generalTab.icons.visualInformation",
-  visualWarning: "generalTab.icons.visualWarning",
-  visualError: "generalTab.icons.visualError",
-  drillOnDropdown: "generalTab.icons.drillOnDropdown",
-  drillUp: "generalTab.icons.drillUp",
-  drillDown: "generalTab.icons.drillDown",
-  showNextLevel: "generalTab.icons.showNextLevel",
-  expandToNextLevel: "generalTab.icons.expandToNextLevel",
-  pin: "generalTab.icons.pin",
-  focusMode: "generalTab.icons.focusMode",
-  seeDataLayout: "generalTab.icons.seeDataLayout",
-  moreOptions: "generalTab.icons.moreOptions",
-  filter: "generalTab.icons.filter",
-  helpTooltip: "generalTab.icons.helpTooltip",
-  commentButton: "generalTab.icons.commentButton",
-  copyIcon: "generalTab.icons.copyIcon",
-  smartNarrative: "generalTab.icons.smartNarrative",
-  seeAlertButton: "generalTab.icons.seeAlertButton",
+  visualInformation: "icons.visualInformation",
+  visualWarning: "icons.visualWarning",
+  visualError: "icons.visualError",
+  drillOnDropdown: "icons.drillOnDropdown",
+  drillUp: "icons.drillUp",
+  drillDown: "icons.drillDown",
+  showNextLevel: "icons.showNextLevel",
+  expandToNextLevel: "icons.expandToNextLevel",
+  pin: "icons.pin",
+  focusMode: "icons.focusMode",
+  seeDataLayout: "icons.seeDataLayout",
+  moreOptions: "icons.moreOptions",
+  filter: "icons.filter",
+  helpTooltip: "icons.helpTooltip",
+  commentButton: "icons.commentButton",
+  copyIcon: "icons.copyIcon",
+  smartNarrative: "icons.smartNarrative",
+  seeAlertButton: "icons.seeAlertButton",
 };
 
 export default function IconsSection({
@@ -36,12 +36,12 @@ export default function IconsSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("generalTab");
   const icons = settings.headerIcons.icons;
 
   return (
     <ConfigSection
-      title={t("generalTab.icons.title", "Icons")}
+      title={"icons.title"}
       isExpanded={expanded.headerIconsIcons}
       onToggle={() => toggle("headerIconsIcons")}
     >

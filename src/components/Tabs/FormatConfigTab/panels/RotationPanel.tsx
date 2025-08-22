@@ -6,12 +6,12 @@ const RotationPanel: React.FC<{
   cfg: any;
   onUpdate: (section: string, key: string, value: any) => void;
 }> = ({ cfg, onUpdate }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("formatTab");
   return (
     <div className="section-content">
       <div className="form-group">
         <Typography.Text className="form-label">
-          {t("formatTab.rotation.angle", "Angle")}
+          {t("rotation.angle", "Angle")}
         </Typography.Text>
         <InputNumber
           size="small"

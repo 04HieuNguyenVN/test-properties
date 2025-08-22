@@ -12,6 +12,7 @@ import { DataTab } from "./Tabs/DataTab";
 import FormatConfigTab from "./Tabs/FormatConfigTab";
 import GeneralConfigTab from "./Tabs/GeneralConfigTab";
 import chartData from "../data/chartData.json";
+import { useTranslation } from "react-i18next";
 
 const { TabPane } = Tabs;
 
@@ -35,6 +36,7 @@ const PropertiesPanel: React.FC = () => {
       ? chartData.categories
       : chartData.monthlyData;
 
+  const { t } = useTranslation("propertiesPanel");
   return (
     <Tabs
       activeKey={activeTab}
@@ -43,13 +45,13 @@ const PropertiesPanel: React.FC = () => {
       centered
       className="main-tabs"
     >
-      <TabPane tab="Data" key="data">
+      <TabPane tab={t("tabs.data", "Data")} key="data">
         <div className="properties-content">
           <DataTab chartType={chartType} rawData={rawData} data={data} />
         </div>
       </TabPane>
 
-      <TabPane tab="Format" key="format">
+      <TabPane tab={t("tabs.format", "Format")} key="format">
         <Tabs
           activeKey={activeSubTab}
           onChange={(key) =>
@@ -58,12 +60,12 @@ const PropertiesPanel: React.FC = () => {
           size="small"
           className="sub-tabs"
         >
-          <TabPane tab="Visual" key="Visual">
+          <TabPane tab={t("tabs.visual", "Visual")} key="Visual">
             <div className="properties-content">
               <FormatConfigTab />
             </div>
           </TabPane>
-          <TabPane tab="General" key="General">
+          <TabPane tab={t("tabs.general", "General")} key="General">
             <div className="properties-content">
               <GeneralConfigTab />
             </div>

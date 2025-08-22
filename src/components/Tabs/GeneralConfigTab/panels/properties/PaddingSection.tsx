@@ -15,10 +15,10 @@ export default function PaddingSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("generalTab");
   return (
     <ConfigSection
-      title={t("generalTab.padding", "Padding")}
+      title={"padding.title"}
       isExpanded={expanded.padding}
       onToggle={() => toggle("padding")}
     >

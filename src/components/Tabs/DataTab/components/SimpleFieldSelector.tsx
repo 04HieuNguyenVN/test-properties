@@ -20,52 +20,37 @@ const SimpleFieldSelector: React.FC<Props> = ({
   category,
   onUpdate,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("dataTab");
   return (
     <div className="simple-field-selector">
       <div className="selector-row">
         <div className="selector-group">
           <Select
-            title={t("dataTab.fieldSelector.fieldTitle", "Chọn trường dữ liệu")}
+            title={t("selectField", "Chọn trường dữ liệu")}
             size="small"
             value={field.field || undefined}
             onChange={(value) => onUpdate(category, field.id, "field", value)}
             style={{ width: "100%" }}
-            placeholder={t(
-              "dataTab.fieldSelector.fieldPlaceholder",
-              "Select field"
-            )}
+            placeholder={t("selectField", "Select field")}
             options={FIELD_OPTIONS.map((opt) => ({
               ...opt,
-              label: t(
-                `dataTab.fieldSelector.options.${opt.value}`,
-                opt.label || opt.value
-              ),
+              label: t(`fieldOptions.${opt.value}`, opt.label || opt.value),
             }))}
             allowClear
           />
         </div>
         <div className="selector-group">
           <Select
-            title={t(
-              "dataTab.fieldSelector.actionTitle",
-              "Chọn hành động cho trường"
-            )}
+            title={t("selectAction", "Chọn hành động cho trường")}
             size="small"
             value={field.action || undefined}
             onChange={(value) => onUpdate(category, field.id, "action", value)}
             style={{ width: "100%" }}
             options={FIELD_ACTION_OPTIONS.map((opt) => ({
               ...opt,
-              label: t(
-                `dataTab.fieldSelector.actionOptions.${opt.value}`,
-                opt.label || opt.value
-              ),
+              label: t(`actionOptions.${opt.value}`, opt.label || opt.value),
             }))}
-            placeholder={t(
-              "dataTab.fieldSelector.actionPlaceholder",
-              "Select action"
-            )}
+            placeholder={t("selectAction", "Select action")}
             allowClear
           />
         </div>

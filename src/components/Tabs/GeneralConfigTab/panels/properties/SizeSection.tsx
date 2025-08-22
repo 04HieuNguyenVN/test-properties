@@ -20,17 +20,17 @@ export default function SizeSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("generalTab");
   return (
     <ConfigSection
-      title={t("generalTab.size", "Size")}
+      title={"size.title"}
       isExpanded={expanded.size}
       onToggle={() => toggle("size")}
     >
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("generalTab.height", "Height")}
+            {t("size.height")}
           </Typography.Text>
           <InputNumber
             size="small"
@@ -41,7 +41,7 @@ export default function SizeSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("generalTab.width", "Width")}
+            {t("size.width")}
           </Typography.Text>
           <InputNumber
             size="small"
@@ -53,7 +53,7 @@ export default function SizeSection({
         <div className="form-group">
           <div className="checkbox-row">
             <Typography.Text className="form-label">
-              {t("generalTab.lockAspectRatio", "Lock aspect ratio")}
+              {t("size.lockAspectRatio")}
             </Typography.Text>
             <Switch
               size="small"

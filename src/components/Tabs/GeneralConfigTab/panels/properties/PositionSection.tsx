@@ -20,17 +20,17 @@ export default function PositionSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("generalTab");
   return (
     <ConfigSection
-      title={t("generalTab.position", "Position")}
+      title={"position.title"}
       isExpanded={expanded.position}
       onToggle={() => toggle("position")}
     >
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("generalTab.horizontal", "Horizontal")}
+            {t("position.horizontal")}
           </Typography.Text>
           <InputNumber
             size="small"
@@ -41,7 +41,7 @@ export default function PositionSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("generalTab.vertical", "Vertical")}
+            {t("position.vertical")}
           </Typography.Text>
           <InputNumber
             size="small"

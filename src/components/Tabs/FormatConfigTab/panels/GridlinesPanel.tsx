@@ -7,17 +7,17 @@ const GridlinesPanel: React.FC<{
   cfg: any;
   onUpdate: (section: string, key: string, value: any) => void;
 }> = ({ cfg, onUpdate }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("formatTab");
   return (
     <div className="section-content">
       <CustomColorPicker
-        label={t("formatTab.gridlines.color", "Color")}
+        label={t("gridlines.color", "Color")}
         value={cfg.color}
         onChange={(c) => onUpdate("gridlines", "color", c)}
       />
       <div className="form-group">
         <Typography.Text className="form-label">
-          {t("formatTab.gridlines.strokeWidth", "Stroke Width")}
+          {t("gridlines.strokeWidth", "Stroke Width")}
         </Typography.Text>
         <InputNumber
           size="small"

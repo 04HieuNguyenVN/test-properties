@@ -1,6 +1,29 @@
 {
-  "dataSource": "Nguồn dữ liệu",
-  "table": "Bảng",
+  "dataSource": {
+    "label": "Nguồn dữ liệu:",
+    "tooltip": "Chọn nguồn dữ liệu cho biểu đồ",
+    "selectTooltip": "Chọn nguồn dữ liệu (API, file, v.v.)",
+    "selectTitle": "Chọn trường dữ liệu cho nhóm này",
+    "selectPlaceholder": "Chọn nguồn dữ liệu",
+    "options": {
+      "API": "API",
+      "file": "Tệp",
+      "other": "Khác"
+    }
+  },
+  "table": {
+    "label": "Bảng:",
+    "tooltip": "Tên bảng dữ liệu đang sử dụng cho biểu đồ",
+    "selectTooltip": "Bảng dữ liệu tương ứng với loại biểu đồ đang chọn",
+    "selectTitle": "Chọn hành động cho trường trong nhóm",
+    "selectPlaceholder": "Chọn bảng dữ liệu",
+    "options": {
+      "monthlyData": "Dữ liệu theo tháng",
+      "stackedData": "Dữ liệu chồng",
+      "categories": "Danh mục",
+      "data": "Dữ liệu"
+    }
+  },
   "selectField": "Chọn trường",
   "selectAction": "Chọn thao tác",
   "addField": "Thêm trường",

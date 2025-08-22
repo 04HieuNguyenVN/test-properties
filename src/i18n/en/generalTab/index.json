@@ -4,20 +4,34 @@
     "title": "Size",
     "height": "Height",
     "width": "Width",
-    "lockAspectRatio": "Lock aspect ratio"
+    "lockAspectRatio": "Lock aspect ratio",
+    "auto": "Auto size",
+    "minWidth": "Minimum width",
+    "minHeight": "Minimum height",
+    "maxWidth": "Maximum width",
+    "maxHeight": "Maximum height"
   },
   "position": {
     "title": "Position",
     "horizontal": "Horizontal",
-    "vertical": "Vertical"
+    "vertical": "Vertical",
+    "zIndex": "Z-index",
+    "alignment": "Alignment"
   },
-  "padding": { "title": "Padding" },
+  "padding": {
+    "title": "Padding",
+    "top": "Top",
+    "bottom": "Bottom",
+    "left": "Left",
+    "right": "Right"
+  },
   "advanced": {
     "title": "Advanced options",
     "responsive": "Responsive",
-    "maintainLayerOrder": "Maintain layer order"
+    "maintainLayerOrder": "Maintain layer order",
+    "customCSS": "Custom CSS",
+    "customClass": "Custom class"
   },
-
   "title": {
     "title": "Title",
     "subtitle": "Subtitle",
@@ -25,6 +39,7 @@
     "spacing": "Spacing",
     "textWrap": "Text wrap",
     "horizontalAlignment": "Horizontal alignment",
+    "verticalAlignment": "Vertical alignment",
     "backgroundColor": "Background color",
     "labelColor": "Label color",
     "valueColor": "Value color",
@@ -33,9 +48,17 @@
     "width": "Width",
     "ignorePadding": "Ignore padding",
     "customizeSpacing": "Customize spacing",
-    "spaceBetweenLabelAndValue": "Space between label and value"
+    "spaceBetweenLabelAndValue": "Space between label and value",
+    "font": "Font",
+    "fontSize": "Font size",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "textColor": "Text color",
+    "heading": "Heading",
+    "show": "Show title",
+    "showSubtitle": "Show subtitle"
   },
-
   "effects": {
     "title": "Effects",
     "background": "Background",
@@ -45,18 +68,29 @@
     "position": "Position",
     "outside": "Outside",
     "inside": "Inside",
-    "positions": ["Bottom right", "Bottom left", "Top right", "Top left"]
+    "positions": ["Bottom right", "Bottom left", "Top right", "Top left"],
+    "color": "Effect color",
+    "transparency": "Transparency",
+    "roundedCorners": "Rounded corners",
+    "width": "Border width",
+    "enabled": "Enable effect"
   },
-
   "dataFormat": {
     "title": "Data format",
     "applySettingsTo": "Apply settings to",
-    "format": "Format"
+    "format": "Format",
+    "decimalPlaces": "Decimal places",
+    "thousandSeparator": "Thousand separator",
+    "prefix": "Prefix",
+    "suffix": "Suffix"
   },
-
   "headerIcons": {
     "title": "Header icons",
     "colors": "Colors",
-    "icons": "Icons"
+    "icons": "Icons",
+    "show": "Show header icons",
+    "background": "Icon background",
+    "border": "Icon border",
+    "icon": "Icon color"
   }
 }

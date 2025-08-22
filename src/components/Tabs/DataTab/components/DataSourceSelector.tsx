@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography, Select, Tooltip } from "antd";
+import { useTranslation } from "react-i18next";
 import { DATA_SOURCE_OPTIONS } from "../../../../constants";
 
 type Props = {
@@ -13,38 +14,80 @@ const DataSourceSelector: React.FC<Props> = ({
   onChange,
   tableName,
 }) => {
+  const { t } = useTranslation("dataTab");
   return (
     <div className="data-source-section">
       <div className="source-table-row">
         <div className="selector-group">
-          <Tooltip title="Chọn nguồn dữ liệu cho biểu đồ">
+          <Tooltip
+            title={t("dataSource.tooltip", "Chọn nguồn dữ liệu cho biểu đồ")}
+          >
             <Typography.Text className="selector-label">
-              Data source:
+              {t("dataSource.label", "Data source:")}
             </Typography.Text>
           </Tooltip>
-          <Tooltip title="Chọn nguồn dữ liệu (API, file, v.v.)">
+          <Tooltip
+            title={t(
+              "dataSource.selectTooltip",
+              "Chọn nguồn dữ liệu (API, file, v.v.)"
+            )}
+          >
             <Select
-              title="Chọn trường dữ liệu cho nhóm này"
+              title={t(
+                "dataSource.selectTitle",
+                "Chọn trường dữ liệu cho nhóm này"
+              )}
               size="small"
               value={dataSource}
               onChange={onChange}
               style={{ width: "100%" }}
-              options={DATA_SOURCE_OPTIONS}
+              options={DATA_SOURCE_OPTIONS.map((opt) => ({
+                ...opt,
+                label: t(
+                  `dataSource.options.${opt.value}`,
+                  opt.label || opt.value
+                ),
+              }))}
+              placeholder={t(
+                "dataSource.selectPlaceholder",
+                "Chọn nguồn dữ liệu"
+              )}
             />
           </Tooltip>
         </div>
         <div className="selector-group">
-          <Tooltip title="Tên bảng dữ liệu đang sử dụng cho biểu đồ">
-            <Typography.Text className="selector-label">Table:</Typography.Text>
+          <Tooltip
+            title={t(
+              "table.tooltip",
+              "Tên bảng dữ liệu đang sử dụng cho biểu đồ"
+            )}
+          >
+            <Typography.Text className="selector-label">
+              {t("table.label", "Table:")}
+            </Typography.Text>
           </Tooltip>
-          <Tooltip title="Bảng dữ liệu tương ứng với loại biểu đồ đang chọn">
+          <Tooltip
+            title={t(
+              "table.selectTooltip",
+              "Bảng dữ liệu tương ứng với loại biểu đồ đang chọn"
+            )}
+          >
             <Select
-              title="Chọn hành động cho trường trong nhóm"
+              title={t(
+                "table.selectTitle",
+                "Chọn hành động cho trường trong nhóm"
+              )}
               size="small"
               value={tableName}
               style={{ width: "100%" }}
               disabled
-              options={[{ label: tableName, value: tableName }]}
+              options={[
+                {
+                  label: t(`table.options.${tableName}`, tableName),
+                  value: tableName,
+                },
+              ]}
+              placeholder={t("table.selectPlaceholder", "Chọn bảng dữ liệu")}
             />
           </Tooltip>
         </div>
