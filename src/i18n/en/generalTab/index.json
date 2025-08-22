@@ -1,22 +1,19 @@
 {
-  "properties": "Properties",
+  "resetToDefault": "Reset to default",
+  "properties": {
+    "title": "Properties"
+  },
   "size": {
     "title": "Size",
     "height": "Height",
     "width": "Width",
-    "lockAspectRatio": "Lock aspect ratio",
-    "auto": "Auto size",
-    "minWidth": "Minimum width",
-    "minHeight": "Minimum height",
-    "maxWidth": "Maximum width",
-    "maxHeight": "Maximum height"
+    "lockAspectRatio": "Lock aspect ratio"
   },
   "position": {
     "title": "Position",
     "horizontal": "Horizontal",
     "vertical": "Vertical",
-    "zIndex": "Z-index",
-    "alignment": "Alignment"
+    "zIndex": "Z-index"
   },
   "padding": {
     "title": "Padding",
@@ -26,71 +23,135 @@
     "right": "Right"
   },
   "advanced": {
-    "title": "Advanced options",
-    "responsive": "Responsive",
-    "maintainLayerOrder": "Maintain layer order",
-    "customCSS": "Custom CSS",
-    "customClass": "Custom class"
+    "title": "Advanced options"
   },
   "title": {
+    "sectionTitle": "Title",
     "title": "Title",
-    "subtitle": "Subtitle",
-    "divider": "Divider",
-    "spacing": "Spacing",
-    "textWrap": "Text wrap",
-    "horizontalAlignment": "Horizontal alignment",
-    "verticalAlignment": "Vertical alignment",
-    "backgroundColor": "Background color",
-    "labelColor": "Label color",
-    "valueColor": "Value color",
-    "drillTextAndIconColor": "Drill text & icon color",
-    "lineStyle": "Line style",
-    "width": "Width",
-    "ignorePadding": "Ignore padding",
-    "customizeSpacing": "Customize spacing",
-    "spaceBetweenLabelAndValue": "Space between label and value",
+    "text": "Text",
+    "heading": "Heading",
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "heading3": "Heading 3",
+    "heading4": "Heading 4",
     "font": "Font",
+    "fontDIN": "DIN",
+    "fontSegoeUI": "Segoe UI",
+    "fontArial": "Arial",
     "fontSize": "Font size",
     "bold": "Bold",
     "italic": "Italic",
     "underline": "Underline",
     "textColor": "Text color",
+    "backgroundColor": "Background color",
+    "horizontalAlignment": "Horizontal alignment",
+    "textWrap": "Text wrap"
+  },
+  "subtitle": {
+    "title": "Subtitle",
+    "text": "Text",
     "heading": "Heading",
-    "show": "Show title",
-    "showSubtitle": "Show subtitle"
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "heading3": "Heading 3",
+    "heading4": "Heading 4",
+    "font": "Font",
+    "fontDIN": "DIN",
+    "fontSegoeUI": "Segoe UI",
+    "fontArial": "Arial",
+    "fontSize": "Font size",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "textColor": "Text color",
+    "textWrap": "Text wrap"
+  },
+  "divider": {
+    "title": "Divider",
+    "color": "Color",
+    "lineStyle": "Line style",
+    "lineStyleSolid": "Solid",
+    "lineStyleDashed": "Dashed",
+    "lineStyleDotted": "Dotted",
+    "width": "Width",
+    "ignorePadding": "Ignore padding"
+  },
+  "spacing": {
+    "title": "Spacing",
+    "customizeSpacing": "Customize spacing",
+    "spaceBetweenLabelAndValue": "Space between label and value"
   },
   "effects": {
-    "title": "Effects",
-    "background": "Background",
-    "visualBorder": "Visual border",
-    "shadow": "Shadow",
-    "offset": "Offset",
-    "position": "Position",
-    "outside": "Outside",
-    "inside": "Inside",
-    "positions": ["Bottom right", "Bottom left", "Top right", "Top left"],
-    "color": "Effect color",
-    "transparency": "Transparency",
-    "roundedCorners": "Rounded corners",
-    "width": "Border width",
-    "enabled": "Enable effect"
+    "title": "Effects"
   },
-  "dataFormat": {
-    "title": "Data format",
-    "applySettingsTo": "Apply settings to",
-    "format": "Format",
-    "decimalPlaces": "Decimal places",
-    "thousandSeparator": "Thousand separator",
-    "prefix": "Prefix",
-    "suffix": "Suffix"
+  "background": {
+    "title": "Background"
+  },
+  "visualBorder": {
+    "title": "Visual border"
+  },
+  "shadow": {
+    "title": "Shadow"
   },
   "headerIcons": {
     "title": "Header icons",
     "colors": "Colors",
     "icons": "Icons",
+    "iconsTitle": "Icons",
     "show": "Show header icons",
-    "background": "Icon background",
-    "border": "Icon border",
-    "icon": "Icon color"
+    "background": "Background",
+    "border": "Border",
+    "icon": "Icon",
+    "transparency": "Transparency",
+    "icons": {
+      "visualInformation": "Visual information",
+      "visualWarning": "Visual warning",
+      "visualError": "Visual error",
+      "drillOnDropdown": "Drill on dropdown",
+      "drillUp": "Drill up",
+      "drillDown": "Drill down",
+      "showNextLevel": "Show next level",
+      "expandToNextLevel": "Expand to next level",
+      "pin": "Pin",
+      "focusMode": "Focus mode",
+      "seeDataLayout": "See data layout",
+      "moreOptions": "More options",
+      "filter": "Filter",
+      "helpTooltip": "Help tooltip",
+      "commentButton": "Comment button",
+      "copyIcon": "Copy icon",
+      "smartNarrative": "Smart narrative",
+      "seeAlertButton": "See alert button"
+    }
+  },
+  "tooltips": {
+    "title": "Tooltips"
+  },
+  "tooltipsBackground": {
+    "title": "Background",
+    "color": "Color",
+    "transparency": "Transparency"
+  },
+  "tooltipsOptions": {
+    "title": "Content",
+    "text": "Text"
+  },
+  "tooltipsText": {
+    "title": "Text",
+    "font": "Font",
+    "fontDIN": "DIN",
+    "fontSegoeUI": "Segoe UI",
+    "fontArial": "Arial",
+    "fontSize": "Font size",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "labelColor": "Label color",
+    "valueColor": "Value color",
+    "drillTextAndIconColor": "Drill text & icon color"
+  },
+  "dataFormat": {
+    "title": "Data format",
+    "applySettingsTo": "Apply settings to"
   }
 }

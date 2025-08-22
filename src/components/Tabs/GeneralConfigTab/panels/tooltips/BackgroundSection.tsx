@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import NumberSlider from "../../common/NumberSlider";
 import { CustomColorPicker } from "../../../../common/CustomColorPicker";
@@ -17,16 +18,19 @@ export default function BackgroundSection({
   toggle: ToggleFn;
 }) {
   const b = settings.tooltips.background;
+  const { t } = useTranslation("generalTab");
 
   return (
     <ConfigSection
-      title="Background"
+      title={"tooltipsBackground.title"}
       isExpanded={expanded.tooltipsBackground}
       onToggle={() => toggle("tooltipsBackground")}
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Color</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("tooltipsBackground.color")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
             value={b.color}
@@ -44,7 +48,9 @@ export default function BackgroundSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Transparency</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("tooltipsBackground.transparency")}
+          </Typography.Text>
           <NumberSlider
             value={b.transparency}
             onChange={(v) =>

@@ -1,5 +1,6 @@
 import React from "react";
 import { InputNumber, Select, Typography } from "antd";
+import { useTranslation } from "react-i18next";
 import ConfigSection from "../../common/ConfigSection";
 import TextStyleToggles from "../../common/TextStyleToggles";
 import { CustomColorPicker } from "../../../../common/CustomColorPicker";
@@ -18,20 +19,23 @@ export default function TextSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
-  const t = settings.tooltips.text;
+  const tt = settings.tooltips.text;
+  const { t } = useTranslation("generalTab");
 
   return (
     <ConfigSection
-      title="Text"
+      title={"tooltipsText.title"}
       isExpanded={expanded.tooltipsText}
       onToggle={() => toggle("tooltipsText")}
     >
       <div className="section-content">
         <div className="form-group">
-          <Typography.Text className="form-label">Font</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("tooltipsText.font")}
+          </Typography.Text>
           <Select
             size="small"
-            value={t.font}
+            value={tt.font}
             onChange={(v) =>
               setSettings((p) => ({
                 ...p,
@@ -43,16 +47,18 @@ export default function TextSection({
             }
             style={{ width: "100%" }}
           >
-            <Option value="Segoe UI">Segoe UI</Option>
-            <Option value="DIN">DIN</Option>
-            <Option value="Arial">Arial</Option>
+            <Option value="Segoe UI">{t("tooltipsText.fontSegoeUI")}</Option>
+            <Option value="DIN">{t("tooltipsText.fontDIN")}</Option>
+            <Option value="Arial">{t("tooltipsText.fontArial")}</Option>
           </Select>
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Font size</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("tooltipsText.fontSize")}
+          </Typography.Text>
           <InputNumber
             size="small"
-            value={t.fontSize}
+            value={tt.fontSize}
             min={6}
             max={72}
             onChange={(v) =>
@@ -60,7 +66,7 @@ export default function TextSection({
                 ...p,
                 tooltips: {
                   ...p.tooltips,
-                  text: { ...p.tooltips.text, fontSize: v ?? t.fontSize },
+                  text: { ...p.tooltips.text, fontSize: v ?? tt.fontSize },
                 },
               }))
             }
@@ -69,9 +75,9 @@ export default function TextSection({
         </div>
         <div className="form-group">
           <TextStyleToggles
-            bold={t.bold}
-            italic={t.italic}
-            underline={t.underline}
+            bold={tt.bold}
+            italic={tt.italic}
+            underline={tt.underline}
             onChange={(next) =>
               setSettings((p) => ({
                 ...p,
@@ -85,10 +91,12 @@ export default function TextSection({
         </div>
 
         <div className="form-group">
-          <Typography.Text className="form-label">Label color</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("tooltipsText.labelColor")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
-            value={t.labelColor}
+            value={tt.labelColor}
             onChange={(c) =>
               setSettings((p) => ({
                 ...p,
@@ -103,10 +111,12 @@ export default function TextSection({
           />
         </div>
         <div className="form-group">
-          <Typography.Text className="form-label">Value color</Typography.Text>
+          <Typography.Text className="form-label">
+            {t("tooltipsText.valueColor")}
+          </Typography.Text>
           <CustomColorPicker
             label=""
-            value={t.valueColor}
+            value={tt.valueColor}
             onChange={(c) =>
               setSettings((p) => ({
                 ...p,
@@ -122,11 +132,11 @@ export default function TextSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            Drill text & icon color
+            {t("tooltipsText.drillTextAndIconColor")}
           </Typography.Text>
           <CustomColorPicker
             label=""
-            value={t.drillTextAndIconColor}
+            value={tt.drillTextAndIconColor}
             onChange={(c) =>
               setSettings((p) => ({
                 ...p,

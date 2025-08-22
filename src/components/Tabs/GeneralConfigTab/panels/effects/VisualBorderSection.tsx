@@ -21,7 +21,7 @@ export default function VisualBorderSection({
 
   return (
     <ConfigSection
-      title={"effects.visualBorder"}
+      title={"visualBorder.title"}
       isExpanded={expanded.visualBorder}
       onToggle={() => toggle("visualBorder")}
       hasToggle
@@ -39,7 +39,7 @@ export default function VisualBorderSection({
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("effects.color", "Color")}
+            {t("visualBorder.color", "Color")}
           </Typography.Text>
           <CustomColorPicker
             label=""
@@ -59,7 +59,7 @@ export default function VisualBorderSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("effects.roundedCorners", "Rounded corners")}
+            {t("visualBorder.roundedCorners", "Rounded corners")}
           </Typography.Text>
           <InputNumber
             size="small"
@@ -82,7 +82,7 @@ export default function VisualBorderSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("effects.width", "Width")}
+            {t("visualBorder.width", "Width")}
           </Typography.Text>
           <InputNumber
             size="small"

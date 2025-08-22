@@ -22,7 +22,7 @@ export default function BackgroundSection({
 
   return (
     <ConfigSection
-      title={"background"}
+      title={"background.title"}
       isExpanded={expanded.background}
       onToggle={() => toggle("background")}
       hasToggle
@@ -40,7 +40,7 @@ export default function BackgroundSection({
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("color", "Color")}
+            {t("background.color", "Color")}
           </Typography.Text>
           <CustomColorPicker
             label=""
@@ -60,7 +60,7 @@ export default function BackgroundSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("transparency", "Transparency")}
+            {t("background.transparency", "Transparency")}
           </Typography.Text>
           <NumberSlider
             value={bg.transparency}

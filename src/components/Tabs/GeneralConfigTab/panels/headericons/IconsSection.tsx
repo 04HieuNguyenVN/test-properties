@@ -5,24 +5,24 @@ import ConfigSection from "../../common/ConfigSection";
 import type { GeneralSettings, ExpandedState, ToggleFn } from "../../types";
 
 const LABEL_KEYS: Record<string, string> = {
-  visualInformation: "icons.visualInformation",
-  visualWarning: "icons.visualWarning",
-  visualError: "icons.visualError",
-  drillOnDropdown: "icons.drillOnDropdown",
-  drillUp: "icons.drillUp",
-  drillDown: "icons.drillDown",
-  showNextLevel: "icons.showNextLevel",
-  expandToNextLevel: "icons.expandToNextLevel",
-  pin: "icons.pin",
-  focusMode: "icons.focusMode",
-  seeDataLayout: "icons.seeDataLayout",
-  moreOptions: "icons.moreOptions",
-  filter: "icons.filter",
-  helpTooltip: "icons.helpTooltip",
-  commentButton: "icons.commentButton",
-  copyIcon: "icons.copyIcon",
-  smartNarrative: "icons.smartNarrative",
-  seeAlertButton: "icons.seeAlertButton",
+  visualInformation: "headerIcons.icons.visualInformation",
+  visualWarning: "headerIcons.icons.visualWarning",
+  visualError: "headerIcons.icons.visualError",
+  drillOnDropdown: "headerIcons.icons.drillOnDropdown",
+  drillUp: "headerIcons.icons.drillUp",
+  drillDown: "headerIcons.icons.drillDown",
+  showNextLevel: "headerIcons.icons.showNextLevel",
+  expandToNextLevel: "headerIcons.icons.expandToNextLevel",
+  pin: "headerIcons.icons.pin",
+  focusMode: "headerIcons.icons.focusMode",
+  seeDataLayout: "headerIcons.icons.seeDataLayout",
+  moreOptions: "headerIcons.icons.moreOptions",
+  filter: "headerIcons.icons.filter",
+  helpTooltip: "headerIcons.icons.helpTooltip",
+  commentButton: "headerIcons.icons.commentButton",
+  copyIcon: "headerIcons.icons.copyIcon",
+  smartNarrative: "headerIcons.icons.smartNarrative",
+  seeAlertButton: "headerIcons.icons.seeAlertButton",
 };
 
 export default function IconsSection({
@@ -41,7 +41,7 @@ export default function IconsSection({
 
   return (
     <ConfigSection
-      title={"icons.title"}
+      title={"headerIcons.iconsTitle"}
       isExpanded={expanded.headerIconsIcons}
       onToggle={() => toggle("headerIconsIcons")}
     >

@@ -34,9 +34,9 @@ export default function NumberSlider({
           ? {
               formatter: (val) => `${val}%`,
               parser: (val) => Number(String(val).replace("%", "")),
-              placeholder: t("percentPlaceholder", "%"),
+              placeholder: t("numberSlider.percentPlaceholder", "%"),
             }
-          : { placeholder: t("numberPlaceholder", "0") })}
+          : { placeholder: t("numberSlider.numberPlaceholder", "0") })}
       />
       <Slider
         min={min}

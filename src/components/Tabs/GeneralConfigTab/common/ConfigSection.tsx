@@ -22,8 +22,7 @@ const ConfigSection: React.FC<{
   toggleValue,
   onToggleChange,
 }) => {
-  const { t } = useTranslation();
-  // Nếu title là key dạng a.b.c thì dịch, còn nếu là text thì giữ nguyên
+  const { t } = useTranslation("generalTab");
   const isI18nKey = typeof title === "string" && title.includes(".");
   return (
     <Collapse

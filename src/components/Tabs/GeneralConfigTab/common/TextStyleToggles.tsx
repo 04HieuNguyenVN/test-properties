@@ -24,24 +24,24 @@ export default function TextStyleToggles({
         type={bold ? "primary" : "default"}
         icon={<Bold size={12} />}
         onClick={() => onChange({ bold: !bold })}
-        title={t("bold", "Bold")}
-        aria-label={t("bold", "Bold")}
+        title={t("textStyleToggles.bold", "Bold")}
+        aria-label={t("textStyleToggles.bold", "Bold")}
       />
       <Button
         size="small"
         type={italic ? "primary" : "default"}
         icon={<Italic size={12} />}
         onClick={() => onChange({ italic: !italic })}
-        title={t("italic", "Italic")}
-        aria-label={t("italic", "Italic")}
+        title={t("textStyleToggles.italic", "Italic")}
+        aria-label={t("textStyleToggles.italic", "Italic")}
       />
       <Button
         size="small"
         type={underline ? "primary" : "default"}
         icon={<Underline size={12} />}
         onClick={() => onChange({ underline: !underline })}
-        title={t("underline", "Underline")}
-        aria-label={t("underline", "Underline")}
+        title={t("textStyleToggles.underline", "Underline")}
+        aria-label={t("textStyleToggles.underline", "Underline")}
       />
     </Space>
   );

@@ -29,7 +29,7 @@ export default function ColorsSection({
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("headerIcons.background", "Background")}
+            {t("headerIcons.background")}
           </Typography.Text>
           <CustomColorPicker
             label=""
@@ -49,7 +49,7 @@ export default function ColorsSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("headerIcons.border", "Border")}
+            {t("headerIcons.border")}
           </Typography.Text>
           <CustomColorPicker
             label=""
@@ -69,7 +69,7 @@ export default function ColorsSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("headerIcons.icon", "Icon")}
+            {t("headerIcons.icon")}
           </Typography.Text>
           <CustomColorPicker
             label=""
@@ -89,7 +89,7 @@ export default function ColorsSection({
         </div>
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("headerIcons.transparency", "Transparency")}
+            {t("headerIcons.transparency")}
           </Typography.Text>
           <NumberSlider
             value={c.transparency}

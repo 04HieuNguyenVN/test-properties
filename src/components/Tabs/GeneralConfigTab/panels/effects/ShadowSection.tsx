@@ -23,7 +23,7 @@ export default function ShadowSection({
 
   return (
     <ConfigSection
-      title={"effects.title"}
+      title={"shadow.title"}
       isExpanded={expanded.shadow}
       onToggle={() => toggle("shadow")}
       hasToggle
@@ -41,7 +41,7 @@ export default function ShadowSection({
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("effects.color", "Color")}
+            {t("shadow.color", "Color")}
           </Typography.Text>
           <CustomColorPicker
             label=""
@@ -62,7 +62,7 @@ export default function ShadowSection({
 
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("effects.offset", "Offset")}
+            {t("shadow.offset", "Offset")}
           </Typography.Text>
           <Select
             size="small"
@@ -78,14 +78,14 @@ export default function ShadowSection({
             }
             style={{ width: "100%" }}
           >
-            <Option value="Outside">{t("effects.outside", "Outside")}</Option>
-            <Option value="Inside">{t("effects.inside", "Inside")}</Option>
+            <Option value="Outside">{t("shadow.outside", "Outside")}</Option>
+            <Option value="Inside">{t("shadow.inside", "Inside")}</Option>
           </Select>
         </div>
 
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("effects.position", "Position")}
+            {t("shadow.position", "Position")}
           </Typography.Text>
           <Select
             size="small"
@@ -102,16 +102,16 @@ export default function ShadowSection({
             style={{ width: "100%" }}
           >
             <Option value="Bottom right">
-              {t("effects.positions.0", "Bottom right")}
+              {t("shadow.positions.0", "Bottom right")}
             </Option>
             <Option value="Bottom left">
-              {t("effects.positions.1", "Bottom left")}
+              {t("shadow.positions.1", "Bottom left")}
             </Option>
             <Option value="Top right">
-              {t("effects.positions.2", "Top right")}
+              {t("shadow.positions.2", "Top right")}
             </Option>
             <Option value="Top left">
-              {t("effects.positions.3", "Top left")}
+              {t("shadow.positions.3", "Top left")}
             </Option>
           </Select>
         </div>

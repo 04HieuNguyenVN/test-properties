@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "antd";
 import { RotateCcw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useGeneralSettings } from "./hooks/useGeneralSettings";
 import ConfigSection from "./common/ConfigSection";
 
@@ -31,6 +32,7 @@ import TooltipTextSection from "./panels/tooltips/TextSection";
 import TooltipBackgroundSection from "./panels/tooltips/BackgroundSection";
 
 const GeneralConfigTab: React.FC = () => {
+  const { t } = useTranslation("generalTab");
   const { settings, setSettings, expanded, toggle, update } =
     useGeneralSettings();
 
@@ -38,7 +40,7 @@ const GeneralConfigTab: React.FC = () => {
     <div className="general-config-tab general-tab">
       {/* Properties */}
       <ConfigSection
-        title="Properties"
+        title={"properties.title"}
         isExpanded={expanded.properties}
         onToggle={() => toggle("properties")}
       >
@@ -72,7 +74,7 @@ const GeneralConfigTab: React.FC = () => {
 
       {/* Title */}
       <ConfigSection
-        title="Title"
+        title={"title.sectionTitle"}
         isExpanded={expanded.title}
         onToggle={() => toggle("title")}
       >
@@ -106,7 +108,7 @@ const GeneralConfigTab: React.FC = () => {
 
       {/* Effects */}
       <ConfigSection
-        title="Effects"
+        title={"effects.title"}
         isExpanded={expanded.effects}
         onToggle={() => toggle("effects")}
       >
@@ -134,7 +136,7 @@ const GeneralConfigTab: React.FC = () => {
 
       {/* Data format */}
       <ConfigSection
-        title="Data format"
+        title={"dataFormat.title"}
         isExpanded={expanded.dataFormat}
         onToggle={() => toggle("dataFormat")}
       >
@@ -148,7 +150,7 @@ const GeneralConfigTab: React.FC = () => {
 
       {/* Header icons */}
       <ConfigSection
-        title="Header icons"
+        title={"headerIcons.title"}
         isExpanded={expanded.headerIcons}
         onToggle={() => toggle("headerIcons")}
       >
@@ -170,7 +172,7 @@ const GeneralConfigTab: React.FC = () => {
 
       {/* Tooltips */}
       <ConfigSection
-        title="Tooltips"
+        title={"tooltips.title"}
         isExpanded={expanded.tooltips}
         onToggle={() => toggle("tooltips")}
         hasToggle
@@ -204,7 +206,7 @@ const GeneralConfigTab: React.FC = () => {
           icon={<RotateCcw size={14} />}
           style={{ padding: 16, fontSize: 12, color: "#0078d4" }}
         >
-          Reset to default
+          {t("resetToDefault")}
         </Button>
       </div>
     </div>

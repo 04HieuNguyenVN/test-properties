@@ -15,17 +15,17 @@ export default function ContentSection({
   expanded: ExpandedState;
   toggle: ToggleFn;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("generalTab");
   return (
     <ConfigSection
-      title={t("generalTab.tooltips.content", "Content")}
+      title={"tooltipsOptions.title"}
       isExpanded={expanded.tooltipsOptions}
       onToggle={() => toggle("tooltipsOptions")}
     >
       <div className="section-content">
         <div className="form-group">
           <Typography.Text className="form-label">
-            {t("generalTab.tooltips.text", "Text")}
+            {t("tooltipsOptions.text")}
           </Typography.Text>
           <Input.TextArea
             value={settings.tooltips.options.text}
