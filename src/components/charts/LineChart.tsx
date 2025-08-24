@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import chartData from "../../data/chartData.json";
 
 // Props cho biểu đồ đường
 // Thêm prop data để nhận dữ liệu từ ngoài vào
@@ -51,7 +50,7 @@ export const LineChart: React.FC<LineChartProps> = ({ config, data }) => {
         />
         <Tooltip />
         {config.legend?.enabled && <Legend />}
-        <Line
+        {/* <Line
           type="monotone"
           dataKey="visitors"
           stroke="#0078D4"
@@ -64,7 +63,7 @@ export const LineChart: React.FC<LineChartProps> = ({ config, data }) => {
           stroke="#00BCF2"
           strokeWidth={2}
           name="Revenue"
-        />
+        /> */}
       </RechartsLineChart>
     </ResponsiveContainer>
   );

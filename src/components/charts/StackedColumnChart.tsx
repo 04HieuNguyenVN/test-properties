@@ -1,8 +1,5 @@
 import { Column } from "@ant-design/plots";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setRawChartData } from "../../store/chartSlice";
-import chartData from "../../data/chartData.json";
+import React from "react";
 
 // ===== Props cho biểu đồ cột chồng dọc =====
 // Thêm prop data để nhận dữ liệu từ ngoài vào
@@ -17,8 +14,6 @@ const StackedColumnChart: React.FC<StackedColumnChartProps> = ({
   config,
   data,
 }) => {
-  const dispatch = useDispatch();
-
   // Nhận dữ liệu từ prop data
   const rawData = data;
   // Chuyển đổi dữ liệu sang dạng phù hợp cho stacked column chart
@@ -27,11 +22,6 @@ const StackedColumnChart: React.FC<StackedColumnChartProps> = ({
     { category: item.month, series: "Revenue", value: item.revenue },
     { category: item.month, series: "Sales", value: item.sales },
   ]);
-
-  // Đẩy dữ liệu gốc lên Redux khi component mount (nếu cần)
-  useEffect(() => {
-    dispatch(setRawChartData(rawData));
-  }, [dispatch, rawData]);
 
   // Cấu hình mặc định cho biểu đồ cột chồng dọc
   const defaultConfig = {

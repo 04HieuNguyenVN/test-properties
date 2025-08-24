@@ -8,7 +8,7 @@ import {
   Legend,
 } from "recharts";
 import { CHART_COLORS } from "../../constants/index";
-import chartData from "../../data/chartData.json";
+// Removed direct import of chartData.json
 
 // ===== Props cho biểu đồ tròn =====
 // Thêm prop data để nhận dữ liệu từ ngoài vào

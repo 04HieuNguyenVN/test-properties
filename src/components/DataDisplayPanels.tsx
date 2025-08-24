@@ -1,26 +1,95 @@
 import React from "react";
+import ChartRenderer from "./ChartRenderer";
 import JsonDataPanel from "./JsonDataPanel";
 import ProcessedDataPanel from "./ProcessedDataPanel";
-import "../styles/data-display.css";
+import "../styles/data/data-display.css";
 
-// ===== Props cho panel hiển thị dữ liệu =====
+import { useHorizontalSplit } from "../hooks/useHorizontalSplit";
+import ResizeHitbox from "./common/ResizeHitbox";
+
 interface DataDisplayPanelsProps {
-  chartComponent: React.ReactNode; // Component biểu đồ truyền vào
+  chartType: string;
+  config: any;
+  rawData: any[];
+  data: any[]; // dữ liệu mặc định từ Provider
 }
 
-// ===== Panel hiển thị biểu đồ và dữ liệu gốc/đã xử lý =====
 const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
-  chartComponent,
+  chartType,
+  config,
+  rawData,
+  data,
 }) => {
-  return (
-    <div className="data-display-container">
-      {/* Khu vực hiển thị biểu đồ */}
-      <div className="chart-section">{chartComponent}</div>
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
 
-      {/* Khu vực hiển thị dữ liệu gốc và dữ liệu đã xử lý */}
-      <div className="data-panels-container">
-        <JsonDataPanel />
-        <ProcessedDataPanel />
+  // Tỉ lệ panel trái (Chart). Lưu theo key "dataLeftRatio".
+  const { leftBasisPct, hitboxLeft, onMouseDown } = useHorizontalSplit({
+    containerRef,
+    storageKey: "dataLeftRatio",
+    defaultLeftRatio: 0.58, // ~58% cho Chart
+    minLeftPx: 320,
+    minRightPx: 320,
+  });
+
+  // 👉 State dữ liệu thực tế dùng cho Chart (mặc định = data từ Provider)
+  const [chartData, setChartData] = React.useState<any[]>(data);
+
+  // Khi Provider đổi chartType/data thì reset chartData
+  React.useEffect(() => {
+    setChartData(data);
+  }, [data, chartType]);
+
+  // Callback nhận dữ liệu đã xử lý từ ProcessedDataPanel
+  const handleUseInChart = React.useCallback((nextData: any[]) => {
+    setChartData(nextData || []);
+  }, []);
+
+  return (
+    <div
+      className="data-display-container"
+      ref={containerRef}
+      style={{
+        display: "flex",
+        width: "100%",
+        minHeight: 360,
+        position: "relative",
+      }}
+    >
+      {/* Chart bên trái */}
+      <div
+        className="chart-section"
+        style={{ flex: `0 0 ${leftBasisPct}`, minWidth: 320 }}
+      >
+        <ChartRenderer
+          chartType={chartType as any}
+          config={config}
+          data={chartData}
+        />
+      </div>
+
+      {/* Hitbox vô hình bám mép Chart/Data */}
+      <ResizeHitbox
+        left={hitboxLeft}
+        onMouseDown={onMouseDown}
+        ariaLabel="Resize data panels"
+      />
+
+      <div
+        className="data-panels-container"
+        style={{
+          flex: 1,
+          minWidth: 320,
+          display: "flex",
+          gap: 12,
+          overflow: "hidden",
+        }}
+      >
+        <JsonDataPanel chartType={chartType} rawData={rawData} />
+        <ProcessedDataPanel
+          chartType={chartType}
+          data={data}
+          onUseInChart={handleUseInChart}
+        />
       </div>
     </div>
   );

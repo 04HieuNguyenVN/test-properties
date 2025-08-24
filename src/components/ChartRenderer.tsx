@@ -8,7 +8,6 @@ import {
   StackedBarChart,
   ClusteredBarChart,
 } from "./charts";
-import chartData from "../data/chartData.json";
 
 type Props = {
   chartType:

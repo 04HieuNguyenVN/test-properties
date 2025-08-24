@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import chartData from "../../data/chartData.json";
+// import chartData from "../../data/chartData.json"; // Removed direct import
 
 // Thêm prop data để nhận dữ liệu từ ngoài vào
 interface LineAndColumnChartProps {
@@ -63,15 +63,15 @@ export const LineAndColumnChart: React.FC<LineAndColumnChartProps> = ({
         />
         <Tooltip />
         {config.legend?.enabled && <Legend />}
-        <Bar yAxisId="left" dataKey="sales" fill="#0088FE" name="Sales" />
-        <Line
+        {/* <Bar yAxisId="left" dataKey="sales" fill="#0088FE" name="Sales" /> */}
+        {/* <Line
           yAxisId="right"
           type="monotone"
           dataKey="profit"
           stroke="#00C49F"
           strokeWidth={2}
           name="Profit"
-        />
+        /> */}
       </ComposedChart>
     </ResponsiveContainer>
   );

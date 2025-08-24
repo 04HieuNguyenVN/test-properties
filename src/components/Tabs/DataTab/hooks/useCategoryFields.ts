@@ -11,7 +11,11 @@ import {
 import { useTranslation } from "react-i18next";
 import type { CategoryFields } from "../types";
 
-export function useCategoryFields(chartType: string, rawData: any[]) {
+export function useCategoryFields(
+  chartType: string,
+  rawData: any[],
+  autoDetect = true
+) {
   const { t } = useTranslation();
   const [dataSource, setDataSource] = useState("API");
   const [categoryFields, setCategoryFields] = useState<CategoryFields>({
@@ -26,14 +30,14 @@ export function useCategoryFields(chartType: string, rawData: any[]) {
     columnLegend: [],
   });
 
-  // Auto-detect & preload field options when rawData/chartType changes
-  useEffect(() => {
-    if (!rawData || rawData.length === 0) return;
+  // detection logic extracted so it can be run on-demand
+  const detectAndSetFields = (sourceRawData: any[]) => {
+    if (!sourceRawData || sourceRawData.length === 0) return;
 
     // expose rawData to FIELD_OPTIONS pool (giữ nguyên hành vi cũ)
-    loadFieldOptions({ temp: rawData }, "temp");
+    loadFieldOptions({ temp: sourceRawData }, "temp");
 
-    const keys = Object.keys(rawData[0] || {});
+    const keys = Object.keys(sourceRawData[0] || {});
     const pick = (predicate: (k: string) => boolean, fallbackIdx = 0) =>
       keys.find((k) => predicate(k.toLowerCase())) ??
       keys[fallbackIdx] ??
@@ -115,7 +119,14 @@ export function useCategoryFields(chartType: string, rawData: any[]) {
         ? [{ id: 3, field: legendField, action: "no-action" }]
         : [],
     }));
-  }, [rawData, chartType]);
+  };
+
+  // Auto-detect & preload field options when rawData/chartType changes (only if autoDetect)
+  useEffect(() => {
+    if (!autoDetect) return;
+    if (!rawData || rawData.length === 0) return;
+    detectAndSetFields(rawData);
+  }, [rawData, chartType, autoDetect]);
 
   const getAvailableFields = useMemo(
     () => () => CHART_AVAILABLE_FIELDS[chartType] || DEFAULT_AVAILABLE_FIELDS,
@@ -150,6 +161,7 @@ export function useCategoryFields(chartType: string, rawData: any[]) {
   const getFieldDisplayName = (fieldKey: string) =>
     FIELD_DISPLAY_NAMES[fieldKey] || fieldKey;
 
+  // Add field -> tạo item rỗng để Select hiển thị trống
   const addFieldToCategory = (category: string) => {
     setCategoryFields((prev) => ({
       ...prev,
@@ -175,6 +187,14 @@ export function useCategoryFields(chartType: string, rawData: any[]) {
     }));
   };
 
+  // ✕ Remove field -> bật lại nút Add khi list rỗng/đủ điều kiện
+  const removeFieldFromCategory = (category: string, fieldId: number) => {
+    setCategoryFields((prev) => ({
+      ...prev,
+      [category]: (prev[category] || []).filter((f) => f.id !== fieldId),
+    }));
+  };
+
   return {
     dataSource,
     setDataSource,
@@ -185,5 +205,7 @@ export function useCategoryFields(chartType: string, rawData: any[]) {
     allowsAddingFieldsToCategory,
     addFieldToCategory,
     updateFieldInCategory,
+    removeFieldFromCategory, // ✨ expose
+    detectAndSetFields,
   };
 }

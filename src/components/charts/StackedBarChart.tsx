@@ -1,6 +1,6 @@
 import React from "react";
 import { Bar as AntPlotBar } from "@ant-design/plots";
-import chartData from "../../data/chartData.json";
+// Removed direct import of chartData.json
 
 // ===== Props cho biểu đồ cột chồng ngang =====
 // Thêm prop data để nhận dữ liệu từ ngoài vào

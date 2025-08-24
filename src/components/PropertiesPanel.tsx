@@ -1,18 +1,15 @@
+// components/PropertiesPanel.tsx
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tabs } from "antd";
 import type { RootState } from "../store/store";
-import {
-  setActiveSubTab,
-  setActiveTab,
-  type ChartState,
-} from "../store/chartSlice";
+import { setActiveSubTab, setActiveTab, type ChartState } from "../store/chart";
 
 import { DataTab } from "./Tabs/DataTab";
 import FormatConfigTab from "./Tabs/FormatConfigTab";
 import GeneralConfigTab from "./Tabs/GeneralConfigTab";
-import chartData from "../data/chartData.json";
 import { useTranslation } from "react-i18next";
+import type { DataConfigState } from "./Tabs/DataTab/types";
 
 const { TabPane } = Tabs;
 
@@ -20,18 +17,27 @@ interface PropertiesPanelProps {
   chartType: string;
   rawData: any;
   data: any;
+  /** Giá trị cấu hình dữ liệu hiện tại (đến từ Provider) */
+  dataConfig?: DataConfigState;
+  /** Emit khi DataTab thay đổi cấu hình */
+  onDataConfigChange?: (next: DataConfigState) => void;
+  availableTables?: string[]; // thêm prop
 }
 
 const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   chartType,
   rawData,
   data,
+  dataConfig,
+  onDataConfigChange,
+  availableTables = [], // fallback
 }) => {
   const dispatch = useDispatch();
   const { activeTab, activeSubTab } = useSelector(
     (s: RootState) => s.chart
   ) as ChartState;
   const { t } = useTranslation("propertiesPanel");
+
   return (
     <Tabs
       activeKey={activeTab}
@@ -42,7 +48,14 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     >
       <TabPane tab={t("tabs.data", "Data")} key="data">
         <div className="properties-content">
-          <DataTab chartType={chartType} rawData={rawData} data={data} />
+          <DataTab
+            chartType={chartType}
+            rawData={rawData}
+            data={data}
+            value={dataConfig}
+            onChange={onDataConfigChange}
+            tableNames={availableTables} // truyền vào đây
+          />
         </div>
       </TabPane>
 

@@ -10,11 +10,10 @@ import {
   PieChart as PieChartIcon,
   TrendingUp,
 } from "lucide-react";
-import { setChartType, type ChartState } from "../store/chartSlice";
+import { setChartType, type ChartState } from "../store/chart";
 import type { RootState } from "../store/store";
 
 const ChartToolbar: React.FC = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { chartType } = useSelector((s: RootState) => s.chart) as ChartState;
   const { t, i18n } = useTranslation("charts");
@@ -30,7 +29,7 @@ const ChartToolbar: React.FC = () => {
   ) => (
     <Button
       onClick={() => {
-        navigate(`/chart/${key}`);
+        navigate(`/${key}`);
       }}
       className={`chart-type-button ${chartType === key ? "active" : ""}`}
       title={t(chartKey, defaultLabel)}

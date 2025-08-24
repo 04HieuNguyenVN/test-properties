@@ -6,7 +6,7 @@ import {
   ChartState,
   toggleSection,
   updateFormatConfig,
-} from "../../../store/chartSlice";
+} from "../../../store/chart";
 import { BAR_CHART_TYPES } from "../../../constants";
 import { Button } from "antd";
 import { RotateCcw } from "lucide-react";

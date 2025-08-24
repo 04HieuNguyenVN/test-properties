@@ -1,6 +1,5 @@
 import React from "react";
 import { Bar as AntPlotBar } from "@ant-design/plots";
-import chartData from "../../data/chartData.json";
 import { useTranslation } from "react-i18next";
 
 // Thêm prop data để nhận dữ liệu từ ngoài vào

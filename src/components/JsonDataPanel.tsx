@@ -3,45 +3,30 @@ import { Card, Typography, Button, Space, Tooltip } from "antd";
 import { Code, Eye, EyeOff, RotateCcw } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-
-import chartData from "../data/chartData.json";
-import { setSelectedData } from "../store/chartSlice";
-import "../styles/data-display.css";
+// ❌ Bỏ import chartData.json
+// import chartData from "../data/chartData.json";
+import { setSelectedData } from "../store/chart";
+import "../styles/data/data-display.css";
 
 const { Title } = Typography;
 
-const JsonDataPanel: React.FC = () => {
+type JsonDataPanelProps = {
+  chartType: string;
+  rawData: any[];
+};
+
+const JsonDataPanel: React.FC<JsonDataPanelProps> = ({
+  chartType,
+  rawData,
+}) => {
   const [showRawData, setShowRawData] = useState(true);
   const dispatch = useDispatch();
 
-  const { chartType, selectedData } = useSelector(
-    (state: RootState) => state.chart
-  );
+  const { selectedData } = useSelector((state: RootState) => state.chart);
 
-  // Map chartType to the correct data array from chartData.json
-  const getChartDataArray = () => {
-    switch (chartType) {
-      case "stackedColumn":
-        return chartData.monthlyData;
-      case "stackedBar":
-        return chartData.stackedData;
-      case "clusteredColumn":
-      case "lineAndColumn":
-      case "line":
-      case "clusteredBar":
-        return chartData.monthlyData;
-      case "pie":
-        return chartData.categories;
-      default:
-        return [];
-    }
-  };
-
-  // Show selectedData if available, else show the correct chart data array
-  const rawData =
-    selectedData && selectedData.length > 0
-      ? selectedData
-      : getChartDataArray();
+  // Ưu tiên selectedData nếu có, ngược lại dùng rawData từ Provider
+  const displayData =
+    selectedData && selectedData.length > 0 ? selectedData : rawData;
 
   const handleReset = () => {
     dispatch(setSelectedData([]));
@@ -85,7 +70,7 @@ const JsonDataPanel: React.FC = () => {
       {showRawData && (
         <div className="panel-content">
           <div className="json-display">
-            <pre>{JSON.stringify(rawData, null, 2)}</pre>
+            <pre>{JSON.stringify(displayData, null, 2)}</pre>
           </div>
         </div>
       )}

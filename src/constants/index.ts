@@ -149,7 +149,7 @@ export const CHART_AVAILABLE_FIELDS: { [key: string]: string[] } = {
 };
 
 // Chart types không cho phép thêm nhiều fields
-export const SIMPLE_CHART_TYPES = ["pie"];
+export const SIMPLE_CHART_TYPES = [""];
 
 // Fields chỉ cho phép 1 field
 export const SINGLE_FIELD_TYPES = [

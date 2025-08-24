@@ -43,8 +43,7 @@ const FieldCategoryBlock: React.FC<Props> = ({
 
       <div className="field-list">
         {fields.map(renderField)}
-
-        {canAdd && (
+        {fields.length === 0 && (
           <div className="add-field-button">
             <Button
               title={t("addField", "Thêm trường mới vào nhóm")}
@@ -53,6 +52,7 @@ const FieldCategoryBlock: React.FC<Props> = ({
               onClick={onAdd}
               block
               size="small"
+              disabled={!canAdd}
             >
               {t("addField", "Add field")}
             </Button>

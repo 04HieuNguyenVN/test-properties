@@ -6,15 +6,38 @@ import { DATA_SOURCE_OPTIONS } from "../../../../constants";
 type Props = {
   dataSource: string;
   onChange: (v: string) => void;
-  tableName: string;
+  tableName?: string;
+  tableNames?: string[]; // thêm optional prop
+  onTableChange?: (table?: string) => void;
 };
 
 const DataSourceSelector: React.FC<Props> = ({
   dataSource,
   onChange,
   tableName,
+  tableNames = [], // fallback rỗng
+  onTableChange,
 }) => {
   const { t } = useTranslation("dataTab");
+
+  const tableOptions =
+    tableNames.length > 0
+      ? tableNames.map((name) => ({
+          label: t(`table.options.${name}`, name),
+          value: name,
+        }))
+      : [
+          {
+            label: t(`table.options.${tableName || ""}`, tableName || ""),
+            value: tableName || "",
+          },
+        ];
+  // Insert an explicit empty option at the top so Select can be empty on init
+  const tableOptionsWithEmpty = [
+    { label: t("table.options.none", "(Không chọn)"), value: "" },
+    ...tableOptions,
+  ];
+
   return (
     <div className="data-source-section">
       <div className="source-table-row">
@@ -41,6 +64,7 @@ const DataSourceSelector: React.FC<Props> = ({
               value={dataSource}
               onChange={onChange}
               style={{ width: "100%" }}
+              disabled
               options={DATA_SOURCE_OPTIONS.map((opt) => ({
                 ...opt,
                 label: t(
@@ -55,6 +79,7 @@ const DataSourceSelector: React.FC<Props> = ({
             />
           </Tooltip>
         </div>
+
         <div className="selector-group">
           <Tooltip
             title={t(
@@ -78,15 +103,12 @@ const DataSourceSelector: React.FC<Props> = ({
                 "Chọn hành động cho trường trong nhóm"
               )}
               size="small"
-              value={tableName}
+              value={tableName || undefined}
               style={{ width: "100%" }}
-              disabled
-              options={[
-                {
-                  label: t(`table.options.${tableName}`, tableName),
-                  value: tableName,
-                },
-              ]}
+              options={tableOptionsWithEmpty}
+              onChange={(v) =>
+                onTableChange && onTableChange(v ? String(v) : undefined)
+              }
               placeholder={t("table.selectPlaceholder", "Chọn bảng dữ liệu")}
             />
           </Tooltip>

@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import chartData from "../../data/chartData.json";
 
 // ===== Props cho biểu đồ cột nhóm dọc =====
 // Thêm prop data để nhận dữ liệu từ ngoài vào
@@ -57,11 +56,7 @@ export const ClusteredColumnChart: React.FC<ClusteredColumnChartProps> = ({
         />
         <Tooltip />
         {/* Hiển thị chú giải nếu có cấu hình */}
-        {config.legend?.enabled && <Legend />}
-        {/* Cột dữ liệu visitors */}
-        <Bar dataKey="visitors" fill="#0088FE" name="Visitors" />
-        {/* Cột dữ liệu revenue */}
-        <Bar dataKey="revenue" fill="#00C49F" name="Revenue" />
+        {config.legend?.enabled && <Legend />}/
       </BarChart>
     </ResponsiveContainer>
   );
