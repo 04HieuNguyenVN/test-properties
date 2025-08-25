@@ -40,6 +40,18 @@ export const DataTab: React.FC<DataTabProps> = ({
   // ✅ Đồng bộ từ "value" (nếu chạy controlled) nhưng CHỈ khi khác hiện tại
   useEffect(() => {
     if (!value) return;
+    const incomingJson = JSON.stringify(value || null);
+    if (
+      lastEmittedJsonRef.current &&
+      lastEmittedJsonRef.current === incomingJson
+    ) {
+      // Echo of our own emit — ignore
+      console.debug?.("DataTab: ignoring echoed value from parent", {
+        chartType,
+      });
+      lastEmittedJsonRef.current = null;
+      return;
+    }
     if (value.dataSource !== dataSource) {
       setDataSource(value.dataSource);
     }
@@ -118,23 +130,55 @@ export const DataTab: React.FC<DataTabProps> = ({
   }, [selectedTable, data, getAvailableFields]);
   // ✅ Chỉ phát onChange khi khác "value" (tránh ping-pong với Provider)
   const didMount = useRef(false);
+  // ref để lưu trạng thái DataTab riêng cho từng chartType (giữ local, không emit khi restore)
+  const perChartStateRef = useRef<Record<string, any>>({});
+  const prevChartRef = useRef<string>(chartType);
+  // khi restore state từ map, tránh emit onChange
+  const suppressOnChangeRef = useRef(false);
+  // track last emitted config to avoid reacting to echoed `value` from parent
+  const lastEmittedJsonRef = useRef<string | null>(null);
 
   // Reset the mount-skip flag whenever the chart type changes so that
   // switching charts will not immediately emit an onChange from stale state
   // and cause a ping-pong with the Provider.
   useEffect(() => {
-    didMount.current = false;
-    // When switching charts, clear internal selection so each chart's
-    // DataTab is isolated, unless a controlled `value` explicitly
-    // provides a tableName for the new chart.
-    const incomingTable = (value && value.tableName) || undefined;
-    if (!incomingTable) {
-      setSelectedTable(undefined);
-      setCategoryFields({});
-      // Reset data source to default so charts don't share the previous
-      // DataTab's source when switching between chart types.
-      setDataSource("API");
+    // If chartType changed, persist previous state and restore saved state for new chartType
+    if (prevChartRef.current !== chartType) {
+      // persist previous
+      perChartStateRef.current[prevChartRef.current] = {
+        tableName: selectedTable,
+        categoryFields,
+        dataSource,
+      };
+
+      const incomingTable = (value && value.tableName) || undefined;
+      const saved = perChartStateRef.current[chartType];
+
+      // Reset didMount so first user-driven change after switch doesn't immediately emit
+      didMount.current = false;
+
+      if (incomingTable) {
+        // Controlled by parent; restore from value (do not suppress)
+        setSelectedTable(incomingTable);
+        setCategoryFields((value && value.categoryFields) || {});
+        setDataSource((value && value.dataSource) || "API");
+      } else if (saved) {
+        // restore previous per-chart state but suppress onChange while restoring
+        suppressOnChangeRef.current = true;
+        setSelectedTable(saved.tableName);
+        setCategoryFields(saved.categoryFields || {});
+        setDataSource(saved.dataSource || "API");
+      } else {
+        // no saved state → start empty but suppress the initial emit
+        suppressOnChangeRef.current = true;
+        setSelectedTable(undefined);
+        setCategoryFields({});
+        setDataSource("API");
+      }
+
+      prevChartRef.current = chartType;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartType]);
 
   useEffect(() => {
@@ -145,6 +189,14 @@ export const DataTab: React.FC<DataTabProps> = ({
       tableName: selectedTable,
     };
 
+    // If we are restoring state after a chart switch, skip emitting once.
+    if (suppressOnChangeRef.current) {
+      suppressOnChangeRef.current = false;
+      // mark as mounted so next real user change will emit
+      didMount.current = true;
+      return;
+    }
+
     // Skip the very first render to avoid mount-time ping-pong with Provider
     if (!didMount.current) {
       didMount.current = true;
@@ -152,6 +204,12 @@ export const DataTab: React.FC<DataTabProps> = ({
     }
 
     if (!value || !deepEqual(value, next)) {
+      try {
+        // mark last emitted so incoming identical `value` can be ignored
+        lastEmittedJsonRef.current = JSON.stringify(next);
+      } catch (e) {
+        lastEmittedJsonRef.current = null;
+      }
       onChange(next);
     }
   }, [dataSource, categoryFields, selectedTable, value, onChange]);
