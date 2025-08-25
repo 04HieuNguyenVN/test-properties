@@ -72,10 +72,11 @@ const ChartRouterSync: React.FC = () => {
         config,
         rawData,
         data,
-        // ✅ LẤY THÊM hai giá trị này từ Provider
+        // ✅ LẤY THÊM các giá trị này từ Provider
         dataConfig,
         onDataConfigChange,
         availableTables,
+        processSummary,
       }) => (
         <Layout ref={layoutRef} style={{ position: "relative" }}>
           <Content>
@@ -98,6 +99,7 @@ const ChartRouterSync: React.FC = () => {
                 config={config}
                 rawData={rawData}
                 data={data}
+                processSummary={processSummary}
               />
             </Card>
           </Content>

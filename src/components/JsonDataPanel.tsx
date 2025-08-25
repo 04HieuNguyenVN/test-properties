@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Typography, Button, Space, Tooltip } from "antd";
 import { Code, Eye, EyeOff, RotateCcw } from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 // ❌ Bỏ import chartData.json
 // import chartData from "../data/chartData.json";
@@ -13,24 +13,31 @@ const { Title } = Typography;
 type JsonDataPanelProps = {
   chartType: string;
   rawData: any[];
+  selectedData?: any[]; // per-chart selected data (optional)
+  onReset?: () => void; // optional reset handler
 };
 
 const JsonDataPanel: React.FC<JsonDataPanelProps> = ({
   chartType,
   rawData,
+  selectedData: selectedDataProp,
+  onReset,
 }) => {
   const [showRawData, setShowRawData] = useState(true);
   const dispatch = useDispatch();
-
-  const { selectedData } = useSelector((state: RootState) => state.chart);
-
-  // Ưu tiên selectedData nếu có, ngược lại dùng rawData từ Provider
-  const displayData =
-    selectedData && selectedData.length > 0 ? selectedData : rawData;
+  // Per-chart selected data: if prop provided use it, otherwise prefer rawData
+  const selectedData =
+    typeof selectedDataProp !== "undefined" ? selectedDataProp : [];
 
   const handleReset = () => {
+    if (onReset) return onReset();
+    // Fallback: clear global selected data to keep backward compatibility
     dispatch(setSelectedData([]));
   };
+
+  // Nếu có selectedData (per-chart) dùng nó, nếu không hiển thị rawData
+  const selectedDataOrRaw =
+    selectedData && selectedData.length > 0 ? selectedData : rawData;
 
   return (
     <Card className="data-panel json-data-panel">
@@ -70,7 +77,7 @@ const JsonDataPanel: React.FC<JsonDataPanelProps> = ({
       {showRawData && (
         <div className="panel-content">
           <div className="json-display">
-            <pre>{JSON.stringify(displayData, null, 2)}</pre>
+            <pre>{JSON.stringify(selectedDataOrRaw, null, 2)}</pre>
           </div>
         </div>
       )}

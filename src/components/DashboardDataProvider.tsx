@@ -5,6 +5,7 @@ import type { ChartState } from "../store/chart";
 import chartData from "../data/chartData.json";
 import { setRawChartDataForChart } from "../store/chart";
 import type { CategoryFields, FieldItem } from "./Tabs/DataTab/types";
+import { CHART_AVAILABLE_FIELDS, DEFAULT_AVAILABLE_FIELDS } from "../constants";
 import { getTableName } from "./Tabs/DataTab/utils/getTableName";
 
 interface DataConfigState {
@@ -26,6 +27,15 @@ interface DashboardDataProviderProps {
     onDataConfigChange: (next: DataConfigState) => void;
     /** Danh sách bảng dữ liệu có sẵn */
     availableTables: string[];
+    /** Tóm tắt kết quả các action (sum/count/avg) trên các field đã chọn */
+    processSummary: { key: string; value: number }[];
+    /** Mapped chart config (xField, yFields, legendField, valueField) */
+    chartConfig: {
+      xField?: string;
+      yFields?: string[];
+      legendField?: string;
+      valueField?: string;
+    };
   }) => React.ReactNode;
 }
 
@@ -51,14 +61,25 @@ const applyAgg = (
   field: string,
   action: string | undefined
 ): number => {
-  const nums = rows
-    .map((r) => r?.[field])
-    .filter((v) => typeof v === "number") as number[];
-
   const op = (action || "sum").toLowerCase();
+
+  // count: count non-null/undefined values (works for strings, numbers, etc.)
+  if (op === "count") {
+    return rows.filter((r) => r && typeof r === "object" && r[field] != null)
+      .length;
+  }
+
+  // For numeric aggregations, coerce to numbers and ignore non-numeric
+  const nums = rows
+    .map((r) => {
+      const v = r?.[field];
+      const n = typeof v === "number" ? v : Number(v);
+      return Number.isFinite(n) ? n : null;
+    })
+    .filter((v) => v != null) as number[];
+
   if (op === "average" || op === "avg" || op === "mean")
     return nums.length ? nums.reduce((s, v) => s + v, 0) / nums.length : 0;
-  if (op === "count") return nums.length;
   if (op === "min") return nums.length ? Math.min(...nums) : 0;
   if (op === "max") return nums.length ? Math.max(...nums) : 0;
 
@@ -141,6 +162,50 @@ const computeProcessed = (
   });
 };
 
+const computeProcessSummary = (
+  chartType: string,
+  rawData: any[],
+  cfg: CategoryFields
+): { key: string; value: number }[] => {
+  if (!rawData || rawData.length === 0) return [];
+  const out: { key: string; value: number }[] = [];
+
+  // Determine category order to match DataTab UI
+  const categoryOrder: string[] =
+    (CHART_AVAILABLE_FIELDS[chartType] && CHART_AVAILABLE_FIELDS[chartType]) ||
+    Object.keys(cfg || {}).length
+      ? Object.keys(cfg || {})
+      : DEFAULT_AVAILABLE_FIELDS;
+
+  categoryOrder.forEach((cat) => {
+    const fields = cfg[cat] || [];
+    fields.forEach((fi) => {
+      if (!fi || !fi.field) return;
+      const action = (fi.action || "no-action").toLowerCase();
+      if (!action || action === "no-action") return;
+      const key = `${
+        action[0].toUpperCase() + action.slice(1)
+      }${fi.field.replace(/[^a-zA-Z0-9]/g, "")}`;
+      const value = applyAgg(rawData, fi.field, action);
+      out.push({ key, value });
+    });
+  });
+  return out;
+};
+
+const buildChartConfigFromDataConfig = (cfg: DataConfigState) => {
+  const xField = firstField(cfg.categoryFields.xAxis)?.field;
+  const legendField = firstField(cfg.categoryFields.legend)?.field;
+  const yFields =
+    (cfg.categoryFields.yAxis &&
+      cfg.categoryFields.yAxis.map((f) => f.field)) ||
+    (cfg.categoryFields.values &&
+      cfg.categoryFields.values.map((f) => f.field)) ||
+    [];
+  const valueField = firstField(cfg.categoryFields.values)?.field;
+  return { xField, yFields, legendField, valueField };
+};
+
 /* -------------------- Provider -------------------- */
 
 const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
@@ -193,6 +258,10 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
 
   // Dữ liệu sau xử lý theo cấu hình — KHỞI TẠO RỖNG
   const [processed, setProcessed] = React.useState<any[]>([]);
+  const [processSummary, setProcessSummary] = React.useState<
+    { key: string; value: number }[]
+  >([]);
+  const [chartConfigMap, setChartConfigMap] = React.useState<any>({});
 
   // Dùng khóa chuỗi để chỉ phụ thuộc nội dung cấu hình (tránh phụ thuộc theo reference)
   const cfgKey = React.useMemo(() => JSON.stringify(dataConfig), [dataConfig]);
@@ -206,6 +275,15 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
     );
     // ⬇️ KHÔNG Fallback về rawData nữa
     setProcessed(next && next.length ? next : []);
+    // compute process summary and chartConfig
+    const summary = computeProcessSummary(
+      chartType,
+      rawData,
+      dataConfig.categoryFields
+    );
+    setProcessSummary(summary);
+    const cfgMap = buildChartConfigFromDataConfig(dataConfig);
+    setChartConfigMap(cfgMap);
   }, [chartType, rawData, cfgKey]);
 
   // Dispatch rawData into Redux from a single place (Provider)
@@ -255,6 +333,8 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
         dataConfig,
         onDataConfigChange: handleDataConfigChange,
         availableTables,
+        processSummary,
+        chartConfig: chartConfigMap,
       })}
     </>
   );

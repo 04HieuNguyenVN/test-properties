@@ -1,0 +1,10 @@
+.process-summary-wrapper {
+  margin: 8px 0;
+}
+.process-summary-list {
+  margin: 0;
+  padding-left: 16px;
+}
+.process-summary-list li {
+  margin-bottom: 4px;
+}

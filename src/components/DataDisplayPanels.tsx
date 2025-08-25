@@ -12,6 +12,7 @@ interface DataDisplayPanelsProps {
   config: any;
   rawData: any[];
   data: any[]; // dữ liệu mặc định từ Provider
+  processSummary?: { key: string; value: number }[];
 }
 
 const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
@@ -19,6 +20,7 @@ const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
   config,
   rawData,
   data,
+  processSummary = [],
 }) => {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -84,11 +86,16 @@ const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
           overflow: "hidden",
         }}
       >
-        <JsonDataPanel chartType={chartType} rawData={rawData} />
+        <JsonDataPanel
+          chartType={chartType}
+          rawData={rawData}
+          onReset={() => setChartData(data)}
+        />
         <ProcessedDataPanel
           chartType={chartType}
           data={data}
           onUseInChart={handleUseInChart}
+          processSummary={processSummary}
         />
       </div>
     </div>
