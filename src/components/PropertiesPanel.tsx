@@ -21,7 +21,7 @@ interface PropertiesPanelProps {
   dataConfig?: DataConfigState;
   /** Emit khi DataTab thay đổi cấu hình */
   onDataConfigChange?: (next: DataConfigState) => void;
-  availableTables?: string[]; // thêm prop
+  availableTables?: string[]; // danh sách bảng để chọn
 }
 
 const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
@@ -30,7 +30,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   data,
   dataConfig,
   onDataConfigChange,
-  availableTables = [], // fallback
+  availableTables = [],
 }) => {
   const dispatch = useDispatch();
   const { activeTab, activeSubTab } = useSelector(
@@ -54,7 +54,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             data={data}
             value={dataConfig}
             onChange={onDataConfigChange}
-            tableNames={availableTables} // truyền vào đây
+            tableNames={availableTables}
           />
         </div>
       </TabPane>

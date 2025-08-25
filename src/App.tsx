@@ -77,6 +77,7 @@ const ChartRouterSync: React.FC = () => {
         onDataConfigChange,
         availableTables,
         processSummary,
+        chartConfig,
       }) => (
         <Layout ref={layoutRef} style={{ position: "relative" }}>
           <Content>
@@ -97,6 +98,7 @@ const ChartRouterSync: React.FC = () => {
               <DataDisplayPanels
                 chartType={chartType}
                 config={config}
+                chartConfig={chartConfig}
                 rawData={rawData}
                 data={data}
                 processSummary={processSummary}

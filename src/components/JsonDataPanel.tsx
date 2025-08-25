@@ -3,8 +3,7 @@ import { Card, Typography, Button, Space, Tooltip } from "antd";
 import { Code, Eye, EyeOff, RotateCcw } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-// ❌ Bỏ import chartData.json
-// import chartData from "../data/chartData.json";
+// ❌ Không import chartData
 import { setSelectedData } from "../store/chart";
 import "../styles/data/data-display.css";
 
@@ -13,8 +12,8 @@ const { Title } = Typography;
 type JsonDataPanelProps = {
   chartType: string;
   rawData: any[];
-  selectedData?: any[]; // per-chart selected data (optional)
-  onReset?: () => void; // optional reset handler
+  selectedData?: any[];
+  onReset?: () => void;
 };
 
 const JsonDataPanel: React.FC<JsonDataPanelProps> = ({
@@ -25,17 +24,16 @@ const JsonDataPanel: React.FC<JsonDataPanelProps> = ({
 }) => {
   const [showRawData, setShowRawData] = useState(true);
   const dispatch = useDispatch();
-  // Per-chart selected data: if prop provided use it, otherwise prefer rawData
+
+  // Nếu có selectedData từ props thì dùng, không thì để rỗng (panel này chủ yếu để xem rawData)
   const selectedData =
     typeof selectedDataProp !== "undefined" ? selectedDataProp : [];
 
   const handleReset = () => {
     if (onReset) return onReset();
-    // Fallback: clear global selected data to keep backward compatibility
     dispatch(setSelectedData([]));
   };
 
-  // Nếu có selectedData (per-chart) dùng nó, nếu không hiển thị rawData
   const selectedDataOrRaw =
     selectedData && selectedData.length > 0 ? selectedData : rawData;
 
@@ -67,7 +65,6 @@ const JsonDataPanel: React.FC<JsonDataPanelProps> = ({
                 size="small"
                 icon={<RotateCcw size={14} />}
                 onClick={handleReset}
-                title="Reset to default data"
               />
             </Tooltip>
           )}

@@ -10,6 +10,7 @@ import ResizeHitbox from "./common/ResizeHitbox";
 interface DataDisplayPanelsProps {
   chartType: string;
   config: any;
+  chartConfig?: any; // ⬅️ chartConfig tính từ Provider (xField/yFields/legendField)
   rawData: any[];
   data: any[]; // dữ liệu mặc định từ Provider
   processSummary?: { key: string; value: number }[];
@@ -18,6 +19,7 @@ interface DataDisplayPanelsProps {
 const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
   chartType,
   config,
+  chartConfig,
   rawData,
   data,
   processSummary = [],
@@ -28,15 +30,13 @@ const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
   const { leftBasisPct, hitboxLeft, onMouseDown } = useHorizontalSplit({
     containerRef,
     storageKey: "dataLeftRatio",
-    defaultLeftRatio: 0.58, // ~58% cho Chart
+    defaultLeftRatio: 0.58,
     minLeftPx: 320,
     minRightPx: 320,
   });
 
-  // 👉 State dữ liệu thực tế dùng cho Chart (mặc định = data từ Provider)
+  // Dữ liệu thực tế dùng cho Chart (mặc định = data từ Provider)
   const [chartData, setChartData] = React.useState<any[]>(data);
-
-  // Khi Provider đổi chartType/data thì reset chartData
   React.useEffect(() => {
     setChartData(data);
   }, [data, chartType]);
@@ -64,18 +64,24 @@ const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
       >
         <ChartRenderer
           chartType={chartType as any}
-          config={config}
+          // Ưu tiên chartConfig từ Provider nếu có
+          config={
+            chartConfig && Object.keys(chartConfig).length
+              ? chartConfig
+              : config
+          }
           data={chartData}
         />
       </div>
 
-      {/* Hitbox vô hình bám mép Chart/Data */}
+      {/* Hitbox kéo thả */}
       <ResizeHitbox
         left={hitboxLeft}
         onMouseDown={onMouseDown}
         ariaLabel="Resize data panels"
       />
 
+      {/* Panels bên phải */}
       <div
         className="data-panels-container"
         style={{

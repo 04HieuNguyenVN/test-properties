@@ -19,8 +19,6 @@ const ProcessedDataPanel: React.FC<ProcessedDataPanelProps> = ({
   onUseInChart,
   processSummary = [],
 }) => {
-  // Ở đây bạn có thể thực hiện các bước xử lý/aggregate/sort...
-  // Hiện tại demo: giữ nguyên hoặc có thể biến đổi tuỳ ý.
   const [processed, setProcessed] = React.useState<any[]>(data);
 
   // Reset khi chartType/data gốc đổi
@@ -43,8 +41,6 @@ const ProcessedDataPanel: React.FC<ProcessedDataPanelProps> = ({
           <Title level={5} className="panel-title">
             PROCESSED DATA → CHART
           </Title>
-
-          {/* Nút đẩy thủ công (phòng khi bạn muốn kiểm soát) */}
           <Tooltip title="Dùng dữ liệu này cho biểu đồ">
             <Button
               size="small"

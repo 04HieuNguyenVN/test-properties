@@ -155,31 +155,14 @@ export const DataTab: React.FC<DataTabProps> = ({
         tableName={selectedTable}
         tableNames={computedTableNames}
         onTableChange={(tbl) => {
+          // update selected table
           setSelectedTable(tbl);
-          // If user cleared selection, reset fields
-          if (!tbl) {
-            setCategoryFields({});
-            return;
-          }
-          // If data is an object with named tables, detect using that table
-          if (data && !Array.isArray(data) && typeof data === "object") {
-            const tableData = (data as any)[tbl as string];
-            if (tableData && Array.isArray(tableData)) {
-              // detect and set fields from the selected table
-              // @ts-ignore - detectAndSetFields is returned by hook
-              if (typeof (detectAndSetFields as any) === "function") {
-                // call the hook's detector
-                (detectAndSetFields as any)(tableData);
-              }
-            }
-          } else if (Array.isArray(data) && data.length > 0) {
-            // If data is an array (single table), run detection on it
-            // @ts-ignore
-            if (typeof (detectAndSetFields as any) === "function") {
-              // @ts-ignore
-              (detectAndSetFields as any)(data as any[]);
-            }
-          }
+          // Reset all selected fields whenever the table changes so the
+          // DataTab starts empty for the newly selected table. The user can
+          // then run explicit detection or pick fields manually.
+          setCategoryFields({});
+          // Do not auto-detect fields here to avoid cross-chart side effects.
+          // If tbl is falsy (cleared), we've already reset fields above.
         }}
       />
 

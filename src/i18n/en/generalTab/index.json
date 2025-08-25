@@ -23,7 +23,9 @@
     "right": "Right"
   },
   "advanced": {
-    "title": "Advanced options"
+    "title": "Advanced options",
+    "responsive": "Responsive",
+    "maintainLayerOrder": "Maintain layer order"
   },
   "title": {
     "sectionTitle": "Title",
@@ -96,7 +98,7 @@
   "headerIcons": {
     "title": "Header icons",
     "colors": "Colors",
-    "icons": "Icons",
+    "iconsLabel": "Icons",
     "iconsTitle": "Icons",
     "show": "Show header icons",
     "background": "Background",

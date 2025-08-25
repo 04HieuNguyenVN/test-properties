@@ -23,7 +23,9 @@
     "right": "Phải"
   },
   "advanced": {
-    "title": "Tùy chọn nâng cao"
+    "title": "Tùy chọn nâng cao",
+    "responsive": "Tự điều chỉnh kích thước",
+    "maintainLayerOrder": "Duy trì thứ tự lớp"
   },
   "title": {
     "sectionTitle": "Tiêu đề",
@@ -96,7 +98,7 @@
   "headerIcons": {
     "title": "Biểu tượng tiêu đề",
     "colors": "Màu sắc",
-    "icons": "Biểu tượng",
+    "iconsLabel": "Biểu tượng",
     "iconsTitle": "Biểu tượng",
     "show": "Hiển thị biểu tượng tiêu đề",
     "background": "Nền",
