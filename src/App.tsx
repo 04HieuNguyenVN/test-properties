@@ -138,6 +138,8 @@ const ChartRouterSync: React.FC = () => {
 const PowerBIDashboard: React.FC = () => (
   <BrowserRouter>
     <Routes>
+      {/* Default: redirect root to /stackedColumn */}
+      <Route index element={<Navigate to="/stackedColumn" replace />} />
       <Route path=":type" element={<ChartRouterSync />} />
     </Routes>
   </BrowserRouter>

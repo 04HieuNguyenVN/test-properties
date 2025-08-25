@@ -4,12 +4,11 @@ import type { RootState } from "../store/store";
 import type { ChartState } from "../store/chart";
 import chartData from "../data/chartData.json";
 import { setRawChartDataForChart } from "../store/chart";
-
 import type { CategoryFields, FieldItem } from "./Tabs/DataTab/types";
 import { CHART_AVAILABLE_FIELDS, DEFAULT_AVAILABLE_FIELDS } from "../constants";
 import { getTableName } from "./Tabs/DataTab/utils/getTableName";
 
-/** Cấu hình DataTab được lưu/đồng bộ (per-chart) */
+/** ---- Types ---- */
 interface DataConfigState {
   dataSource: string;
   categoryFields: CategoryFields;
@@ -21,17 +20,11 @@ interface DashboardDataProviderProps {
     chartType: string;
     config: any;
     rawData: any[];
-    /** Dữ liệu đã xử lý theo cấu hình ở DataTab */
-    data: any[];
-    /** Cấu hình hiện tại của DataTab (để DataTab hiển thị lại) */
+    data: any[]; // dữ liệu đã xử lý
     dataConfig: DataConfigState;
-    /** Cho phép DataTab báo thay đổi cấu hình lên Provider */
     onDataConfigChange: (next: DataConfigState) => void;
-    /** Danh sách bảng dữ liệu có sẵn */
     availableTables: string[];
-    /** Tóm tắt kết quả các action (sum/count/avg...) trên field đã chọn */
     processSummary: { key: string; value: number }[];
-    /** Mapped chart config (xField, yFields, legendField, valueField) */
     chartConfig: {
       xField?: string;
       yFields?: string[];
@@ -41,8 +34,7 @@ interface DashboardDataProviderProps {
   }) => React.ReactNode;
 }
 
-/* -------------------- Helpers -------------------- */
-
+/** ---- Helpers chung ---- */
 const deepEqual = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b);
 const firstField = (items?: FieldItem[]) =>
   items && items.length > 0 ? items[0] : undefined;
@@ -53,12 +45,23 @@ const groupBy = (arr: any[], key: string) =>
     return acc;
   }, {});
 
+/** xác định field có “có vẻ” là số (dựa trên sample ≤ 50) */
+const isLikelyNumeric = (rows: any[], field?: string) => {
+  if (!field) return false;
+  let seen = 0,
+    ok = 0;
+  for (let i = 0; i < rows.length && seen < 50; i++) {
+    const v = rows[i]?.[field];
+    if (v == null) continue;
+    seen++;
+    const n = typeof v === "number" ? v : Number(v);
+    if (Number.isFinite(n)) ok++;
+  }
+  return seen > 0 && ok / seen >= 0.6;
+};
+
 /** Áp dụng phép gộp (sum/avg/min/max/count) an toàn */
-const applyAgg = (
-  rows: any[],
-  field: string,
-  action: string | undefined
-): number => {
+const applyAgg = (rows: any[], field: string, action?: string): number => {
   const op = (action || "sum").toLowerCase();
   if (op === "count") {
     return rows.filter((r) => r && typeof r === "object" && r[field] != null)
@@ -75,7 +78,7 @@ const applyAgg = (
     return nums.length ? nums.reduce((s, v) => s + v, 0) / nums.length : 0;
   if (op === "min") return nums.length ? Math.min(...nums) : 0;
   if (op === "max") return nums.length ? Math.max(...nums) : 0;
-  return nums.reduce((s, v) => s + v, 0); // sum mặc định
+  return nums.reduce((s, v) => s + v, 0); // mặc định sum
 };
 
 const hasAnySelectedField = (cfg?: CategoryFields) => {
@@ -90,16 +93,18 @@ const hasAnySelectedField = (cfg?: CategoryFields) => {
   return count > 0;
 };
 
-/** Tính dữ liệu processed theo cấu hình DataTab */
+const isBarChart = (t: string) => t === "clusteredBar" || t === "stackedBar";
+
+/** ---- Tính dữ liệu processed theo DataTab ---- */
 const computeProcessed = (
   chartType: string,
   rawData: any[],
   cfg: CategoryFields
 ): any[] => {
   if (!rawData || rawData.length === 0) return [];
-  if (!hasAnySelectedField(cfg)) return []; // ⬅️ chưa chọn gì ⇒ trả rỗng
+  if (!hasAnySelectedField(cfg)) return [];
 
-  // PIE: dùng `detail` làm nhãn lát, `values[0]` làm giá trị
+  // PIE
   if (chartType === "pie") {
     const detail =
       firstField(cfg.detail)?.field || firstField(cfg.legend)?.field;
@@ -108,30 +113,81 @@ const computeProcessed = (
     const g = groupBy(rawData, detail);
     return Object.entries(g).map(([k, rows]) => ({
       name: k,
-      value: applyAgg(rows, val.field, val.action),
+      value: applyAgg(
+        rows,
+        val.field,
+        val.action || (isLikelyNumeric(rows, val.field) ? "sum" : "count")
+      ),
     }));
   }
 
-  // XY Chart: Line/Column/Bar/Stacked/Clustered/Line&Column...
+  /** ---- BAR CHART (ngang): Y là danh mục, X là số đo ---- */
+  if (isBarChart(chartType)) {
+    const categoryKey =
+      firstField(cfg.yAxis)?.field || firstField(cfg.xAxis)?.field; // ưu tiên Y làm danh mục
+    const legendKey = firstField(cfg.legend)?.field || undefined;
+    // Measure: ưu tiên Values; nếu trống → dùng X‑Axis (trường hợp bạn chọn Area ở X)
+    const measureItems =
+      (cfg.values && cfg.values.length ? cfg.values : cfg.xAxis) || [];
+    const measure = firstField(measureItems);
+    if (!categoryKey || !measure?.field) return [];
+
+    if (legendKey) {
+      // PIVOT theo legend: mỗi giá trị legend → 1 cột
+      const gByCat = groupBy(rawData, categoryKey);
+      const out: any[] = [];
+      Object.entries(gByCat).forEach(([cat, rows]) => {
+        const gByLegend = groupBy(rows, legendKey);
+        const row: any = { [categoryKey]: cat };
+        Object.entries(gByLegend).forEach(([lg, lgRows]) => {
+          const inferred =
+            measure.action ||
+            (isLikelyNumeric(lgRows, measure.field) ? "sum" : "count");
+          row[lg] = applyAgg(lgRows, measure.field, inferred);
+        });
+        out.push(row);
+      });
+      return out;
+    }
+
+    // Không legend → mỗi measure là một series (WIDE)
+    const g = groupBy(rawData, categoryKey);
+    return Object.entries(g).map(([cat, rows]) => {
+      const row: any = { [categoryKey]: cat };
+      measureItems.forEach((m) => {
+        const inferred =
+          m.action || (isLikelyNumeric(rows, m.field) ? "sum" : "count");
+        row[m.field] = applyAgg(rows, m.field, inferred);
+      });
+      return row;
+    });
+  }
+
+  /** ---- Các chart khác (column/line/…): X là danh mục, Y là số đo ---- */
   const x = firstField(cfg.xAxis)?.field;
   const legend = firstField(cfg.legend)?.field;
   const yItems =
-    (cfg.yAxis?.length ? cfg.yAxis : cfg.values) ||
-    cfg.columnY || // (lineAndColumn) cột
-    [];
+    (cfg.yAxis?.length ? cfg.yAxis : cfg.values) || cfg.columnY || [];
   if (!x || !yItems.length) return [];
 
-  // Có legend → pivot theo legend (mỗi giá trị legend thành một cột)
   if (legend) {
+    // PIVOT theo legend (mỗi giá trị legend → 1 cột)
     const gByX = groupBy(rawData, x);
-    const y = firstField(yItems); // dùng trường Y đầu tiên khi có legend
+    const y = firstField(yItems);
     const out: any[] = [];
     Object.entries(gByX).forEach(([xKey, rows]) => {
       const gByLegend = groupBy(rows, legend);
       const row: any = { [x]: xKey };
       Object.entries(gByLegend).forEach(([lg, lgRows]) => {
+        const inferred =
+          y?.action ||
+          (y?.field
+            ? isLikelyNumeric(lgRows, y.field)
+              ? "sum"
+              : "count"
+            : "count");
         row[lg] = y?.field
-          ? applyAgg(lgRows, y.field, y.action)
+          ? applyAgg(lgRows, y.field, inferred)
           : lgRows.length;
       });
       out.push(row);
@@ -139,18 +195,19 @@ const computeProcessed = (
     return out;
   }
 
-  // Không legend → gộp theo X và tính cho từng Y
   const g = groupBy(rawData, x);
   return Object.entries(g).map(([xKey, rows]) => {
     const row: any = { [x]: xKey };
     yItems.forEach((it) => {
-      row[it.field] = applyAgg(rows, it.field, it.action);
+      const inferred =
+        it.action || (isLikelyNumeric(rows, it.field) ? "sum" : "count");
+      row[it.field] = applyAgg(rows, it.field, inferred);
     });
     return row;
   });
 };
 
-/** Tính tóm tắt kết quả action (sum/count...) cho panel ProcessedData */
+/** Kết quả action để hiển thị ở ProcessedDataPanel */
 const computeProcessSummary = (
   chartType: string,
   rawData: any[],
@@ -158,7 +215,6 @@ const computeProcessSummary = (
 ): { key: string; value: number }[] => {
   if (!rawData || rawData.length === 0) return [];
   const out: { key: string; value: number }[] = [];
-
   const categoryOrder: string[] =
     (CHART_AVAILABLE_FIELDS[chartType] && CHART_AVAILABLE_FIELDS[chartType]) ||
     (Object.keys(cfg || {}).length
@@ -181,10 +237,29 @@ const computeProcessSummary = (
   return out;
 };
 
-/** Map từ DataTab → chartConfig cơ bản (xField, yFields, legendField, valueField) */
-const buildChartConfigFromDataConfig = (cfg: DataConfigState) => {
-  const xField = firstField(cfg.categoryFields.xAxis)?.field;
+/** Map DataTab → chartConfig cơ bản (phần “định tuyến kênh” cho ChartRenderer) */
+const buildChartConfigFromDataConfig = (
+  chartType: string,
+  cfg: DataConfigState
+) => {
   const legendField = firstField(cfg.categoryFields.legend)?.field;
+
+  if (isBarChart(chartType)) {
+    // ⬅️ BAR: Y là danh mục → map vào xField của chart component (chart sẽ vẽ yField="category")
+    const categoryKey =
+      firstField(cfg.categoryFields.yAxis)?.field ||
+      firstField(cfg.categoryFields.xAxis)?.field;
+    const measureItems =
+      (cfg.categoryFields.values && cfg.categoryFields.values.length
+        ? cfg.categoryFields.values
+        : cfg.categoryFields.xAxis) || [];
+    const yFields = measureItems.map((f) => f.field); // khi không legend
+    const valueField = firstField(cfg.categoryFields.values)?.field;
+    return { xField: categoryKey, yFields, legendField, valueField };
+  }
+
+  // Mặc định (column/line …): X là danh mục
+  const xField = firstField(cfg.categoryFields.xAxis)?.field;
   const yFields =
     (cfg.categoryFields.yAxis &&
       cfg.categoryFields.yAxis.map((f) => f.field)) ||
@@ -195,8 +270,7 @@ const buildChartConfigFromDataConfig = (cfg: DataConfigState) => {
   return { xField, yFields, legendField, valueField };
 };
 
-/* -------------------- Provider -------------------- */
-
+/** ---- Provider ---- */
 const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
   children,
 }) => {
@@ -205,7 +279,6 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
   ) as ChartState;
   const config = chartConfigs[chartType]?.format;
 
-  // Mỗi chartType có một cấu hình DataTab riêng (controlled)
   const makeDefaultConfig = (ct: string): DataConfigState => ({
     dataSource: "API",
     categoryFields: {
@@ -219,15 +292,16 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
       lineY: [],
       columnLegend: [],
     },
-    tableName: undefined, // khởi tạo: chưa chọn table
+    tableName: undefined,
   });
+
   const [dataConfigByChart, setDataConfigByChart] = React.useState<
     Record<string, DataConfigState>
   >(() => ({}));
   const dataConfig: DataConfigState =
     dataConfigByChart[chartType] ?? makeDefaultConfig(chartType);
 
-  // Chọn nguồn raw theo tableName (nếu người dùng chọn), fallback theo chartType
+  // Xác định rawData theo tableName (nếu đã chọn)
   const selectedTableName = dataConfig?.tableName;
   const rawData: any[] =
     selectedTableName && (chartData as any)[selectedTableName]
@@ -238,24 +312,22 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
       ? (chartData as any).stackedData
       : (chartData as any).monthlyData;
 
-  // State dữ liệu/summary/config tính từ DataTab
   const [processed, setProcessed] = React.useState<any[]>([]);
   const [processSummary, setProcessSummary] = React.useState<
     { key: string; value: number }[]
   >([]);
   const [chartConfigMap, setChartConfigMap] = React.useState<any>({});
 
-  // Dùng khoá chuỗi để theo dõi nội dung cấu hình (tránh lệ thuộc reference)
   const cfgKey = React.useMemo(() => JSON.stringify(dataConfig), [dataConfig]);
+  const dispatch = useDispatch();
 
-  // Tính lại processed + summary + chartConfig mỗi khi chartType/rawData/cấu hình đổi
   React.useEffect(() => {
     const next = computeProcessed(
       chartType,
       rawData,
       dataConfig.categoryFields
     );
-    setProcessed(next && next.length ? next : []); // KHÔNG fallback về rawData
+    setProcessed(next && next.length ? next : []); // không fallback
 
     const summary = computeProcessSummary(
       chartType,
@@ -264,28 +336,26 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
     );
     setProcessSummary(summary);
 
-    const cfgMap = buildChartConfigFromDataConfig(dataConfig);
+    const cfgMap = buildChartConfigFromDataConfig(chartType, dataConfig);
 
-    // ✅ Nếu có legend ⇒ dữ liệu đã pivot wide → yFields = các cột thực tế trong processed
-    if (cfgMap.legendField && cfgMap.xField && next && next.length) {
+    // ✅ Đồng bộ yFields theo dữ liệu đã pivot/aggregate
+    if (cfgMap?.xField && next && next.length) {
       const set = new Set<string>();
-      for (const row of next) {
+      for (const row of next)
         Object.keys(row || {}).forEach((k) => {
           if (k !== cfgMap.xField) set.add(k);
         });
-      }
       const derived = Array.from(set);
       if (derived.length) {
-        cfgMap.yFields = derived; // đồng bộ với dữ liệu sau pivot
-        (cfgMap as any).seriesField = undefined; // wide-mode
+        cfgMap.yFields = derived; // ví dụ: ["Bắc Bộ","Trung Bộ","Nam Bộ"] hoặc ["Area","Population"]
+        (cfgMap as any).seriesField = undefined; // chạy WIDE mode
       }
     }
 
     setChartConfigMap(cfgMap);
   }, [chartType, rawData, cfgKey]);
 
-  // Đẩy rawData vào Redux (nếu bạn cần dùng nơi khác)
-  const dispatch = useDispatch();
+  // Đưa raw vào Redux nếu nơi khác cần
   React.useEffect(() => {
     dispatch(
       setRawChartDataForChart({
@@ -295,7 +365,6 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
     );
   }, [dispatch, rawData]);
 
-  // Nhận thay đổi từ DataTab, lưu theo chartType
   const handleDataConfigChange = React.useCallback(
     (next: DataConfigState) => {
       setDataConfigByChart((prev) => {
@@ -315,12 +384,12 @@ const DashboardDataProvider: React.FC<DashboardDataProviderProps> = ({
         chartType,
         config,
         rawData: Array.isArray(rawData) ? rawData : [],
-        data: processed, // ⬅️ Chart chỉ nhận data này
+        data: processed,
         dataConfig,
         onDataConfigChange: handleDataConfigChange,
         availableTables,
         processSummary,
-        chartConfig: chartConfigMap, // ⬅️ ChartRenderer sẽ dùng xField/yFields/legendField
+        chartConfig: chartConfigMap,
       })}
     </>
   );

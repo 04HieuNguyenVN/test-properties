@@ -7,43 +7,47 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { CHART_COLORS } from "../../constants/index";
-// Removed direct import of chartData.json
 
-// ===== Props cho biểu đồ tròn =====
-// Thêm prop data để nhận dữ liệu từ ngoài vào
 interface PieChartProps {
-  config: any;
+  config?: any;
   data: any[];
 }
 
-// ===== Biểu đồ tròn (Pie Chart) =====
+const COLORS = [
+  "#5B8FF9",
+  "#61DDAA",
+  "#65789B",
+  "#F6BD16",
+  "#7262FD",
+  "#78D3F8",
+  "#9661BC",
+  "#F6903D",
+  "#1E9493",
+];
+
 export const PieChart: React.FC<PieChartProps> = ({ config, data }) => {
-  // Nhận dữ liệu từ prop data
+  const cfg = config ?? {};
   return (
     <ResponsiveContainer width="100%" height={500}>
       <RechartsPieChart>
-        {/* Vẽ các phần tử của biểu đồ tròn */}
         <Pie
-          data={data}
+          data={Array.isArray(data) ? data : []}
+          dataKey="value"
+          nameKey="name"
           cx="50%"
           cy="50%"
-          labelLine={false}
-          label={({ name, percentage }) => `${name} ${percentage}%`}
           outerRadius={80}
-          fill="#8884d8"
-          dataKey="value"
+          labelLine={false}
+          label={({ name, percent }) =>
+            `${name} ${Math.round((percent ?? 0) * 100)}%`
+          }
         >
-          {data.map((entry: any, index: number) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={CHART_COLORS[index % CHART_COLORS.length]}
-            />
+          {(Array.isArray(data) ? data : []).map((_: any, idx: number) => (
+            <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
           ))}
         </Pie>
         <Tooltip />
-        {/* Hiển thị chú giải nếu có cấu hình */}
-        {config.legend?.enabled && <Legend />}
+        {cfg.legend?.enabled !== false && <Legend />}
       </RechartsPieChart>
     </ResponsiveContainer>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ResponsiveContainer,
   LineChart as RechartsLineChart,
@@ -10,60 +10,100 @@ import {
   Legend,
 } from "recharts";
 
-// Props cho biểu đồ đường
-// Thêm prop data để nhận dữ liệu từ ngoài vào
 interface LineChartProps {
-  config: any;
+  config?: any;
   data: any[];
 }
 
-// Biểu đồ đường (Line Chart)
+const PALETTE = [
+  "#0078D4",
+  "#00BCF2",
+  "#34C759",
+  "#F6BD16",
+  "#8A2BE2",
+  "#FF7A45",
+  "#1E9493",
+  "#B37FEB",
+  "#5CDBD3",
+];
+
 export const LineChart: React.FC<LineChartProps> = ({ config, data }) => {
-  // Nhận dữ liệu từ prop data
+  const cfg = config ?? {};
+  const xKey: string | undefined = cfg.xField;
+
+  const yKeys: string[] = useMemo(() => {
+    if (Array.isArray(cfg.yFields) && cfg.yFields.length) return cfg.yFields;
+    if (!Array.isArray(data) || data.length === 0 || !xKey) return [];
+    const set = new Set<string>();
+    (data as any[]).forEach((row) => {
+      Object.keys(row ?? {}).forEach((k) => {
+        if (k !== xKey) set.add(k);
+      });
+    });
+    return Array.from(set);
+  }, [cfg.yFields, data, xKey]);
+
+  const normalized = useMemo(() => {
+    if (!Array.isArray(data) || !xKey) return [];
+    return (data as any[]).map((row) => {
+      const out: any = { ...row };
+      yKeys.forEach((k) => {
+        const v = out[k];
+        out[k] = Number.isFinite(v) ? v : Number(v ?? 0) || 0;
+      });
+      return out;
+    });
+  }, [data, yKeys, xKey]);
+
+  if (!xKey || yKeys.length === 0) {
+    return (
+      <div style={{ padding: 20, color: "#666", textAlign: "center" }}>
+        Hãy chọn xField và yFields trong DataTab.
+      </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height={500}>
       <RechartsLineChart
-        data={data}
+        data={normalized}
         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
       >
-        {config.gridlines?.enabled && (
+        {cfg.gridlines?.enabled && (
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke={config.gridlines.color}
-            strokeWidth={config.gridlines.strokeWidth}
+            stroke={cfg.gridlines?.color ?? "#E5E7EB"}
+            strokeWidth={cfg.gridlines?.strokeWidth ?? 1}
           />
         )}
         <XAxis
-          dataKey="month"
+          dataKey={xKey}
           tick={{
-            fontSize: config.xAxis.fontSize,
-            fill: config.xAxis.color,
-            fontWeight: config.xAxis.bold ? "bold" : "normal",
+            fontSize: cfg.xAxis?.fontSize ?? 12,
+            fill: cfg.xAxis?.color ?? "#666",
+            fontWeight: cfg.xAxis?.bold ? "bold" : "normal",
           }}
         />
         <YAxis
           tick={{
-            fontSize: config.yAxis.fontSize,
-            fill: config.yAxis.color,
-            fontWeight: config.yAxis.bold ? "bold" : "normal",
+            fontSize: cfg.yAxis?.fontSize ?? 12,
+            fill: cfg.yAxis?.color ?? "#666",
+            fontWeight: cfg.yAxis?.bold ? "bold" : "normal",
           }}
         />
         <Tooltip />
-        {config.legend?.enabled && <Legend />}
-        <Line
-          type="monotone"
-          dataKey="visitors"
-          stroke="#0078D4"
-          strokeWidth={2}
-          name="Visitors"
-        />
-        <Line
-          type="monotone"
-          dataKey="revenue"
-          stroke="#00BCF2"
-          strokeWidth={2}
-          name="Revenue"
-        />
+        {cfg.legend?.enabled !== false && <Legend />}
+        {yKeys.map((key, idx) => (
+          <Line
+            key={key}
+            type="monotone"
+            dataKey={key}
+            name={cfg.labels?.[key] ?? key}
+            stroke={PALETTE[idx % PALETTE.length]}
+            strokeWidth={2}
+            dot={false}
+          />
+        ))}
       </RechartsLineChart>
     </ResponsiveContainer>
   );

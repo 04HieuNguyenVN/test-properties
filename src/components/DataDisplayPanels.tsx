@@ -100,6 +100,11 @@ const DataDisplayPanels: React.FC<DataDisplayPanelsProps> = ({
         <ProcessedDataPanel
           chartType={chartType}
           data={data}
+          config={
+            chartConfig && Object.keys(chartConfig).length
+              ? chartConfig
+              : config
+          }
           onUseInChart={handleUseInChart}
           processSummary={processSummary}
         />

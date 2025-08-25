@@ -18,36 +18,38 @@ type Props = {
     | "line"
     | "stackedBar"
     | "clusteredBar";
-  config: any; // chartConfig đến từ Provider (có xField/yFields/legendField)
-  data: any[]; // dữ liệu đã xử lý (processed) từ Provider
+  config: any;
+  data: any[];
 };
 
-/** Suy ra danh sách yFields từ data đã pivot (mọi key khác xField) */
 function deriveYFieldsFromData(data: any[], xField?: string) {
   if (!Array.isArray(data) || data.length === 0 || !xField) return [];
   const set = new Set<string>();
-  for (const row of data) {
+  for (const row of data)
     Object.keys(row || {}).forEach((k) => {
       if (k !== xField) set.add(k);
     });
-  }
   return Array.from(set);
 }
 
 const ChartRenderer: React.FC<Props> = ({ chartType, config, data }) => {
-  if (chartType === "stackedColumn") {
-    const xField = config?.xField;
-    const hasLegend = Boolean(config?.legendField);
-    let nextConfig = { ...(config || {}) };
-
-    if (hasLegend && xField) {
-      // Khi có legend, processed đã pivot: suy ra cột Y thực tế từ data
-      const yFromData = deriveYFieldsFromData(data, xField);
+  // Với bar & stackedColumn, sau pivot cần suy ra yFields theo dữ liệu thực tế
+  if (
+    chartType === "clusteredBar" ||
+    chartType === "stackedColumn" ||
+    chartType === "stackedBar"
+  ) {
+    const nextConfig = { ...(config || {}) };
+    if (!nextConfig.yFields || nextConfig.yFields.length === 0) {
+      const yFromData = deriveYFieldsFromData(data, nextConfig?.xField);
       if (yFromData.length) nextConfig.yFields = yFromData;
-      // Chạy wide-mode (nhiều yFields) nên KHÔNG dùng seriesField
-      if ("seriesField" in nextConfig) delete (nextConfig as any).seriesField;
     }
+    if ("seriesField" in nextConfig) delete (nextConfig as any).seriesField;
 
+    if (chartType === "clusteredBar")
+      return <ClusteredBarChart config={nextConfig} data={data} />;
+    if (chartType === "stackedBar")
+      return <StackedBarChart config={nextConfig} data={data} />;
     return <StackedColumnChart config={nextConfig} data={data} />;
   }
 
@@ -60,10 +62,6 @@ const ChartRenderer: React.FC<Props> = ({ chartType, config, data }) => {
       return <CustomPieChart config={config} data={data} />;
     case "line":
       return <CustomLineChart config={config} data={data} />;
-    case "stackedBar":
-      return <StackedBarChart config={config} data={data} />;
-    case "clusteredBar":
-      return <ClusteredBarChart config={config} data={data} />;
     default:
       return null;
   }

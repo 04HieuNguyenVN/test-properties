@@ -119,6 +119,36 @@
       "region": "Nam Bộ",
       "established": 1876,
       "density": 3214
+    },
+    {
+      "id": 9,
+      "name": "Vũng Tàu",
+      "population": 450000,
+      "area": 1140,
+      "gdp": 18.6,
+      "revenue": 28.3,
+      "growth": 8.5,
+      "temperature": 27.8,
+      "humidity": 79,
+      "category": "Thành phố tỉnh",
+      "region": "Trung Bộ",
+      "established": 1876,
+      "density": 3214
+    },
+    {
+      "id": 91,
+      "name": "Vũng Tàu",
+      "population": 450000,
+      "area": 1140,
+      "gdp": 18.6,
+      "revenue": 28.3,
+      "growth": 8.5,
+      "temperature": 27.8,
+      "humidity": 79,
+      "category": "Thành phố tỉnh",
+      "region": "Trung Bộ",
+      "established": 1876,
+      "density": 3214
     }
   ],
   "categories": [
