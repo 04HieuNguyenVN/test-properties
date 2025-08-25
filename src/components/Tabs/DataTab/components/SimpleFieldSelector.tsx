@@ -15,6 +15,8 @@ type Props = {
   ) => void;
   onRemove: (category: string, fieldId: number) => void; // ✨ mới
   options?: { label: string; value: string }[];
+  disableAction?: boolean;
+  disableReason?: string;
 };
 
 const SimpleFieldSelector: React.FC<Props> = ({
@@ -23,6 +25,8 @@ const SimpleFieldSelector: React.FC<Props> = ({
   onUpdate,
   onRemove,
   options,
+  disableAction,
+  disableReason,
 }) => {
   const { t } = useTranslation("dataTab");
   return (
@@ -49,19 +53,37 @@ const SimpleFieldSelector: React.FC<Props> = ({
           />
         </div>
         <div className="selector-group" style={{ flex: 1 }}>
-          <Select
-            title={t("selectAction", "Chọn hành động cho trường")}
-            size="small"
-            value={field.action || undefined} // trống khi "", undefined
-            onChange={(value) => onUpdate(category, field.id, "action", value)}
-            style={{ width: "100%" }}
-            options={FIELD_ACTION_OPTIONS.map((opt) => ({
-              ...opt,
-              label: t(`actionOptions.${opt.value}`, opt.label || opt.value),
-            }))}
-            placeholder={t("selectAction", "Select action")}
-            allowClear
-          />
+          <Tooltip
+            title={
+              disableAction
+                ? disableReason ||
+                  t("disableAction", "Action not available for this field")
+                : undefined
+            }
+          >
+            {/* span wrapper so Tooltip works on disabled elements */}
+            <span>
+              <Select
+                title={t("selectAction", "Chọn hành động cho trường")}
+                size="small"
+                value={field.action || undefined} // trống khi "", undefined
+                onChange={(value) =>
+                  onUpdate(category, field.id, "action", value)
+                }
+                style={{ width: "100%" }}
+                options={FIELD_ACTION_OPTIONS.map((opt) => ({
+                  ...opt,
+                  label: t(
+                    `actionOptions.${opt.value}`,
+                    opt.label || opt.value
+                  ),
+                }))}
+                placeholder={t("selectAction", "Select action")}
+                allowClear
+                disabled={Boolean(disableAction) || undefined}
+              />
+            </span>
+          </Tooltip>
         </div>
 
         {/* Nút xoá ✕ */}

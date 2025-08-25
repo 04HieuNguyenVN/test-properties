@@ -26,6 +26,7 @@
   },
   "selectField": "Select field",
   "selectAction": "Select action",
+  "disableAction": "Action not available for this field",
   "addField": "Add field",
   "groups": {
     "xAxis": "X-axis",
@@ -41,6 +42,12 @@
   "hints": {
     "xAxis": "Choose a field for the X axis",
     "yAxis": "Choose a field for the Y axis",
-    "legend": "Choose a field to color/legend"
+    "legend": "Choose a field to color/legend",
+    "disabled": {
+      "legend": "Action not available for legends/details",
+      "xField": "Action not available for X field in this chart type",
+      "yField": "Action not available for Y fields in bar charts",
+      "columnLegend": "Action not available for column legend in Line & Column chart"
+    }
   }
 }

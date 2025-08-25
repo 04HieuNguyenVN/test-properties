@@ -26,6 +26,7 @@
   },
   "selectField": "Chọn trường",
   "selectAction": "Chọn thao tác",
+  "disableAction": "Không có thao tác cho trường này",
   "addField": "Thêm trường",
   "groups": {
     "xAxis": "Trục X",
@@ -41,6 +42,12 @@
   "hints": {
     "xAxis": "Chọn trường cho trục X",
     "yAxis": "Chọn trường cho trục Y",
-    "legend": "Chọn trường để phân màu (legend)"
+    "legend": "Chọn trường để phân màu (legend)",
+    "disabled": {
+      "legend": "Không có thao tác cho chú giải/chi tiết",
+      "xField": "Không thể thực hiện thao tác cho trục X ở loại biểu đồ này",
+      "yField": "Không có thao tác cho trường Y trong biểu đồ dạng bar",
+      "columnLegend": "Không có thao tác cho chú giải cột trong biểu đồ Line & Column"
+    }
   }
 }

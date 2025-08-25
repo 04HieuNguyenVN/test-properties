@@ -124,6 +124,17 @@ export const DataTab: React.FC<DataTabProps> = ({
   // and cause a ping-pong with the Provider.
   useEffect(() => {
     didMount.current = false;
+    // When switching charts, clear internal selection so each chart's
+    // DataTab is isolated, unless a controlled `value` explicitly
+    // provides a tableName for the new chart.
+    const incomingTable = (value && value.tableName) || undefined;
+    if (!incomingTable) {
+      setSelectedTable(undefined);
+      setCategoryFields({});
+      // Reset data source to default so charts don't share the previous
+      // DataTab's source when switching between chart types.
+      setDataSource("API");
+    }
   }, [chartType]);
 
   useEffect(() => {
@@ -180,18 +191,77 @@ export const DataTab: React.FC<DataTabProps> = ({
                 getFieldDisplayName(fieldKey)
               )}
               fields={fieldsForCategory}
-              canAdd={allowsAddingFieldsToCategory(fieldKey)}
+              // Disable adding fields when no table is selected
+              canAdd={
+                Boolean(selectedTable) && allowsAddingFieldsToCategory(fieldKey)
+              }
               onAdd={() => addFieldToCategory(fieldKey)}
-              renderField={(field) => (
-                <SimpleFieldSelector
-                  key={field.id}
-                  field={field}
-                  category={fieldKey}
-                  onUpdate={updateFieldInCategory}
-                  onRemove={removeFieldFromCategory}
-                  options={fieldOptions}
-                />
-              )}
+              renderField={(field) =>
+                // Determine whether action select should be disabled for this field
+                (() => {
+                  const isLegendOrDetail =
+                    fieldKey === "legend" || fieldKey === "detail";
+                  const xFieldInColumnOrLine =
+                    (chartType === "clusteredColumn" ||
+                      chartType === "stackedColumn" ||
+                      chartType === "line" ||
+                      chartType === "lineAndColumn") &&
+                    fieldKey === "xAxis";
+                  const yFieldInBar =
+                    (chartType === "clusteredBar" ||
+                      chartType === "stackedBar") &&
+                    (fieldKey === "yAxis" ||
+                      fieldKey === "columnY" ||
+                      fieldKey === "values");
+
+                  const disableAction =
+                    isLegendOrDetail ||
+                    xFieldInColumnOrLine ||
+                    yFieldInBar ||
+                    (chartType === "lineAndColumn" &&
+                      fieldKey === "columnLegend");
+
+                  let disableReason: string | undefined;
+                  if (disableAction) {
+                    if (isLegendOrDetail)
+                      disableReason = t(
+                        "hints.disabled.legend",
+                        "Action not available for legends/details"
+                      );
+                    else if (xFieldInColumnOrLine)
+                      disableReason = t(
+                        "hints.disabled.xField",
+                        "Action not available for X field in this chart type"
+                      );
+                    else if (yFieldInBar)
+                      disableReason = t(
+                        "hints.disabled.yField",
+                        "Action not available for Y fields in bar charts"
+                      );
+                    else if (
+                      chartType === "lineAndColumn" &&
+                      fieldKey === "columnLegend"
+                    )
+                      disableReason = t(
+                        "hints.disabled.columnLegend",
+                        "Action not available for column legend in Line & Column chart"
+                      );
+                  }
+
+                  return (
+                    <SimpleFieldSelector
+                      key={field.id}
+                      field={field}
+                      category={fieldKey}
+                      onUpdate={updateFieldInCategory}
+                      onRemove={removeFieldFromCategory}
+                      options={fieldOptions}
+                      disableAction={disableAction}
+                      disableReason={disableReason}
+                    />
+                  );
+                })()
+              }
             />
           );
         })}
